@@ -140,7 +140,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                     "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect-for-Windows'>https://github.com/Mythologyli/ZJU-Connect-for-Windows</a>" +
                                     "<br><br>ZJUConnect" +
                                     "<br>ZJU RVPN 客户端的 Go 语言实现，基于 EasierConnect" +
-                                    "<br><作者: <a href='https://myth.cx'>Myth</a>" +
+                                    "<br>作者: <a href='https://myth.cx'>Myth</a>" +
                                     "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect'>https://github.com/Mythologyli/ZJU-Connect</a>" +
                                     "<br><br>EasierConnect" +
                                     "<br>EasyConnect 客户端的开源实现" +
