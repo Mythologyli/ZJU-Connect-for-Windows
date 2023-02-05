@@ -35,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->serverAddressLineEdit->setText(settings->value("EasyConnect/ServerAddress", "rvpn.zju.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("EasyConnect/ServerPort", 443).toInt());
     ui->usernameLineEdit->setText(settings->value("EasyConnect/Username", "").toString());
-    ui->passwordLineEdit->setText(settings->value("EasyConnect/Password", "").toString());
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 1080).toInt());
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 1081).toInt());
     ui->parseServerCheckBox->setChecked(settings->value("ZJUConnect/ParseServer", true).toBool());
@@ -43,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->useZjuDnsCheckBox->setChecked(settings->value("ZJUConnect/UseZjuDns", true).toBool());
     ui->proxyAllCheckBox->setChecked(settings->value("ZJUConnect/ProxyAll", false).toBool());
     ui->debugCheckBox->setChecked(settings->value("ZJUConnect/Debug", false).toBool());
-    ui->autoReconnectCheckBox->setChecked(settings->value("GUI/AutoReconnect", true).toBool());
+    ui->autoReconnectCheckBox->setChecked(settings->value("GUI/AutoReconnect", false).toBool());
     ui->reconnectTimeSpinBox->setValue(settings->value("GUI/ReconnectTime", 1).toInt());
 
     // 系统托盘
@@ -343,7 +342,6 @@ MainWindow::~MainWindow()
     settings->setValue("EasyConnect/ServerAddress", ui->serverAddressLineEdit->text());
     settings->setValue("EasyConnect/ServerPort", ui->serverPortSpinBox->value());
     settings->setValue("EasyConnect/Username", ui->usernameLineEdit->text());
-    settings->setValue("EasyConnect/Password", ui->passwordLineEdit->text());
     settings->setValue("ZJUConnect/Socks5Port", ui->socks5PortSpinBox->value());
     settings->setValue("ZJUConnect/HttpPort", ui->httpPortSpinBox->value());
     settings->setValue("ZJUConnect/ParseServer", ui->parseServerCheckBox->isChecked());
