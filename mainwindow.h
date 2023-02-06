@@ -37,7 +37,6 @@ private:
 
     bool isLinked;
     bool isSystemProxySet;
-    int logLineCount;
 };
 
 #endif //QEASIERCONNECT_MAINWINDOW_H

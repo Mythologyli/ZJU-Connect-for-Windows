@@ -19,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
     );
     isLinked = false;
     isSystemProxySet = false;
-    logLineCount = 0;
 
     ui->setupUi(this);
 
