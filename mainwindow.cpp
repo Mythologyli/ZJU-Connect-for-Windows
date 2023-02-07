@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QSettings::IniFormat
     );
     isLinked = false;
+    isLoginError = false;
     isSystemProxySet = false;
 
     ui->setupUi(this);
@@ -181,17 +182,31 @@ MainWindow::MainWindow(QWidget *parent) :
 
                     connect(zjuConnectProcess, &QProcess::readyReadStandardOutput, this, [&]()
                     {
-                        ui->logTextBrowser->append(QString(zjuConnectProcess->readAllStandardOutput()));
+                        QString output = QString(zjuConnectProcess->readAllStandardOutput());
+
+                        if (output.contains("Login FAILED"))
+                        {
+                            isLoginError = true;
+                        }
+
+                        ui->logTextBrowser->append(output);
                     });
 
                     connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
                     {
-                        ui->logTextBrowser->append(QString(zjuConnectProcess->readAllStandardError()));
+                        QString output = QString(zjuConnectProcess->readAllStandardError());
+
+                        if (output.contains("Login FAILED"))
+                        {
+                            isLoginError = true;
+                        }
+
+                        ui->logTextBrowser->append(output);
                     });
 
                     connect(zjuConnectProcess, &QProcess::finished, this, [&]()
                     {
-                        if (ui->autoReconnectCheckBox->isChecked() && isLinked)
+                        if (!isLoginError && ui->autoReconnectCheckBox->isChecked() && isLinked)
                         {
                             QTimer::singleShot(ui->reconnectTimeSpinBox->value() * 1000, this, [&]()
                             {
@@ -213,6 +228,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
                         isLinked = false;
                         ui->linkPushButton->setText("连接服务器");
+
+                        if (isLoginError)
+                        {
+                            isLoginError = false;
+                            QMessageBox::warning(this, "警告", "登录失败");
+                        }
                     });
 
                     QList<QString> args = QStringList({

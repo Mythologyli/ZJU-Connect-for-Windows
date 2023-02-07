@@ -36,6 +36,7 @@ private:
     QSettings *settings;
 
     bool isLinked;
+    bool isLoginError;
     bool isSystemProxySet;
 };
 
