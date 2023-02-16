@@ -137,10 +137,10 @@ MainWindow::MainWindow(QWidget *parent) :
                                     "<br>基于 Qt 编写的 ZJUConnect 图形界面" +
                                     "<br>作者: <a href='https://myth.cx'>Myth</a>" +
                                     "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect-for-Windows'>https://github.com/Mythologyli/ZJU-Connect-for-Windows</a>" +
-                                    "<br><br>ZJUConnect" +
+                                    "<br><br>zju-connect" +
                                     "<br>ZJU RVPN 客户端的 Go 语言实现，基于 EasierConnect" +
                                     "<br>作者: <a href='https://myth.cx'>Myth</a>" +
-                                    "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect'>https://github.com/Mythologyli/ZJU-Connect</a>" +
+                                    "<br>项目主页: <a href='https://github.com/Mythologyli/zju-connect'>https://github.com/Mythologyli/zju-connect</a>" +
                                     "<br><br>EasierConnect" +
                                     "<br>EasyConnect 客户端的开源实现" +
                                     "<br>作者: <a href='https://github.com/lyc8503'>lyc8503</a>" +
@@ -251,19 +251,19 @@ MainWindow::MainWindow(QWidget *parent) :
                                                           ":" + ui->httpPortSpinBox->text()
                                                       });
 
-                    if (ui->parseServerCheckBox->isChecked())
+                    if (!ui->parseServerCheckBox->isChecked())
                     {
-                        args.append("-parse");
+                        args.append("-disable-server-config");
                     }
 
-                    if (ui->parseZjuCheckBox->isChecked())
+                    if (!ui->parseZjuCheckBox->isChecked())
                     {
-                        args.append("-parse-zju");
+                        args.append("-disable-zju-config");
                     }
 
-                    if (ui->useZjuDnsCheckBox->isChecked())
+                    if (!ui->useZjuDnsCheckBox->isChecked())
                     {
-                        args.append("-use-zju-dns");
+                        args.append("-disable-zju-dns");
                     }
 
                     if (ui->proxyAllCheckBox->isChecked())
@@ -276,7 +276,7 @@ MainWindow::MainWindow(QWidget *parent) :
                         args.append("-debug-dump");
                     }
 
-                    zjuConnectProcess->start("ZJUConnect.exe", args);
+                    zjuConnectProcess->start("zju-connect.exe", args);
                     zjuConnectProcess->waitForStarted();
 
                     isLinked = true;
