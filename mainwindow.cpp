@@ -92,9 +92,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->zjuRuleAction, &QAction::triggered,
             [&]()
             {
-                zjuruleWindow = new ZjuruleWindow(this);
-                zjuruleWindow->setSocks5Port(ui->socks5PortSpinBox->text());
-                zjuruleWindow->show();
+                zjuRuleWindow = new ZjuRuleWindow(this);
+                zjuRuleWindow->setSocks5Port(ui->socks5PortSpinBox->text());
+                zjuRuleWindow->show();
             });
 
     // 帮助-关于本软件

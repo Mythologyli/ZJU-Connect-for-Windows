@@ -2,25 +2,26 @@
 #define ZJURULEWINDOWS_H
 
 #include <QWidget>
+#include "ui_zjurulewindow.h"
 
 namespace Ui
 {
     class ZjuruleWindow;
 }
 
-class ZjuruleWindow : public QWidget
+class ZjuRuleWindow : public QWidget
 {
 Q_OBJECT
 
 public:
-    explicit ZjuruleWindow(QWidget *parent = nullptr);
+    explicit ZjuRuleWindow(QWidget *parent = nullptr);
 
-    ~ZjuruleWindow() override;
+    ~ZjuRuleWindow() override;
 
     void setSocks5Port(const QString &port);
 
 private:
-    Ui::ZjuruleWindow *ui;
+    Ui::ZjuRuleWindow *ui;
 };
 
 #endif //ZJURULEWINDOWS_H

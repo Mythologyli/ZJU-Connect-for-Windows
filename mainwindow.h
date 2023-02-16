@@ -37,7 +37,7 @@ private:
     QNetworkAccessManager *networkAccessManager;
     QSettings *settings;
 
-    ZjuruleWindow *zjuruleWindow;
+    ZjuRuleWindow *zjuRuleWindow;
 
     bool isLinked;
     bool isLoginError;

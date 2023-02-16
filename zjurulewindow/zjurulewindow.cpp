@@ -1,9 +1,9 @@
 #include "zjurulewindow.h"
 #include "ui_zjurulewindow.h"
 
-ZjuruleWindow::ZjuruleWindow(QWidget *parent) :
+ZjuRuleWindow::ZjuRuleWindow(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ZjuruleWindow)
+    ui(new Ui::ZjuRuleWindow)
 {
     ui->setupUi(this);
 
@@ -16,12 +16,12 @@ ZjuruleWindow::ZjuruleWindow(QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose);
 }
 
-ZjuruleWindow::~ZjuruleWindow()
+ZjuRuleWindow::~ZjuRuleWindow()
 {
     delete ui;
 }
 
-void ZjuruleWindow::setSocks5Port(const QString &port)
+void ZjuRuleWindow::setSocks5Port(const QString &port)
 {
     QString socks5Url = QString("tg://socks?server=127.0.0.1&port=") +
                         port +
