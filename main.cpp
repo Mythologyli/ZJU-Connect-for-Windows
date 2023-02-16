@@ -1,10 +1,12 @@
 #include <QApplication>
 
+#include "SingleApplication"
+
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    SingleApplication app(argc, argv);
     QApplication::setApplicationName("ZJU Connect for Windows");
     QApplication::setApplicationVersion("0.12");
 

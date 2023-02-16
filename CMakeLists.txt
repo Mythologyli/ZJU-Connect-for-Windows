@@ -20,11 +20,14 @@ add_executable(ZJUConnectForWindows WIN32
         mainwindow.h
         resource.qrc)
 
+add_subdirectory(singleapplication)
+
 target_link_libraries(ZJUConnectForWindows
         Qt::Core
         Qt::Gui
         Qt::Widgets
         Qt::Network
+        SingleApplication::SingleApplication
         )
 
 set(DEBUG_SUFFIX)
