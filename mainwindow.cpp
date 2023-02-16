@@ -35,7 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->serverAddressLineEdit->setText(settings->value("EasyConnect/ServerAddress", "rvpn.zju.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("EasyConnect/ServerPort", 443).toInt());
     ui->usernameLineEdit->setText(settings->value("EasyConnect/Username", "").toString());
-    ui->passwordLineEdit->setText(QByteArray::fromBase64(settings->value("EasyConnect/Password", "").toString().toUtf8()));
+    ui->passwordLineEdit->setText(
+        QByteArray::fromBase64(settings->value("EasyConnect/Password", "").toString().toUtf8())
+    );
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 1080).toInt());
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 1081).toInt());
     ui->parseServerCheckBox->setChecked(settings->value("ZJUConnect/ParseServer", true).toBool());
@@ -90,41 +92,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->zjuRuleAction, &QAction::triggered,
             [&]()
             {
-                auto zjuRuleWindow = new QWidget(this);
-                zjuRuleWindow->setWindowTitle("ZJU Rule");
-                zjuRuleWindow->setWindowIcon(QIcon(QPixmap(":/resource/icon.png").scaled(
-                    512, 512, Qt::KeepAspectRatio, Qt::SmoothTransformation
-                )));
-                zjuRuleWindow->resize(400, 100);
-
-                QString socks5Url = QString("tg://socks?server=127.0.0.1&port=") +
-                                    ui->socks5PortSpinBox->text() +
-                                    "&remarks=ZJU Connect";
-
-                zjuRuleWindow->setLayout(new QVBoxLayout());
-
-                QString socks5UrlLabelText = "你可以将以下订阅链接和你的机场订阅一起添加到 <a href='https://zjurule.xyz'>ZJU Rule</a> 中：";
-
-                auto *socks5UrlLabel = new QLabel(socks5UrlLabelText);
-                socks5UrlLabel->setTextFormat(Qt::RichText);
-                socks5UrlLabel->setOpenExternalLinks(true);
-                socks5UrlLabel->setAlignment(Qt::AlignLeft);
-                zjuRuleWindow->layout()->addWidget(socks5UrlLabel);
-
-                auto *socks5LineEdit = new QLineEdit(socks5Url);
-                socks5LineEdit->setReadOnly(true);
-                zjuRuleWindow->layout()->addWidget(socks5LineEdit);
-
-                QString aboutLabelText = "不明白 ZJU Rule 是什么？请访问<a href='https://www.cc98.org/topic/5257184'>这个帖子</a>";
-                auto *aboutLabel = new QLabel(aboutLabelText);
-                aboutLabel->setTextFormat(Qt::RichText);
-                aboutLabel->setOpenExternalLinks(true);
-                aboutLabel->setAlignment(Qt::AlignLeft);
-                zjuRuleWindow->layout()->addWidget(aboutLabel);
-
-                zjuRuleWindow->setWindowFlag(Qt::Window);
-                zjuRuleWindow->setWindowModality(Qt::WindowModal);
-                zjuRuleWindow->show();
+                zjuruleWindow = new ZjuruleWindow(this);
+                zjuruleWindow->setSocks5Port(ui->socks5PortSpinBox->text());
+                zjuruleWindow->show();
             });
 
     // 帮助-关于本软件

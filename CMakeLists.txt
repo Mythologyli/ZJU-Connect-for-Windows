@@ -18,6 +18,8 @@ add_executable(ZJUConnectForWindows WIN32
         main.cpp
         mainwindow.cpp
         mainwindow.h
+        zjurulewindow/zjurulewindow.cpp
+        zjurulewindow/zjurulewindow.h
         resource.qrc)
 
 add_subdirectory(singleapplication)

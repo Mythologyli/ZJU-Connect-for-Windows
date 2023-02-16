@@ -1,5 +1,5 @@
-#ifndef QEASIERCONNECT_MAINWINDOW_H
-#define QEASIERCONNECT_MAINWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
@@ -7,6 +7,8 @@
 #include <QProcess>
 #include <QNetworkReply>
 #include <QSettings>
+
+#include "zjurulewindow/zjurulewindow.h"
 
 namespace Ui
 {
@@ -35,9 +37,11 @@ private:
     QNetworkAccessManager *networkAccessManager;
     QSettings *settings;
 
+    ZjuruleWindow *zjuruleWindow;
+
     bool isLinked;
     bool isLoginError;
     bool isSystemProxySet;
 };
 
-#endif //QEASIERCONNECT_MAINWINDOW_H
+#endif //MAINWINDOW_H
