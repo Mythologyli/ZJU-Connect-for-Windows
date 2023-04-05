@@ -162,6 +162,10 @@ MainWindow::MainWindow(QWidget *parent) :
             isLoginError = false;
             QMessageBox::warning(this, "警告", "登录失败");
         }
+        else
+        {
+            QMessageBox::information(this, "提示", "已断开连接");
+        }
     });
 
     connect(ui->linkPushButton, &QPushButton::clicked,
@@ -214,7 +218,6 @@ MainWindow::MainWindow(QWidget *parent) :
                     zjuConnectController->stop();
 
                     ui->linkPushButton->setText("连接服务器");
-                    QMessageBox::information(this, "提示", "已断开服务器");
                 }
             });
 
