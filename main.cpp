@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     SingleApplication app(argc, argv);
     QApplication::setApplicationName("ZJU Connect for Windows");
-    QApplication::setApplicationVersion("0.12");
+    QApplication::setApplicationVersion("0.3.0");
 
     MainWindow mainWindow;
     mainWindow.show();

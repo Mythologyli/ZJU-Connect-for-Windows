@@ -9,6 +9,8 @@
 #include <QSettings>
 
 #include "zjurulewindow/zjurulewindow.h"
+#include "portforwardingwindow/portforwardingwindow.h"
+#include "zjuconnectcontroller/zjuconnectcontroller.h"
 
 namespace Ui
 {
@@ -33,15 +35,19 @@ private:
     QMenu *trayMenu;
     QAction *trayShowAction;
     QAction *trayCloseAction;
-    QProcess *zjuConnectProcess;
+    ZjuConnectController *zjuConnectController;
     QNetworkAccessManager *networkAccessManager;
     QSettings *settings;
 
     ZjuRuleWindow *zjuRuleWindow;
+    PortForwardingWindow *portForwardingWindow;
 
     bool isLinked;
     bool isLoginError;
     bool isSystemProxySet;
+
+    QString tcpPortForwarding;
+    QString udpPortForwarding;
 };
 
 #endif //MAINWINDOW_H

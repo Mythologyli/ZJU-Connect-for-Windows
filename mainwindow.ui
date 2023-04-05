@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>800</width>
     <height>400</height>
    </rect>
   </property>
@@ -15,104 +15,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="0" rowspan="4">
-     <widget class="QTextBrowser" name="logTextBrowser">
-      <property name="font">
-       <font>
-        <pointsize>6</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <layout class="QGridLayout" name="gridLayout2">
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="autoReconnectCheckBox">
-        <property name="text">
-         <string>自动重连</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="debugCheckBox">
-        <property name="text">
-         <string>调试模式</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QPushButton" name="linkPushButton">
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>连接服务器</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QPushButton" name="systemProxyPushButton">
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>设置系统代理</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="useZjuDnsCheckBox">
-        <property name="text">
-         <string>应用 ZJU DNS</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="Line" name="line2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="parseServerCheckBox">
-        <property name="text">
-         <string>解析服务器配置</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-        <property name="tristate">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="parseZjuCheckBox">
-        <property name="text">
-         <string>应用 ZJU 设置</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QCheckBox" name="proxyAllCheckBox">
-        <property name="text">
-         <string>代理全部流量</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="2" column="1">
      <widget class="QLabel" name="statusLabel">
       <property name="font">
@@ -132,6 +34,13 @@
       </property>
       <property name="openExternalLinks">
        <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="Line" name="line1">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
@@ -254,6 +163,11 @@
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label7">
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>重连时间 (s)</string>
         </property>
@@ -290,12 +204,86 @@
       </item>
      </layout>
     </item>
-    <item row="1" column="1">
-     <widget class="Line" name="line1">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="0" column="0" rowspan="4">
+     <widget class="QTextBrowser" name="logTextBrowser">
+      <property name="font">
+       <font>
+        <pointsize>7</pointsize>
+       </font>
       </property>
      </widget>
+    </item>
+    <item row="3" column="1">
+     <layout class="QGridLayout" name="gridLayout2">
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="autoReconnectCheckBox">
+        <property name="text">
+         <string>自动重连</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="linkPushButton">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>连接服务器</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="debugCheckBox">
+        <property name="text">
+         <string>调试模式</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="systemProxyPushButton">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>设置系统代理</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="Line" name="line2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="proxyAllCheckBox">
+        <property name="text">
+         <string>代理全部流量</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="multiLineCheckBox">
+        <property name="text">
+         <string>自动选择线路</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
+        <property name="tristate">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -304,8 +292,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
-     <height>21</height>
+     <width>800</width>
+     <height>17</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -335,6 +323,7 @@
      <string>高级</string>
     </property>
     <addaction name="zjuRuleAction"/>
+    <addaction name="portForwardingAction"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="advanceMenu"/>
@@ -358,6 +347,11 @@
     <string>ZJU Rule</string>
    </property>
   </action>
+  <action name="portForwardingAction">
+   <property name="text">
+    <string>端口转发</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>serverAddressLineEdit</tabstop>
@@ -367,10 +361,6 @@
   <tabstop>socks5PortSpinBox</tabstop>
   <tabstop>httpPortSpinBox</tabstop>
   <tabstop>reconnectTimeSpinBox</tabstop>
-  <tabstop>parseServerCheckBox</tabstop>
-  <tabstop>parseZjuCheckBox</tabstop>
-  <tabstop>useZjuDnsCheckBox</tabstop>
-  <tabstop>proxyAllCheckBox</tabstop>
   <tabstop>autoReconnectCheckBox</tabstop>
   <tabstop>debugCheckBox</tabstop>
   <tabstop>linkPushButton</tabstop>

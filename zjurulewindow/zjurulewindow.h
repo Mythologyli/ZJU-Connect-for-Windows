@@ -1,5 +1,5 @@
-#ifndef ZJURULEWINDOWS_H
-#define ZJURULEWINDOWS_H
+#ifndef ZJURULEWINDOW_H
+#define ZJURULEWINDOW_H
 
 #include <QWidget>
 #include "ui_zjurulewindow.h"
@@ -24,4 +24,4 @@ private:
     Ui::ZjuRuleWindow *ui;
 };
 
-#endif //ZJURULEWINDOWS_H
+#endif //ZJURULEWINDOW_H

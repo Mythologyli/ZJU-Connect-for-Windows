@@ -18,9 +18,18 @@ add_executable(ZJUConnectForWindows WIN32
         main.cpp
         mainwindow.cpp
         mainwindow.h
+        zjuconnectcontroller/zjuconnectcontroller.cpp
+        zjuconnectcontroller/zjuconnectcontroller.h
         zjurulewindow/zjurulewindow.cpp
         zjurulewindow/zjurulewindow.h
-        resource.qrc)
+        portforwardingwindow/portforwardingwindow.cpp
+        portforwardingwindow/portforwardingwindow.h
+        utils/utils.cpp
+        utils/utils.h
+        resource.qrc
+        )
+
+set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
 
 add_subdirectory(singleapplication)
 
@@ -51,6 +60,33 @@ if (EXISTS "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll")
             COMMAND ${CMAKE_COMMAND} -E copy
             "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
+endif ()
+if (EXISTS "${QT_INSTALL_PATH}/plugins/tls/qcertonlybackend${DEBUG_SUFFIX}.dll")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/tls/")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${QT_INSTALL_PATH}/plugins/tls/qcertonlybackend${DEBUG_SUFFIX}.dll"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/tls/")
+endif ()
+if (EXISTS "${QT_INSTALL_PATH}/plugins/tls/qopensslbackend${DEBUG_SUFFIX}.dll")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/tls/")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${QT_INSTALL_PATH}/plugins/tls/qopensslbackend${DEBUG_SUFFIX}.dll"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/tls/")
+endif ()
+if (EXISTS "${QT_INSTALL_PATH}/plugins/tls/qschannelbackend${DEBUG_SUFFIX}.dll")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/tls/")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${QT_INSTALL_PATH}/plugins/tls/qschannelbackend${DEBUG_SUFFIX}.dll"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/tls/")
 endif ()
 foreach (QT_LIB Core Gui Widgets Network)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

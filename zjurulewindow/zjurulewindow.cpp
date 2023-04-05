@@ -1,5 +1,6 @@
+#include <QIcon>
+
 #include "zjurulewindow.h"
-#include "ui_zjurulewindow.h"
 
 ZjuRuleWindow::ZjuRuleWindow(QWidget *parent) :
     QWidget(parent),

@@ -6,12 +6,15 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "zjuconnectcontroller/zjuconnectcontroller.h"
+#include "utils/utils.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    zjuConnectProcess = nullptr;
+    zjuConnectController = new ZjuConnectController();
     networkAccessManager = new QNetworkAccessManager(this);
     settings = new QSettings(
         QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/config.ini",
@@ -40,11 +43,11 @@ MainWindow::MainWindow(QWidget *parent) :
     );
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 1080).toInt());
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 1081).toInt());
-    ui->parseServerCheckBox->setChecked(settings->value("ZJUConnect/ParseServer", true).toBool());
-    ui->parseZjuCheckBox->setChecked(settings->value("ZJUConnect/ParseZju", true).toBool());
-    ui->useZjuDnsCheckBox->setChecked(settings->value("ZJUConnect/UseZjuDns", true).toBool());
+    ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", true).toBool());
     ui->proxyAllCheckBox->setChecked(settings->value("ZJUConnect/ProxyAll", false).toBool());
     ui->debugCheckBox->setChecked(settings->value("ZJUConnect/Debug", false).toBool());
+    tcpPortForwarding = settings->value("ZJUConnect/TcpPortForwarding", "").toString();
+    udpPortForwarding = settings->value("ZJUConnect/UdpPortForwarding", "").toString();
     ui->autoReconnectCheckBox->setChecked(settings->value("GUI/AutoReconnect", false).toBool());
     ui->reconnectTimeSpinBox->setValue(settings->value("GUI/ReconnectTime", 1).toInt());
 
@@ -97,33 +100,70 @@ MainWindow::MainWindow(QWidget *parent) :
                 zjuRuleWindow->show();
             });
 
+    // 高级-端口转发
+    connect(ui->portForwardingAction, &QAction::triggered,
+            [&]()
+            {
+                portForwardingWindow = new PortForwardingWindow(this);
+                portForwardingWindow->setPortForwarding(tcpPortForwarding, udpPortForwarding);
+
+                connect(portForwardingWindow, &PortForwardingWindow::applied, this,
+                        [&](const QString &tcpForwarding, const QString &udpForwarding)
+                        {
+                            tcpPortForwarding = tcpForwarding;
+                            udpPortForwarding = udpForwarding;
+                        });
+
+                portForwardingWindow->show();
+
+            });
+
     // 帮助-关于本软件
     connect(ui->aboutAction, &QAction::triggered,
             [&]()
             {
-                QMessageBox messageBox(this);
-                messageBox.setWindowTitle("关于本软件");
-                messageBox.setTextFormat(Qt::RichText);
-                QString aboutText = QApplication::applicationName() + " v" + QApplication::applicationVersion() +
-                                    "<br>基于 Qt 编写的 ZJUConnect 图形界面" +
-                                    "<br>作者: <a href='https://myth.cx'>Myth</a>" +
-                                    "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect-for-Windows'>https://github.com/Mythologyli/ZJU-Connect-for-Windows</a>" +
-                                    "<br><br>zju-connect" +
-                                    "<br>ZJU RVPN 客户端的 Go 语言实现，基于 EasierConnect" +
-                                    "<br>作者: <a href='https://myth.cx'>Myth</a>" +
-                                    "<br>项目主页: <a href='https://github.com/Mythologyli/zju-connect'>https://github.com/Mythologyli/zju-connect</a>" +
-                                    "<br><br>EasierConnect" +
-                                    "<br>EasyConnect 客户端的开源实现" +
-                                    "<br>作者: <a href='https://github.com/lyc8503'>lyc8503</a>" +
-                                    "<br>项目主页: <a href='https://github.com/lyc8503/EasierConnect'>https://github.com/lyc8503/EasierConnect</a>";
-                messageBox.setText(aboutText);
-                messageBox.setIconPixmap(QPixmap(":/resource/icon.png").scaled(
-                    100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation
-                ));
-                messageBox.exec();
+                Utils::showAboutMessageBox(this);
             });
 
     // 连接服务器
+    connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString &output)
+    {
+        ui->logTextBrowser->append(output);
+    });
+
+    connect(zjuConnectController, &ZjuConnectController::loginFailed, this, [&]()
+    {
+        isLoginError = true;
+    });
+
+    connect(zjuConnectController, &ZjuConnectController::finished, this, [&]()
+    {
+        if (!isLoginError && ui->autoReconnectCheckBox->isChecked() && isLinked)
+        {
+            QTimer::singleShot(ui->reconnectTimeSpinBox->value() * 1000, this, [&]()
+            {
+                if (isLinked)
+                {
+                    zjuConnectController->stop();
+
+                    isLinked = false;
+                    ui->linkPushButton->click();
+                }
+            });
+
+            return;
+        }
+
+        isLinked = false;
+        ui->linkPushButton->setText("连接服务器");
+
+        if (isLoginError)
+        {
+            isLoginError = false;
+            QMessageBox::warning(this, "警告", "登录失败");
+        }
+    });
+
     connect(ui->linkPushButton, &QPushButton::clicked,
             [&]()
             {
@@ -149,106 +189,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
                     ui->logTextBrowser->clear();
 
-                    zjuConnectProcess = new QProcess(this);
-
-                    connect(zjuConnectProcess, &QProcess::readyReadStandardOutput, this, [&]()
-                    {
-                        QString output = QString(zjuConnectProcess->readAllStandardOutput());
-
-                        if (output.contains("Login FAILED"))
-                        {
-                            isLoginError = true;
-                        }
-
-                        ui->logTextBrowser->append(output);
-                    });
-
-                    connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
-                    {
-                        QString output = QString(zjuConnectProcess->readAllStandardError());
-
-                        if (output.contains("Login FAILED"))
-                        {
-                            isLoginError = true;
-                        }
-
-                        ui->logTextBrowser->append(output);
-                    });
-
-                    connect(zjuConnectProcess, &QProcess::finished, this, [&]()
-                    {
-                        if (!isLoginError && ui->autoReconnectCheckBox->isChecked() && isLinked)
-                        {
-                            QTimer::singleShot(ui->reconnectTimeSpinBox->value() * 1000, this, [&]()
-                            {
-                                if (isLinked)
-                                {
-                                    delete zjuConnectProcess;
-                                    zjuConnectProcess = nullptr;
-
-                                    isLinked = false;
-                                    ui->linkPushButton->click();
-                                }
-                            });
-
-                            return;
-                        }
-
-                        delete zjuConnectProcess;
-                        zjuConnectProcess = nullptr;
-
-                        isLinked = false;
-                        ui->linkPushButton->setText("连接服务器");
-
-                        if (isLoginError)
-                        {
-                            isLoginError = false;
-                            QMessageBox::warning(this, "警告", "登录失败");
-                        }
-                    });
-
-                    QList<QString> args = QStringList({
-                                                          "-password",
-                                                          ui->passwordLineEdit->text(),
-                                                          "-username",
-                                                          ui->usernameLineEdit->text(),
-                                                          "-server",
-                                                          ui->serverAddressLineEdit->text(),
-                                                          "-port",
-                                                          ui->serverPortSpinBox->text(),
-                                                          "-socks-bind",
-                                                          ":" + ui->socks5PortSpinBox->text(),
-                                                          "-http-bind",
-                                                          ":" + ui->httpPortSpinBox->text()
-                                                      });
-
-                    if (!ui->parseServerCheckBox->isChecked())
-                    {
-                        args.append("-disable-server-config");
-                    }
-
-                    if (!ui->parseZjuCheckBox->isChecked())
-                    {
-                        args.append("-disable-zju-config");
-                    }
-
-                    if (!ui->useZjuDnsCheckBox->isChecked())
-                    {
-                        args.append("-disable-zju-dns");
-                    }
-
-                    if (ui->proxyAllCheckBox->isChecked())
-                    {
-                        args.append("-proxy-all");
-                    }
-
-                    if (ui->debugCheckBox->isChecked())
-                    {
-                        args.append("-debug-dump");
-                    }
-
-                    zjuConnectProcess->start("zju-connect.exe", args);
-                    zjuConnectProcess->waitForStarted();
+                    zjuConnectController->start(
+                        "zju-connect.exe",
+                        ui->usernameLineEdit->text(),
+                        ui->passwordLineEdit->text(),
+                        ui->serverAddressLineEdit->text(),
+                        ui->serverPortSpinBox->text().toInt(),
+                        !ui->multiLineCheckBox->isChecked(),
+                        ui->proxyAllCheckBox->isChecked(),
+                        "127.0.0.1:" + ui->socks5PortSpinBox->text(),
+                        "127.0.0.1:" + ui->httpPortSpinBox->text(),
+                        ui->debugCheckBox->isChecked(),
+                        tcpPortForwarding,
+                        udpPortForwarding
+                    );
 
                     isLinked = true;
                     ui->linkPushButton->setText("断开服务器");
@@ -257,8 +211,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 {
                     isLinked = false;
 
-                    zjuConnectProcess->kill();
-                    zjuConnectProcess->waitForFinished();
+                    zjuConnectController->stop();
 
                     ui->linkPushButton->setText("连接服务器");
                     QMessageBox::information(this, "提示", "已断开服务器");
@@ -269,29 +222,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->systemProxyPushButton, &QPushButton::clicked,
             [&]()
             {
-                QSettings proxySettings(
-                    R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings)",
-                    QSettings::NativeFormat
-                );
-
                 if (!isSystemProxySet)
                 {
-                    proxySettings.setValue("ProxyEnable", 1);
-                    proxySettings.setValue("ProxyServer", "127.0.0.1:" + ui->httpPortSpinBox->text());
-                    proxySettings.setValue("ProxyOverride", "");
-
+                    Utils::setSystemProxy(ui->httpPortSpinBox->text().toInt());
                     ui->systemProxyPushButton->setText("清除系统代理");
-
                     isSystemProxySet = true;
                 }
                 else
                 {
-                    proxySettings.setValue("ProxyEnable", 0);
-                    proxySettings.setValue("ProxyServer", "");
-                    proxySettings.setValue("ProxyOverride", "");
-
+                    Utils::clearSystemProxy();
                     ui->systemProxyPushButton->setText("设置系统代理");
-
                     isSystemProxySet = false;
                 }
             });
@@ -308,11 +248,13 @@ MainWindow::MainWindow(QWidget *parent) :
                     QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
                     QJsonObject jsonObject = jsonDocument.object();
                     QString version = jsonObject["version"].toString();
+                    QString description = jsonObject["description"].toString();
                     QString url = jsonObject["url"].toString();
 
                     if (version != QApplication::applicationVersion())
                     {
                         QString text = "有新版本可用：v" + version +
+                                       "<br>更新内容：" + description +
                                        "<br>点击<a href='" + url + "'>此处</a>下载";
 
                         ui->statusLabel->setText(text);
@@ -336,20 +278,22 @@ MainWindow::~MainWindow()
     settings->setValue("EasyConnect/Password", QString(ui->passwordLineEdit->text().toUtf8().toBase64()));
     settings->setValue("ZJUConnect/Socks5Port", ui->socks5PortSpinBox->value());
     settings->setValue("ZJUConnect/HttpPort", ui->httpPortSpinBox->value());
-    settings->setValue("ZJUConnect/ParseServer", ui->parseServerCheckBox->isChecked());
-    settings->setValue("ZJUConnect/ParseZju", ui->parseZjuCheckBox->isChecked());
-    settings->setValue("ZJUConnect/UseZjuDns", ui->useZjuDnsCheckBox->isChecked());
+    settings->setValue("ZJUConnect/MultiLine", ui->multiLineCheckBox->isChecked());
     settings->setValue("ZJUConnect/ProxyAll", ui->proxyAllCheckBox->isChecked());
     settings->setValue("ZJUConnect/Debug", ui->debugCheckBox->isChecked());
+    settings->setValue("ZJUConnect/TcpPortForwarding", tcpPortForwarding);
+    settings->setValue("ZJUConnect/UdpPortForwarding", udpPortForwarding);
     settings->setValue("GUI/AutoReconnect", ui->autoReconnectCheckBox->isChecked());
     settings->setValue("GUI/ReconnectTime", ui->reconnectTimeSpinBox->value());
     settings->sync();
 
-    if (zjuConnectProcess != nullptr)
+    // 清除系统代理
+    if (isSystemProxySet)
     {
-        zjuConnectProcess->kill();
-        zjuConnectProcess->waitForFinished();
+        Utils::clearSystemProxy();
     }
+
+    delete zjuConnectController;
 
     delete ui;
 }
