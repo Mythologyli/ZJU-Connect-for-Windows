@@ -23,9 +23,9 @@ PortForwardingWindow::PortForwardingWindow(QWidget *parent) :
 
                 QStringList portForwardingList = ui->textEdit->toPlainText().split("\n");
 
-                for (int i = 0; i < portForwardingList.size(); i++)
+                for (const auto &forwarding: portForwardingList)
                 {
-                    QStringList portForwardingItem = portForwardingList[i].split(",");
+                    QStringList portForwardingItem = forwarding.split(",");
 
                     if (portForwardingItem.size() == 3)
                     {
@@ -63,28 +63,28 @@ void PortForwardingWindow::setPortForwarding(const QString &tcpPortForwarding, c
 {
     QStringList tcpPortForwardingList = tcpPortForwarding.split(",");
 
-    for (int i = 0; i < tcpPortForwardingList.size(); i++)
+    for (const auto &forwarding: tcpPortForwardingList)
     {
-        QStringList tcpPortForwardingItem = tcpPortForwardingList[i].split("-");
+        QStringList tcpPortForwardingItem = forwarding.split("-");
 
         if (tcpPortForwardingItem.size() == 2)
         {
             ui->textEdit->append(
-                "TCP," + tcpPortForwardingItem[0].simplified() + "," + tcpPortForwardingItem[1].simplified() + "\n"
+                "TCP," + tcpPortForwardingItem[0].simplified() + "," + tcpPortForwardingItem[1].simplified()
             );
         }
     }
 
     QStringList udpPortForwardingList = udpPortForwarding.split(",");
 
-    for (int i = 0; i < udpPortForwardingList.size(); i++)
+    for (const auto &forwarding: udpPortForwardingList)
     {
-        QStringList udpPortForwardingItem = udpPortForwardingList[i].split("-");
+        QStringList udpPortForwardingItem = forwarding.split("-");
 
         if (udpPortForwardingItem.size() == 2)
         {
             ui->textEdit->append(
-                "UDP," + udpPortForwardingItem[0].simplified() + "," + udpPortForwardingItem[1].simplified() + "\n"
+                "UDP," + udpPortForwardingItem[0].simplified() + "," + udpPortForwardingItem[1].simplified()
             );
         }
     }
