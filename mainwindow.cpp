@@ -115,7 +115,6 @@ MainWindow::MainWindow(QWidget *parent) :
                         });
 
                 portForwardingWindow->show();
-
             });
 
     // 帮助-关于本软件
@@ -295,6 +294,8 @@ MainWindow::~MainWindow()
     {
         Utils::clearSystemProxy();
     }
+
+    disconnect(zjuConnectController, &ZjuConnectController::finished, this, nullptr);
 
     delete zjuConnectController;
 
