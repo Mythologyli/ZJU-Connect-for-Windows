@@ -46,7 +46,7 @@ jobs:
           rm zju-connect-windows-amd64.zip
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ZJU-Connect-for-Windows
           path: "ZJU Connect for Windows"
