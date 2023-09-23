@@ -820,6 +820,8 @@ void MainWindow::cleanUpWhenQuit()
 
 MainWindow::~MainWindow()
 {
+    delete networkDetector;
+
     if (zjuConnectController != nullptr)
     {
         disconnect(zjuConnectController, &ZjuConnectController::finished, this, nullptr);
