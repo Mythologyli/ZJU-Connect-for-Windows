@@ -193,98 +193,107 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->setRouteAction, &QAction::triggered,
             [&]()
             {
-                if (!networkDetectResult.isZjuLan)
-                {
-                    QMessageBox::critical(
-                        this, "错误",
-                        "未检测到 ZJU 有线网，无法设置静态路由！\n如果你正在使用路由器，请在路由器端设置静态路由"
-                    );
-                    return;
-                }
+                connect(networkDetector, &NetworkDetector::finished, this,
+                        [&](const NetworkDetectResult &result)
+                        {
+                            disconnect(networkDetector, &NetworkDetector::finished, this, nullptr);
+                            networkDetectResult = result;
 
-                QMessageBox messageBox(this);
-                messageBox.setWindowTitle("设置静态路由");
-                messageBox.setText(
-                    "在使用 L2TP 时，设置静态路由有助于从校网访问 RDP、NHD 等服务\n是否设置网关为 "
-                    + networkDetectResult.zjuLanGateway
-                    + " 的静态路由？\n在设置过程中会请求管理员权限"
-                );
+                            if (!networkDetectResult.isZjuLan)
+                            {
+                                QMessageBox::critical(
+                                    this, "错误",
+                                    "未检测到 ZJU 有线网，无法设置静态路由！\n如果你正在使用路由器，请在路由器端设置静态路由"
+                                );
+                                return;
+                            }
 
-                messageBox.addButton(QMessageBox::Yes)->setText("是");
-                messageBox.addButton(QMessageBox::No)->setText("否");
-                messageBox.setDefaultButton(QMessageBox::Yes);
+                            QMessageBox messageBox(this);
+                            messageBox.setWindowTitle("设置静态路由");
+                            messageBox.setText(
+                                "在使用 L2TP 时，设置静态路由有助于从校网访问 RDP、NHD 等服务\n是否设置网关为 "
+                                + networkDetectResult.zjuLanGateway
+                                + " 的静态路由？\n在设置过程中会请求管理员权限"
+                            );
 
-                if (messageBox.exec() == QMessageBox::Yes)
-                {
-                    QString command =
-                        "/c route -p add 10.0.0.0 mask 255.0.0.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 210.32.0.0 mask 255.255.240.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 222.205.0.0 mask 255.255.128.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 210.32.128.0 mask 255.255.224.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 210.32.160.0 mask 255.255.248.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 210.32.168.0 mask 255.255.252.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 210.32.172.0 mask 255.255.254.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 210.32.174.0 mask 255.255.255.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 210.32.176.0 mask 255.255.240.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 58.196.192.0 mask 255.255.224.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1 & "
-                        + "route -p add 58.196.224.0 mask 255.255.240.0 "
-                        + networkDetectResult.zjuLanGateway
-                        + " metric 1";
+                            messageBox.addButton(QMessageBox::Yes)->setText("是");
+                            messageBox.addButton(QMessageBox::No)->setText("否");
+                            messageBox.setDefaultButton(QMessageBox::Yes);
 
-                    HINSTANCE hInstance = ShellExecute(
-                        nullptr,
-                        L"runas",
-                        L"cmd.exe",
-                        command.toStdWString().c_str(),
-                        nullptr,
-                        SW_HIDE
-                    );
+                            if (messageBox.exec() == QMessageBox::Yes)
+                            {
+                                QString command =
+                                    "/c route -p add 10.0.0.0 mask 255.0.0.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 210.32.0.0 mask 255.255.240.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 222.205.0.0 mask 255.255.128.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 210.32.128.0 mask 255.255.224.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 210.32.160.0 mask 255.255.248.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 210.32.168.0 mask 255.255.252.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 210.32.172.0 mask 255.255.254.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 210.32.174.0 mask 255.255.255.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 210.32.176.0 mask 255.255.240.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 58.196.192.0 mask 255.255.224.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1 & "
+                                    + "route -p add 58.196.224.0 mask 255.255.240.0 "
+                                    + networkDetectResult.zjuLanGateway
+                                    + " metric 1";
 
-                    if (hInstance > (HINSTANCE) 32)
-                    {
-                        addLog("设置静态路由成功！");
+                                HINSTANCE hInstance = ShellExecute(
+                                    nullptr,
+                                    L"runas",
+                                    L"cmd.exe",
+                                    command.toStdWString().c_str(),
+                                    nullptr,
+                                    SW_HIDE
+                                );
 
-                        QMessageBox successBox(this);
-                        successBox.setWindowTitle("提示");
-                        successBox.setTextFormat(Qt::RichText);
-                        successBox.setText(
-                            "设置成功！"
-                            "<br>请打开 <a href='http://speedtest.zju.edu.cn'>http://speedtest.zju.edu.cn</a> 测速"
-                            "<br>若显示的 IP 地址为 10.x.x.x，说明静态路由已生效！"
-                        );
-                        successBox.exec();
-                    }
-                    else
-                    {
-                        addLog("设置静态路由失败！");
+                                if (hInstance > (HINSTANCE) 32)
+                                {
+                                    addLog("设置静态路由成功！");
 
-                        QMessageBox::critical(
-                            this,
-                            "错误",
-                            "设置失败！\n这可能是您拒绝了权限请求导致的"
-                        );
-                    }
-                }
+                                    QMessageBox successBox(this);
+                                    successBox.setWindowTitle("提示");
+                                    successBox.setTextFormat(Qt::RichText);
+                                    successBox.setText(
+                                        "设置成功！"
+                                        "<br>请打开 <a href='http://speedtest.zju.edu.cn'>http://speedtest.zju.edu.cn</a> 测速"
+                                        "<br>若显示的 IP 地址为 10.x.x.x，说明静态路由已生效！"
+                                    );
+                                    successBox.exec();
+                                }
+                                else
+                                {
+                                    addLog("设置静态路由失败！");
+
+                                    QMessageBox::critical(
+                                        this,
+                                        "错误",
+                                        "设置失败！\n这可能是您拒绝了权限请求导致的"
+                                    );
+                                }
+                            }
+                        });
+
+                networkDetector->start();
             });
 
     // 高级-静态路由-删除静态路由
