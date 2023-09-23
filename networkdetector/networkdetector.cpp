@@ -50,6 +50,8 @@ void NetworkDetector::start()
                     result.isZjuNet = true;
                     checkZjuWlan();
                 }
+
+                checkInternet();
             });
 
             process->start("nslookup", QStringList() << "dns1.zju.edu.cn" << "10.10.0.21");
