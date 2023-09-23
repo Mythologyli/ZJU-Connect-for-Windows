@@ -65,7 +65,7 @@ void MainWindow::setModeToWebLogin()
                         return;
                     }
 
-                    disconnect(processForWebLogin, &QProcess::finished, this, nullptr);
+                    disconnect(processForWebLogin, &QProcess::finished, nullptr, nullptr);
                     connect(processForWebLogin, &QProcess::finished, this, [&]()
                     {
                         QString output = QString::fromLocal8Bit(processForWebLogin->readAllStandardOutput()).trimmed();
@@ -142,7 +142,7 @@ void MainWindow::setModeToWebLogin()
                 }
                 else
                 {
-                    disconnect(processForWebLogin, &QProcess::finished, this, nullptr);
+                    disconnect(processForWebLogin, &QProcess::finished, nullptr, nullptr);
                     connect(processForWebLogin, &QProcess::finished, this, [&]()
                     {
                         isWebLogged = false;

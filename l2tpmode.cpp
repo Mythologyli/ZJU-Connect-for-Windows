@@ -44,7 +44,7 @@ void MainWindow::setModeToL2tp()
     addLog("工作模式设置为：有线网 L2TP");
 
     // 检查是否存在 VPN
-    disconnect(processForL2tp, &QProcess::finished, this, nullptr);
+    disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
     connect(processForL2tp, &QProcess::finished, this, [&]()
     {
         QString output = QString::fromLocal8Bit(processForL2tp->readAllStandardOutput()).trimmed();
@@ -118,7 +118,7 @@ void MainWindow::setModeToL2tp()
                         return;
                     }
 
-                    disconnect(processForL2tp, &QProcess::finished, this, nullptr);
+                    disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
                     connect(processForL2tp, &QProcess::finished, this, [&]()
                     {
                         QString output = QString::fromLocal8Bit(processForL2tp->readAllStandardOutput()).trimmed();
@@ -133,7 +133,7 @@ void MainWindow::setModeToL2tp()
                                 l2tpCheckTimer = new QTimer(this);
                                 connect(l2tpCheckTimer, &QTimer::timeout, this, [&]()
                                 {
-                                    disconnect(processForL2tp, &QProcess::finished, this, nullptr);
+                                    disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
                                     connect(processForL2tp, &QProcess::finished, this, [&]()
                                     {
                                         QString output = QString::fromLocal8Bit(
@@ -217,7 +217,7 @@ void MainWindow::setModeToL2tp()
                         delete l2tpCheckTimer;
                     }
 
-                    disconnect(processForL2tp, &QProcess::finished, this, nullptr);
+                    disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
                     connect(processForL2tp, &QProcess::finished, this, [&]()
                     {
                         QString output = QString::fromLocal8Bit(processForL2tp->readAllStandardOutput());

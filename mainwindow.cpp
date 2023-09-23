@@ -121,7 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
                 if (messageBox.exec() == QMessageBox::Yes)
                 {
-                    disconnect(process, &QProcess::finished, this, nullptr);
+                    disconnect(process, &QProcess::finished, nullptr, nullptr);
                     connect(process, &QProcess::finished, this, [&]()
                     {
                         QString output = QString::fromLocal8Bit(process->readAllStandardError());
@@ -824,7 +824,7 @@ MainWindow::~MainWindow()
 
     if (zjuConnectController != nullptr)
     {
-        disconnect(zjuConnectController, &ZjuConnectController::finished, this, nullptr);
+        disconnect(zjuConnectController, &ZjuConnectController::finished, nullptr, nullptr);
         delete zjuConnectController;
     }
 
