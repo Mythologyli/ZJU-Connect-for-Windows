@@ -45,11 +45,7 @@ PortForwardingWindow::PortForwardingWindow(QWidget *parent) :
                 }
 
                 emit applied(tcpPortForwardingList.join(","), udpPortForwardingList.join(","));
-            });
 
-    connect(ui->cancelPushButton, &QPushButton::clicked,
-            [&]()
-            {
                 close();
             });
 }

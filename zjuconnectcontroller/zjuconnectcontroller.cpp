@@ -6,7 +6,7 @@ ZjuConnectController::ZjuConnectController()
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardOutput, this, [&]()
     {
-        QString output = QString(zjuConnectProcess->readAllStandardOutput());
+        QString output = QString::fromLocal8Bit(zjuConnectProcess->readAllStandardOutput());
 
         emit outputRead(output);
 
@@ -18,7 +18,7 @@ ZjuConnectController::ZjuConnectController()
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
     {
-        QString output = QString(zjuConnectProcess->readAllStandardError());
+        QString output = QString::fromLocal8Bit(zjuConnectProcess->readAllStandardError());
 
         emit outputRead(output);
 

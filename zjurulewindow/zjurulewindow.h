@@ -6,7 +6,7 @@
 
 namespace Ui
 {
-    class ZjuruleWindow;
+    class ZjuRuleWindow;
 }
 
 class ZjuRuleWindow : public QWidget

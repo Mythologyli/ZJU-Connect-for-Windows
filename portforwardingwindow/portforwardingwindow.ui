@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>489</width>
+    <height>317</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,14 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="4">
+   <item row="2" column="1">
+    <widget class="QPushButton" name="applyPushButton">
+     <property name="text">
+      <string>确定</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
     <widget class="QTextEdit" name="textEdit">
      <property name="html">
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -44,30 +51,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </property>
     </spacer>
    </item>
-   <item row="0" column="0" colspan="4">
+   <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;在下面的输入框内输入端口转发规则，一行一条规则&lt;/p&gt;&lt;p&gt;例如，在内网主机 10.10.98.98 的 13389 端口上存在 RDP 远程桌面服务（TCP 协议），&lt;br/&gt;需要将其转发到本机 127.0.0.1:9850 使用，规则为：&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;TCP,127.0.0.1:9850,10.10.98.98:13389&lt;/span&gt;&lt;/p&gt;&lt;p&gt;例如，在内网主机 10.10.98.98 的 2222 端口上存在 SSH 服务（TCP 协议），&lt;br/&gt;需要将其转发到本机 9852 端口供本机和 LAN 下其他设备使用，规则为：&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;TCP,0.0.0.0:9852,10.10.98.98:2222&lt;/span&gt;&lt;/p&gt;&lt;p&gt;支持的协议：TCP、UDP&lt;/p&gt;&lt;p&gt;输入后点击应用，断开并重新连接后方可生效&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;在下面的输入框内输入端口转发规则，一行一条规则&lt;/p&gt;&lt;p&gt;例如，在内网主机 10.10.98.98 的 13389 端口上存在 RDP 远程桌面服务（TCP 协议），&lt;br/&gt;需要将其转发到本机 127.0.0.1:9850 使用，规则为：&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;TCP,127.0.0.1:9850,10.10.98.98:13389&lt;/span&gt;&lt;/p&gt;&lt;p&gt;例如，在内网主机 10.10.98.98 的 2222 端口上存在 SSH 服务（TCP 协议），&lt;br/&gt;需要将其转发到本机 9852 端口供本机和 LAN 下其他设备使用，规则为：&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;TCP,0.0.0.0:9852,10.10.98.98:2222&lt;/span&gt;&lt;/p&gt;&lt;p&gt;支持的协议：TCP、UDP&lt;/p&gt;&lt;p&gt;输入后点击确定并应用，断开并重新连接后方可生效&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>
      </property>
      <property name="textInteractionFlags">
       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <widget class="QPushButton" name="applyPushButton">
-     <property name="text">
-      <string>应用</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="cancelPushButton">
-     <property name="text">
-      <string>取消</string>
      </property>
     </widget>
    </item>

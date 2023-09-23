@@ -10,7 +10,7 @@ Q_OBJECT
 public:
     ZjuConnectController();
 
-    ~ZjuConnectController();
+    ~ZjuConnectController() override;
 
     void start(
         const QString &program,

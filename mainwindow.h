@@ -11,6 +11,9 @@
 #include "zjurulewindow/zjurulewindow.h"
 #include "portforwardingwindow/portforwardingwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
+#include "networkdetector/networkdetector.h"
+#include "settingwindow/settingwindow.h"
+#include "QrCodeGenerator/QrCodeGenerator.h"
 
 namespace Ui
 {
@@ -26,28 +29,63 @@ public:
 
     ~MainWindow() override;
 
+public slots:
+
+    void cleanUpWhenQuit();
+
+signals:
+
+    void SetModeFinished();
+
 protected:
     void closeEvent(QCloseEvent *e) override;
 
 private:
+    void upgradeSettings();
+
+    void clearLog();
+
+    void addLog(const QString &log);
+
+    void setModeToL2tp();
+
+    void setModeToWebLogin();
+
+    void setModeToZjuConnect();
+
     Ui::MainWindow *ui;
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QAction *trayShowAction;
     QAction *trayCloseAction;
     ZjuConnectController *zjuConnectController;
+    NetworkDetector *networkDetector;
     QNetworkAccessManager *networkAccessManager;
     QSettings *settings;
+    QProcess *process;
+    QProcess *processForL2tp;
+    QProcess *processForWebLogin;
+    QTimer *l2tpCheckTimer;
+    QrCodeGenerator qrGenerator;
+
+    QObject *diagnosisContext;
 
     ZjuRuleWindow *zjuRuleWindow;
-    PortForwardingWindow *portForwardingWindow;
+    SettingWindow *settingWindow;
 
-    bool isLinked;
-    bool isLoginError;
+    QString mode;
+    NetworkDetectResult networkDetectResult;
+
+    bool isFirstTimeSetMode;
+
+    bool isL2tpLinked;
+    bool isL2tpReconnecting;
+
+    bool isWebLogged;
+
+    bool isZjuConnectLinked;
+    bool isZjuConnectLoginError;
     bool isSystemProxySet;
-
-    QString tcpPortForwarding;
-    QString udpPortForwarding;
 };
 
 #endif //MAINWINDOW_H
