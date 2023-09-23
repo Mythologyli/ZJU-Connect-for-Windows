@@ -1,0 +1,60 @@
+name: Build
+
+on:
+    release:
+      types: [ published ]
+    push:
+      branches: [ master ]
+    pull_request:
+      branches: [ master ]
+
+permissions: write-all
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.0'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          cache: 'true'
+          cache-key-prefix: 'install-qt-action'
+
+      - name: Build
+        run: |
+          mkdir build
+          cmake -S . -B build
+          cmake --build build --target ZJUConnectForWindows --config Release
+
+      - name: Download and copy files
+        run: |
+          mkdir "ZJU Connect for Windows"
+          cd "ZJU Connect for Windows"
+          cp ../build/Release/ZJUConnectForWindows.exe .
+          windeployqt.exe ZJUConnectForWindows.exe
+          curl -LO https://github.com/Mythologyli/zju-web-login/releases/latest/download/weblogin.exe          
+          curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
+          tar -xf zju-connect-windows-amd64.zip
+          rm zju-connect-windows-amd64.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ZJU-Connect-for-Windows
+          path: "ZJU Connect for Windows"
+
+      - name: Upload to release
+        if: github.event_name == 'release'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          tar -czf ZJU-Connect-for-Windows.zip "ZJU Connect for Windows"
+          gh release upload ${{ github.event.release.tag_name }} ZJU-Connect-for-Windows.zip
