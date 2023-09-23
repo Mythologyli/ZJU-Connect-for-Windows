@@ -56,5 +56,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          tar -czf ZJU-Connect-for-Windows.zip "ZJU Connect for Windows"
+          Compress-Archive -Path "ZJU Connect for Windows" -DestinationPath ZJU-Connect-for-Windows.zip
           gh release upload ${{ github.event.release.tag_name }} ZJU-Connect-for-Windows.zip
