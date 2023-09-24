@@ -21,6 +21,10 @@
 - [x] 开机启动并连接
 - [x] 网络诊断
 
+## 使用说明
+
+[https://www.cc98.org/topic/5704061](https://www.cc98.org/topic/5704061)
+
 ## 致谢
 
 + [EasierConnect](https://github.com/lyc8503/EasierConnect) 原作者 [lyc8503](https://github.com/lyc8503)
