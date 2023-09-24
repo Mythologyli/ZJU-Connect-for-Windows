@@ -44,17 +44,26 @@ jobs:
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
           tar -xf zju-connect-windows-amd64.zip
           rm zju-connect-windows-amd64.zip
+          cd ..
+          Compress-Archive -Path "ZJU Connect for Windows" -DestinationPath ZJU-Connect-for-Windows.zip
+          Get-FileHash ZJU-Connect-for-Windows.zip | Format-List | Out-File -FilePath SHA256.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: ZJU-Connect-for-Windows
-          path: "ZJU Connect for Windows"
+          path: ZJU-Connect-for-Windows.zip
+
+      - name: Upload SHA256.txt
+        uses: actions/upload-artifact@v3
+        with:
+          name: SHA256
+          path: SHA256.txt
 
       - name: Upload to release
         if: github.event_name == 'release'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          Compress-Archive -Path "ZJU Connect for Windows" -DestinationPath ZJU-Connect-for-Windows.zip
           gh release upload ${{ github.event.release.tag_name }} ZJU-Connect-for-Windows.zip
+          gh release upload ${{ github.event.release.tag_name }} SHA256.txt
