@@ -133,11 +133,11 @@ void MainWindow::setModeToL2tp()
                                 l2tpCheckTimer = new QTimer(this);
                                 connect(l2tpCheckTimer, &QTimer::timeout, this, [&]()
                                 {
-                                    disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
-                                    connect(processForL2tp, &QProcess::finished, this, [&]()
+                                    disconnect(processForL2tpCheck, &QProcess::finished, nullptr, nullptr);
+                                    connect(processForL2tpCheck, &QProcess::finished, this, [&]()
                                     {
                                         QString output = QString::fromLocal8Bit(
-                                            processForL2tp->readAllStandardOutput()
+                                            processForL2tpCheck->readAllStandardOutput()
                                         ).trimmed();
                                         if (output.contains("(0%") && !output.contains("unreachable") &&
                                             !output.contains("无法"))
@@ -152,7 +152,7 @@ void MainWindow::setModeToL2tp()
                                         }
                                     });
 
-                                    processForL2tp->start(
+                                    processForL2tpCheck->start(
                                         "ping",
                                         QStringList()
                                             << "-n"
@@ -211,10 +211,12 @@ void MainWindow::setModeToL2tp()
                 }
                 else
                 {
-                    if (l2tpCheckTimer != nullptr && l2tpCheckTimer->isActive())
+                    if (l2tpCheckTimer != nullptr)
                     {
+                        disconnect(processForL2tpCheck, &QProcess::finished, nullptr, nullptr);
                         l2tpCheckTimer->stop();
                         delete l2tpCheckTimer;
+                        l2tpCheckTimer = nullptr;
                     }
 
                     disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
