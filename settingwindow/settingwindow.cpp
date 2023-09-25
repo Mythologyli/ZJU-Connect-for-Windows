@@ -113,6 +113,19 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
     connect(ui->applyPushButton, &QPushButton::clicked,
             [&]()
             {
+                QRegularExpression re("^[A-Za-z]+$");
+                QRegularExpressionMatch match = re.match(ui->l2tpNameLineEdit->text());
+                if (!match.hasMatch())
+                {
+                    ui->tabWidget->setCurrentWidget(ui->l2tpTab);
+                    QMessageBox::warning(
+                        this,
+                        "警告",
+                        "建议 L2TP VPN 名称只包含英文字母，否则可能导致系统代理出错！\n"
+                        "如果您之前自行配置过 VPN，建议修改此处 L2TP VPN 名称，之后在主界面点击高级-创建 L2TP VPN"
+                    );
+                }
+
                 if (ui->l2tpCheckIpLineEdit->text().isEmpty() and ui->l2tpAutoCheckComboBox->currentText() == "是")
                 {
                     ui->tabWidget->setCurrentWidget(ui->l2tpTab);
