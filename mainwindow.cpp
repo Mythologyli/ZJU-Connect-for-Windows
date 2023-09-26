@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->setIcon(QIcon(QPixmap(":/resource/icon.png").scaled(
         512, 512, Qt::KeepAspectRatio, Qt::SmoothTransformation
     )));
+    trayIcon->setVisible(true);
     trayIcon->setToolTip(QApplication::applicationName());
     connect(trayIcon, &QSystemTrayIcon::activated, this, [&](QSystemTrayIcon::ActivationReason reason)
     {
@@ -71,6 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 break;
             default:
                 show();
+                setWindowState(Qt::WindowState::WindowActive);
         }
     });
     trayIcon->show();
@@ -83,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(trayShowAction, &QAction::triggered, this, [&]()
     {
         show();
+        setWindowState(Qt::WindowState::WindowActive);
     });
     connect(trayCloseAction, &QAction::triggered, this, [&]()
     {
