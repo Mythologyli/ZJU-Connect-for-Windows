@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: 向 ZJU Connect 提出建议/功能请求
+about: 向 ZJU Connect for Windows 提出建议/功能请求
 title: ''
 labels: enhancement
 assignees: Mythologyli
