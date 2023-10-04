@@ -7,6 +7,7 @@
 #include <shellapi.h>
 #include <QNetworkInterface>
 #include <QClipboard>
+#include <QDesktopServices>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -526,6 +527,24 @@ MainWindow::MainWindow(QWidget *parent) :
                                        "<br>点击<a href='" + url + "'>此处</a>下载";
 
                         ui->statusLabel->setText(text);
+
+                        disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
+                        trayIcon->showMessage(
+                            "有新版本可用",
+                            "v" + version + "\n更新内容：" + description + "\n点击查看详情",
+                            QSystemTrayIcon::Information,
+                            10000
+                        );
+
+                        connect(trayIcon, &QSystemTrayIcon::messageClicked, this, [&, url]()
+                        {
+                            disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
+
+                            QDesktopServices::openUrl(QUrl(url));
+
+                            show();
+                            setWindowState(Qt::WindowState::WindowActive);
+                        });
                     }
                 }
             });
@@ -802,6 +821,25 @@ void MainWindow::upgradeSettings()
     }
 
     settings->sync();
+}
+
+void MainWindow::showNotification(const QString &title, const QString &content, QSystemTrayIcon::MessageIcon icon)
+{
+    disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
+    trayIcon->showMessage(
+        title,
+        content,
+        icon,
+        10000
+    );
+
+    connect(trayIcon, &QSystemTrayIcon::messageClicked, this, [&]()
+    {
+        disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
+
+        show();
+        setWindowState(Qt::WindowState::WindowActive);
+    });
 }
 
 void MainWindow::cleanUpWhenQuit()

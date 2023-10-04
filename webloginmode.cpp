@@ -74,6 +74,7 @@ void MainWindow::setModeToWebLogin()
                             isWebLogged = true;
                             ui->pushButton1->setText("注销");
                             addLog("登录成功！");
+                            showNotification("网页认证登录", "登录成功！");
                         }
                         else
                         {

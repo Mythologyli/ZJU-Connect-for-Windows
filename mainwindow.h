@@ -47,6 +47,12 @@ private:
 
     void addLog(const QString &log);
 
+    void showNotification(
+        const QString &title,
+        const QString &content,
+        QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon::Information
+    );
+
     void setModeToL2tp();
 
     void setModeToWebLogin();

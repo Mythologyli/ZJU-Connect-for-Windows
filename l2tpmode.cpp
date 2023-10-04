@@ -127,6 +127,7 @@ void MainWindow::setModeToL2tp()
                             isL2tpLinked = true;
                             ui->pushButton1->setText("断开 L2TP");
                             addLog("连接成功！");
+                            showNotification("有线网 L2TP", "连接成功！");
 
                             if (settings->value("L2TP/AutoReconnect", false).toBool())
                             {
@@ -147,6 +148,11 @@ void MainWindow::setModeToL2tp()
                                         else
                                         {
                                             addLog("自动检测结果：L2TP VPN 连接异常，正在重连...");
+                                            showNotification(
+                                                "有线网 L2TP",
+                                                "自动检测结果：L2TP VPN 连接异常，正在重连...",
+                                                QSystemTrayIcon::MessageIcon::Warning
+                                            );
                                             isL2tpReconnecting = true;
                                             ui->pushButton1->click();
                                         }
