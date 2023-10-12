@@ -114,7 +114,7 @@ void MainWindow::setModeToWebLogin()
                     QString url;
                     if (settings->value("WebLogin/EnableCustomUrl", false).toBool())
                     {
-                        url = settings->value("WebLogin/CustomUrl", "https://net2.zju.edu.cn").toString();
+                        url = settings->value("WebLogin/CustomUrl", "https://net.zju.edu.cn").toString();
                     }
                     else if (settings->value("WebLogin/IntlUrl", false).toBool())
                     {
@@ -122,7 +122,7 @@ void MainWindow::setModeToWebLogin()
                     }
                     else
                     {
-                        url = "https://net2.zju.edu.cn";
+                        url = "https://net.zju.edu.cn";
                     }
 
                     processForWebLogin->start(
@@ -168,7 +168,7 @@ void MainWindow::setModeToWebLogin()
                     QString url;
                     if (settings->value("WebLogin/EnableCustomUrl", false).toBool())
                     {
-                        url = settings->value("WebLogin/CustomUrl", "https://net2.zju.edu.cn").toString();
+                        url = settings->value("WebLogin/CustomUrl", "https://net.zju.edu.cn").toString();
                     }
                     else if (settings->value("WebLogin/IntlUrl", false).toBool())
                     {
@@ -176,7 +176,7 @@ void MainWindow::setModeToWebLogin()
                     }
                     else
                     {
-                        url = "https://net2.zju.edu.cn";
+                        url = "https://net.zju.edu.cn";
                     }
 
                     processForWebLogin->start(

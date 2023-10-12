@@ -92,7 +92,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
         ui->customUrlComboBox->setCurrentText("否");
     }
 
-    ui->customUrlLineEdit->setText(settings->value("WebLogin/CustomUrl", "https://net2.zju.edu.cn").toString());
+    ui->customUrlLineEdit->setText(settings->value("WebLogin/CustomUrl", "https://net.zju.edu.cn").toString());
 
     connect(ui->portForwardingPushButton, &QPushButton::clicked,
             [&]()
