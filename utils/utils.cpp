@@ -92,6 +92,8 @@ void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString 
         lpRasEntryName = (LPRASENTRYNAME) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwCb);
         if (lpRasEntryName == nullptr)
         {
+            free(proxyServerWStr);
+            free(bypassWStr);
             return;
         }
         lpRasEntryName[0].dwSize = sizeof(RASENTRYNAME);
@@ -108,7 +110,6 @@ void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString 
         }
 
         HeapFree(GetProcessHeap(), 0, lpRasEntryName);
-        return;
     }
 
     free(proxyServerWStr);
