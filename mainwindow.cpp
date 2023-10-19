@@ -371,6 +371,35 @@ MainWindow::MainWindow(QWidget *parent) :
                 zjuRuleWindow->show();
             });
 
+    // 帮助-清除系统代理
+    connect(ui->disableProxyAction, &QAction::triggered,
+            [&]()
+            {
+                QMessageBox messageBox(this);
+                messageBox.setWindowTitle("清除系统代理");
+                messageBox.setText("是否清除系统代理？");
+
+                messageBox.addButton(QMessageBox::Yes)->setText("是");
+                messageBox.addButton(QMessageBox::No)->setText("否");
+                messageBox.setDefaultButton(QMessageBox::Yes);
+
+                if (messageBox.exec() == QMessageBox::No)
+                {
+                    return;
+                }
+
+                if (mode == "RVPN" && isSystemProxySet)
+                {
+                    ui->pushButton2->click();
+                }
+                else
+                {
+                    Utils::clearSystemProxy();
+                }
+
+                addLog("已清除系统代理设置");
+            });
+
     // 帮助-网络诊断
     connect(ui->diagnosisAction, &QAction::triggered,
             [&]()

@@ -237,6 +237,7 @@ Windows Version: Windows 11
     <property name="title">
      <string>帮助</string>
     </property>
+    <addaction name="disableProxyAction"/>
     <addaction name="diagnosisAction"/>
     <addaction name="aboutAction"/>
    </widget>
@@ -307,6 +308,11 @@ Windows Version: Windows 11
   <action name="diagnosisAction">
    <property name="text">
     <string>网络诊断</string>
+   </property>
+  </action>
+  <action name="disableProxyAction">
+   <property name="text">
+    <string>清除系统代理</string>
    </property>
   </action>
  </widget>
