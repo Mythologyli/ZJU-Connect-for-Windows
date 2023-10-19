@@ -124,23 +124,14 @@ void NetworkDetector::checkZjuLan()
             {
                 result.zjuLanGateway = line.split(":").at(1).trimmed();
 
-                disconnect(process, &QProcess::finished, this, nullptr);
-                connect(process, &QProcess::finished, this, [&]()
+                if (result.zjuLanGateway.startsWith("10."))
                 {
-                    QString output = QString::fromLocal8Bit(process->readAllStandardOutput());
-                    if (output.contains("(0%") && !output.contains("unreachable") && !output.contains("无法"))
-                    {
-                        result.isZjuLan = true;
-                        checkInternet();
-                        return;
-                    }
-
-                    result.zjuLanGateway = "";
+                    result.isZjuLan = true;
                     checkInternet();
-                });
+                    return;
+                }
 
-                process->start("ping", QStringList() << "10.0.2.3" << "-S" << ip << "-n" << "1");
-                return;
+                result.zjuLanGateway = "";
             }
             else if ((line.contains("接口 \"") || line.contains("interface \"")) && (waitForIp || waitForGateway))
             {
