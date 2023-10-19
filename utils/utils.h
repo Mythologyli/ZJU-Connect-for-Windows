@@ -9,6 +9,8 @@ namespace Utils
 
     void showAboutMessageBox(QWidget *parent = nullptr);
 
+    void SetProxyForAllConnections(const QString &proxyServer, const QString &bypass);
+
     void setSystemProxy(int port);
 
     void clearSystemProxy();

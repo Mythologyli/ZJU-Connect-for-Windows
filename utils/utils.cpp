@@ -3,6 +3,11 @@
 #include <QSettings>
 #include <QNetworkInterface>
 
+#include "windows.h"
+#include "wininet.h"
+#include "ras.h"
+#include "raserror.h"
+
 #include "utils.h"
 
 void Utils::setWidgetFixedWhenHidden(QWidget *widget)
@@ -40,41 +45,98 @@ void Utils::showAboutMessageBox(QWidget *parent)
     messageBox.exec();
 }
 
+void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString &bypass)
+{
+    INTERNET_PER_CONN_OPTION_LIST optionList;
+    INTERNET_PER_CONN_OPTION optionsArr[3];
+    unsigned long optionListSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
+
+    optionsArr[1].dwOption = INTERNET_PER_CONN_FLAGS;
+    optionsArr[1].Value.dwValue = 0;
+    if (proxyServer != "")
+    {
+        optionsArr[1].Value.dwValue = PROXY_TYPE_DIRECT | PROXY_TYPE_PROXY;
+    }
+    else
+    {
+        optionsArr[1].Value.dwValue = PROXY_TYPE_DIRECT;
+    }
+
+    optionsArr[0].dwOption = INTERNET_PER_CONN_PROXY_SERVER;
+    auto *proxyServerWStr = (wchar_t *) calloc(sizeof(wchar_t), proxyServer.length() + 1);
+    proxyServer.toWCharArray(proxyServerWStr);
+    optionsArr[0].Value.pszValue = proxyServerWStr;
+
+    optionsArr[2].dwOption = INTERNET_PER_CONN_PROXY_BYPASS;
+    auto *bypassWStr = (wchar_t *) calloc(sizeof(wchar_t), bypass.length() + 1);
+    bypass.toWCharArray(bypassWStr);
+    optionsArr[2].Value.pszValue = bypassWStr;
+
+    optionList.dwSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
+    optionList.pszConnection = nullptr;
+    optionList.dwOptionCount = 3;
+    optionList.dwOptionError = 0;
+    optionList.pOptions = optionsArr;
+
+    InternetSetOption(nullptr, INTERNET_OPTION_PER_CONNECTION_OPTION, &optionList, optionListSize);
+
+    DWORD dwCb = 0;
+    DWORD dwRet = ERROR_SUCCESS;
+    DWORD dwEntries = 0;
+    LPRASENTRYNAME lpRasEntryName = nullptr;
+
+    dwRet = RasEnumEntries(nullptr, nullptr, lpRasEntryName, &dwCb, &dwEntries);
+
+    if (dwRet == ERROR_BUFFER_TOO_SMALL)
+    {
+        lpRasEntryName = (LPRASENTRYNAME) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwCb);
+        if (lpRasEntryName == nullptr)
+        {
+            return;
+        }
+        lpRasEntryName[0].dwSize = sizeof(RASENTRYNAME);
+
+        dwRet = RasEnumEntries(nullptr, nullptr, lpRasEntryName, &dwCb, &dwEntries);
+
+        if (ERROR_SUCCESS == dwRet)
+        {
+            for (DWORD i = 0; i < dwEntries; i++)
+            {
+                optionList.pszConnection = lpRasEntryName[i].szEntryName;
+                InternetSetOption(nullptr, INTERNET_OPTION_PER_CONNECTION_OPTION, &optionList, optionListSize);
+            }
+        }
+
+        HeapFree(GetProcessHeap(), 0, lpRasEntryName);
+        return;
+    }
+
+    free(proxyServerWStr);
+    free(bypassWStr);
+}
+
 void Utils::setSystemProxy(int port)
 {
-    QSettings proxySettings(
-        R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings)",
-        QSettings::NativeFormat
-    );
-
-    proxySettings.setValue("ProxyEnable", 1);
-    proxySettings.setValue("ProxyServer", "127.0.0.1:" + QString::number(port));
-    proxySettings.setValue(
-        "ProxyOverride",
+    SetProxyForAllConnections(
+        "127.0.0.1:" + QString::number(port),
         "localhost;127.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;<local>"
     );
 }
 
 void Utils::clearSystemProxy()
 {
-    QSettings proxySettings(
-        R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings)",
-        QSettings::NativeFormat
-    );
-
-    proxySettings.setValue("ProxyEnable", 0);
-    proxySettings.setValue("ProxyServer", "");
-    proxySettings.setValue("ProxyOverride", "");
+    SetProxyForAllConnections("", "");
 }
 
 QString Utils::getIpv4Address(const QString &interfaceName)
 {
     auto interfaces = QNetworkInterface::allInterfaces();
-    for (auto &interface: interfaces)
+    for (auto &singleInterface: interfaces)
     {
-        if (interface.humanReadableName() == interfaceName)
+        if (singleInterface.humanReadableName() == interfaceName)
         {
-            auto addresses = interface.addressEntries();
+            auto addresses =
+                singleInterface.addressEntries();
             for (auto &address: addresses)
             {
                 if (address.ip().protocol() == QAbstractSocket::IPv4Protocol)

@@ -55,4 +55,6 @@ target_link_libraries(ZJUConnectForWindows
         Qt::Network
         Qt::Svg
         SingleApplication::SingleApplication
+        wininet
+        rasapi32
 )
