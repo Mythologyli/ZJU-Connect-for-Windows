@@ -83,6 +83,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} ZJUConnectForWindowsInstaller.exe
+          gh release upload ${{ github.event.release.tag_name }} Output/ZJUConnectForWindowsInstaller.exe
           gh release upload ${{ github.event.release.tag_name }} ZJU-Connect-for-Windows.zip
           gh release upload ${{ github.event.release.tag_name }} SHA256.txt
