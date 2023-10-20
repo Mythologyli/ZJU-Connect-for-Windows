@@ -63,6 +63,7 @@ void MainWindow::setModeToZjuConnect()
         showNotification("RVPN", "RVPN 断开！", QSystemTrayIcon::MessageIcon::Warning);
         isZjuConnectLinked = false;
         ui->pushButton1->setText("连接服务器");
+        ui->modeComboBox->setEnabled(true);
 
         if (isZjuConnectLoginError)
         {
