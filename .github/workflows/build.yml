@@ -42,6 +42,7 @@ jobs:
           cd "ZJU Connect for Windows"
           cp ../build/Release/ZJUConnectForWindows.exe .
           windeployqt.exe ZJUConnectForWindows.exe
+          rm vc_redist.x64.exe
           curl -LO https://github.com/Mythologyli/zju-web-login/releases/latest/download/weblogin.exe          
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
           tar -xf zju-connect-windows-amd64.zip
@@ -49,6 +50,15 @@ jobs:
           cd ..
           Compress-Archive -Path "ZJU Connect for Windows" -DestinationPath ZJU-Connect-for-Windows.zip
           Get-FileHash ZJU-Connect-for-Windows.zip | Format-List | Out-File -FilePath SHA256.txt
+          cd "C:\Program Files (x86)\Inno Setup 6\Languages"
+          curl -LO https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl
+
+      - name: Make installer
+        run: |
+          cd "ZJU Connect for Windows"
+          curl -LO https://aka.ms/vs/17/release/vc_redist.x64.exe
+          cd ..
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -62,10 +72,17 @@ jobs:
           name: SHA256
           path: SHA256.txt
 
+      - name: Upload installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: ZJU-Connect-for-Windows-Installer
+          path: Output/ZJUConnectForWindowsInstaller.exe
+
       - name: Upload to release
         if: github.event_name == 'release'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          gh release upload ${{ github.event.release.tag_name }} ZJUConnectForWindowsInstaller.exe
           gh release upload ${{ github.event.release.tag_name }} ZJU-Connect-for-Windows.zip
           gh release upload ${{ github.event.release.tag_name }} SHA256.txt
