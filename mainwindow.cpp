@@ -810,6 +810,21 @@ void MainWindow::upgradeSettings()
     }
     else if (configVersion == 2)
     {
+        if (settings->contains("Common/AutoStart"))
+        {
+            if (settings->value("Common/AutoStart").toBool())
+            {
+                QSettings autoStartSettings(
+                    R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run)",
+                    QSettings::NativeFormat
+                );
+                autoStartSettings.setValue(
+                    "ZjuConnectForWindows",
+                    QCoreApplication::applicationFilePath().replace('/', '\\')
+                );
+            }
+        }
+
         return;
     }
 
