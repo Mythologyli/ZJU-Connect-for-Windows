@@ -44,6 +44,8 @@ void ZjuConnectController::start(
     bool proxyAll,
     const QString &socksBind,
     const QString &httpBind,
+    bool tunMode,
+    bool addRoute,
     bool debugDump,
     const QString &tcpPortForwarding,
     const QString &udpPortForwarding
@@ -71,6 +73,20 @@ void ZjuConnectController::start(
     if (proxyAll)
     {
         args.append("-proxy-all");
+    }
+
+    if (tunMode)
+    {
+        args.append("-tun-mode");
+        args.append("-dns-server-bind");
+        args.append("127.0.0.1:53");
+        args.append("-tun-dns-server");
+        args.append("127.0.0.1");
+
+        if (addRoute)
+        {
+            args.append("-add-route");
+        }
     }
 
     if (debugDump)

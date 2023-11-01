@@ -59,6 +59,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
     ui->autoReconnectCheckBox->setChecked(settings->value("ZJUConnect/AutoReconnect", false).toBool());
     ui->reconnectTimeSpinBox->setValue(settings->value("ZJUConnect/ReconnectTime", 1).toInt());
     ui->autoSetProxyCheckBox->setChecked(settings->value("ZJUConnect/AutoSetProxy", false).toBool());
+    ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", false).toBool());
 
     ui->l2tpNameLineEdit->setText(settings->value("L2TP/Name", "ZJUVPN").toString());
 
@@ -158,6 +159,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                 settings->setValue("ZJUConnect/AutoReconnect", ui->autoReconnectCheckBox->isChecked());
                 settings->setValue("ZJUConnect/ReconnectTime", ui->reconnectTimeSpinBox->value());
                 settings->setValue("ZJUConnect/AutoSetProxy", ui->autoSetProxyCheckBox->isChecked());
+                settings->setValue("ZJUConnect/Route", ui->routeCheckBox->isChecked());
 
                 settings->setValue("L2TP/Name", ui->l2tpNameLineEdit->text());
                 settings->setValue("L2TP/AutoReconnect", ui->l2tpAutoCheckComboBox->currentText() == "是");

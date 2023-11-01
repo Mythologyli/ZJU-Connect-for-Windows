@@ -15,6 +15,7 @@ void MainWindow::setModeToZjuConnect()
     ui->interfaceLabel->hide();
     ui->refreshInterfaceButton->hide();
     ui->interfaceComboBox->hide();
+    ui->tunCheckBox->show();
 
     zjuConnectController = new ZjuConnectController();
 
@@ -105,6 +106,8 @@ void MainWindow::setModeToZjuConnect()
                         settings->value("ZJUConnect/ProxyAll", false).toBool(),
                         "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 1080).toInt()),
                         "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 1081).toInt()),
+                        ui->tunCheckBox->isChecked(),
+                        settings->value("ZJUConnect/Route", false).toBool(),
                         settings->value("ZJUConnect/Debug", false).toBool(),
                         settings->value("ZJUConnect/TcpPortForwarding", "").toString(),
                         settings->value("ZJUConnect/UdpPortForwarding", "").toString()

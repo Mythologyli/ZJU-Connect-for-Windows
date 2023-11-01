@@ -22,6 +22,8 @@ public:
         bool proxyAll = false,
         const QString &socksBind = "",
         const QString &httpBind = "",
+        bool tunMode = false,
+        bool addRoute = false,
         bool debugDump = false,
         const QString &tcpPortForwarding = "",
         const QString &udpPortForwarding = ""

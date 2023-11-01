@@ -16,6 +16,7 @@ void MainWindow::setModeToL2tp()
     ui->interfaceLabel->hide();
     ui->refreshInterfaceButton->hide();
     ui->interfaceComboBox->hide();
+    ui->tunCheckBox->hide();
 
     // 清除系统代理
     if (isSystemProxySet)

@@ -29,6 +29,7 @@ void MainWindow::setModeToWebLogin()
     ui->interfaceLabel->show();
     ui->refreshInterfaceButton->show();
     ui->interfaceComboBox->show();
+    ui->tunCheckBox->hide();
 
     // 清除系统代理
     if (isSystemProxySet)
