@@ -47,10 +47,7 @@ jobs:
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
           tar -xf zju-connect-windows-amd64.zip
           rm zju-connect-windows-amd64.zip
-          curl -LO https://www.wintun.net/builds/wintun-0.14.1.zip
-          tar -xf wintun-0.14.1.zip
-          cp wintun/bin/amd64/wintun.dll .
-          rm -r wintun
+          cp ../libs/wintun/bin/amd64/wintun.dll .
           cd ..
           Compress-Archive -Path "ZJU Connect for Windows" -DestinationPath ZJU-Connect-for-Windows.zip
           Get-FileHash ZJU-Connect-for-Windows.zip | Format-List | Out-File -FilePath SHA256.txt

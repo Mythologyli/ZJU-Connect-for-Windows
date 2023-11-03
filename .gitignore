@@ -36,3 +36,5 @@
 
 # CLion
 /.idea
+
+!wintun.dll
