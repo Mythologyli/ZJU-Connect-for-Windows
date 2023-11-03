@@ -14,6 +14,10 @@ ZjuConnectController::ZjuConnectController()
         {
             emit loginFailed();
         }
+        else if (output.contains("Access is denied."))
+        {
+            emit accessDenied();
+        }
     });
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
@@ -25,6 +29,10 @@ ZjuConnectController::ZjuConnectController()
         if (output.contains("Login FAILED") || output.contains("too many login failures"))
         {
             emit loginFailed();
+        }
+        else if (output.contains("Access is denied."))
+        {
+            emit accessDenied();
         }
     });
 

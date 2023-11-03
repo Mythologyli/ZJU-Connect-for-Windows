@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     isWebLogged = false;
     isZjuConnectLinked = false;
     isZjuConnectLoginError = false;
+    isZjuConnectAccessDenied = false;
     isSystemProxySet = false;
 
     ui->setupUi(this);

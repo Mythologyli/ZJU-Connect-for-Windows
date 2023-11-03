@@ -36,6 +36,8 @@ signals:
 
     void loginFailed();
 
+    void accessDenied();
+
     void outputRead(const QString &output);
 
     void finished();

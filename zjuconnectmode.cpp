@@ -38,10 +38,16 @@ void MainWindow::setModeToZjuConnect()
         isZjuConnectLoginError = true;
     });
 
+    connect(zjuConnectController, &ZjuConnectController::accessDenied, this, [&]()
+    {
+        isZjuConnectAccessDenied = true;
+    });
+
     connect(zjuConnectController, &ZjuConnectController::finished, this, [&]()
     {
         if (
             !isZjuConnectLoginError &&
+            !isZjuConnectAccessDenied &&
             settings->value("ZJUConnect/AutoReconnect", false).toBool() &&
             isZjuConnectLinked
             )
@@ -70,6 +76,10 @@ void MainWindow::setModeToZjuConnect()
         {
             isZjuConnectLoginError = false;
             QMessageBox::critical(this, "错误", "登录失败");
+        } else if (isZjuConnectAccessDenied)
+        {
+            isZjuConnectAccessDenied = false;
+            QMessageBox::critical(this, "错误", "权限不足！\n请关闭程序，点击右键以管理员身份运行");
         }
     });
 
