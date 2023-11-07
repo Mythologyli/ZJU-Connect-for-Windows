@@ -17,7 +17,6 @@
   - [x] SOCKS5/HTTP 代理
   - [x] 端口转发
   - [x] 自动保活/自动重连
-  - [x] 配合 [ZJU Rule](https://github.com/Mythologyli/ZJU-Rule) 使用
 - [x] 开机启动并连接
 - [x] 网络诊断
 
