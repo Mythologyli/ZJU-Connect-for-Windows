@@ -277,7 +277,6 @@ Windows Version: Windows 11
     </widget>
     <addaction name="createL2tpAction"/>
     <addaction name="routeMenu"/>
-    <addaction name="zjuRuleAction"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="advanceMenu"/>
@@ -294,11 +293,6 @@ Windows Version: Windows 11
   <action name="exitAction">
    <property name="text">
     <string>退出</string>
-   </property>
-  </action>
-  <action name="zjuRuleAction">
-   <property name="text">
-    <string>ZJU Rule</string>
    </property>
   </action>
   <action name="settingAction">

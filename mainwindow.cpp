@@ -363,15 +363,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 }
             });
 
-    // 高级-ZJU Rule
-    connect(ui->zjuRuleAction, &QAction::triggered,
-            [&]()
-            {
-                zjuRuleWindow = new ZjuRuleWindow(this);
-                zjuRuleWindow->setSocks5Port(QString::number(settings->value("ZJUConnect/Socks5Port", 1080).toInt()));
-                zjuRuleWindow->show();
-            });
-
     // 帮助-清除系统代理
     connect(ui->disableProxyAction, &QAction::triggered,
             [&]()

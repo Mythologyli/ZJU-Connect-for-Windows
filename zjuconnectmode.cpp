@@ -161,7 +161,7 @@ void MainWindow::setModeToZjuConnect()
                         QMessageBox messageBox(this);
                         messageBox.setWindowTitle("警告");
                         messageBox.setText(
-                            "当前已存在系统代理配置\n如您正在使用代理工具，推荐使用高级-ZJU Rule\n是否覆盖当前系统代理配置？"
+                            "当前已存在系统代理配置\n是否覆盖当前系统代理配置？"
                         );
 
                         messageBox.addButton(QMessageBox::Yes)->setText("是");

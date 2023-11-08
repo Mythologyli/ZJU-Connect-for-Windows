@@ -524,9 +524,6 @@
        </item>
        <item row="5" column="1">
         <widget class="QCheckBox" name="proxyAllCheckBox">
-         <property name="toolTip">
-          <string>配合 ZJU Rule 使用时建议勾选</string>
-         </property>
          <property name="text">
           <string>代理全部流量</string>
          </property>

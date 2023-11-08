@@ -14,10 +14,6 @@ assignees: Mythologyli
     + [ZJU Connect 多合一客户端](https://www.cc98.org/topic/5704061)
     + [使用 ZJU Connect 代替 EasyConnect 提升你的 RVPN 体验](https://www.cc98.org/topic/5521873)
     + [端口转发、定时保活、自动选线、密码保存](https://www.cc98.org/topic/5570875)
-+ 如果你的建议与配合 ZJU Rule 有关，请确保你已阅读过：
-    + [使用 Clash+ZJU Rule](https://www.cc98.org/topic/5257184)
-    + [Clash+ZJU Rule 的常见问题与解决方案](https://www.cc98.org/topic/5677200)
-    + [ZJU Rule Github](https://github.com/Mythologyli/ZJU-Rule) 说明及 [Issues](https://github.com/Mythologyli/ZJU-Rule/issues?q=is%3Aissue)
 + 你已搜索过现有的 [Issues](https://github.com/Mythologyli/ZJU-Connect-for-Windows/issues?q=is%3Aissue) 并且未发现重复
 + 如果你的建议与 EasyConnect 有关且你**不在**使用 ZJU RVPN，请前往 [zju-connect](https://github.com/Mythologyli/zju-connect) 报告
 + 如果你确信你的建议与 [zju-web-login](https://github.com/Mythologyli/zju-web-login) 或 [zju-connect](https://github.com/Mythologyli/zju-connect) 有关，欢迎直接前往相应的项目提交功能请求

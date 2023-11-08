@@ -8,7 +8,6 @@
 #include <QNetworkReply>
 #include <QSettings>
 
-#include "zjurulewindow/zjurulewindow.h"
 #include "portforwardingwindow/portforwardingwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
 #include "networkdetector/networkdetector.h"
@@ -77,7 +76,6 @@ private:
 
     QObject *diagnosisContext;
 
-    ZjuRuleWindow *zjuRuleWindow;
     SettingWindow *settingWindow;
 
     QString mode;

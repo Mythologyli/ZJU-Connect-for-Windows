@@ -23,26 +23,16 @@ add_executable(ZJUConnectForWindows WIN32
         l2tpmode.cpp
         webloginmode.cpp
         zjuconnectmode.cpp
-        mainwindow.h
-        QrCodeGenerator/qrcodegenerator.cpp
-        QrCodeGenerator/qrcodegenerator.h
-        QrCodeGenerator/qrcodegen/qrcodegen.h
-        QrCodeGenerator/qrcodegen/qrcodegen.cpp
         zjuconnectcontroller/zjuconnectcontroller.cpp
-        zjuconnectcontroller/zjuconnectcontroller.h
-        zjurulewindow/zjurulewindow.cpp
-        zjurulewindow/zjurulewindow.h
         portforwardingwindow/portforwardingwindow.cpp
-        portforwardingwindow/portforwardingwindow.h
         settingwindow/settingwindow.cpp
-        settingwindow/settingwindow.h
         networkdetector/networkdetector.cpp
-        networkdetector/networkdetector.h
         utils/utils.cpp
-        utils/utils.h
         resource.qrc
         ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc
 )
+
+add_subdirectory(QrCodeGenerator)
 
 set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
 
@@ -55,6 +45,7 @@ target_link_libraries(ZJUConnectForWindows
         Qt::Network
         Qt::Svg
         SingleApplication::SingleApplication
+        QrCodeGenerator
         wininet
         rasapi32
 )
