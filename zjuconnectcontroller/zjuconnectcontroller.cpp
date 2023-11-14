@@ -86,10 +86,7 @@ void ZjuConnectController::start(
     if (tunMode)
     {
         args.append("-tun-mode");
-        args.append("-dns-server-bind");
-        args.append("127.0.0.1:53");
-        args.append("-tun-dns-server");
-        args.append("127.0.0.1");
+        args.append("-dns-hijack");
 
         if (addRoute)
         {
