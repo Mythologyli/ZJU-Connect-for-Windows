@@ -1,4 +1,5 @@
 #include "zjuconnectcontroller.h"
+#include "../utils/utils.h"
 
 ZjuConnectController::ZjuConnectController()
 {
@@ -6,7 +7,7 @@ ZjuConnectController::ZjuConnectController()
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardOutput, this, [&]()
     {
-        QString output = QString::fromLocal8Bit(zjuConnectProcess->readAllStandardOutput());
+        QString output = Utils::ConsoleOutputToQString(zjuConnectProcess->readAllStandardOutput());
 
         emit outputRead(output);
 
@@ -22,7 +23,7 @@ ZjuConnectController::ZjuConnectController()
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
     {
-        QString output = QString::fromLocal8Bit(zjuConnectProcess->readAllStandardError());
+        QString output = Utils::ConsoleOutputToQString(zjuConnectProcess->readAllStandardError());
 
         emit outputRead(output);
 

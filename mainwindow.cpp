@@ -130,7 +130,7 @@ MainWindow::MainWindow(QWidget *parent) :
                     disconnect(process, &QProcess::finished, nullptr, nullptr);
                     connect(process, &QProcess::finished, this, [&]()
                     {
-                        QString output = QString::fromLocal8Bit(process->readAllStandardError());
+                        QString output = Utils::ConsoleOutputToQString(process->readAllStandardError());
                         if (!output.contains("Add-VpnConnection"))
                         {
                             HINSTANCE hInstance = ShellExecute(

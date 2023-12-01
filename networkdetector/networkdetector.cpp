@@ -1,4 +1,5 @@
 #include "networkdetector.h"
+#include "../utils/utils.h"
 
 NetworkDetector::NetworkDetector()
 {
@@ -23,7 +24,7 @@ void NetworkDetector::start()
         disconnect(process, &QProcess::finished, this, nullptr);
         connect(process, &QProcess::finished, this, [&]()
         {
-            QString output = QString::fromLocal8Bit(process->readAllStandardOutput());
+            QString output = Utils::ConsoleOutputToQString(process->readAllStandardOutput());
             if (!output.contains("timed out"))
             {
                 result.isDefaultDnsAvailable = true;
@@ -44,7 +45,7 @@ void NetworkDetector::start()
             disconnect(process, &QProcess::finished, this, nullptr);
             connect(process, &QProcess::finished, this, [&]()
             {
-                QString output = QString::fromLocal8Bit(process->readAllStandardOutput());
+                QString output = Utils::ConsoleOutputToQString(process->readAllStandardOutput());
                 if (!output.contains("timed out"))
                 {
                     result.isZjuNet = true;
@@ -68,7 +69,7 @@ void NetworkDetector::checkZjuWlan()
     disconnect(process, &QProcess::finished, this, nullptr);
     connect(process, &QProcess::finished, this, [&]()
     {
-        QString output = QString::fromLocal8Bit(process->readAllStandardOutput());
+        QString output = Utils::ConsoleOutputToQString(process->readAllStandardOutput());
         if (output.contains("ZJUWLAN"))
         {
             if (output.contains("ZJUWLAN-Secure"))
@@ -95,7 +96,7 @@ void NetworkDetector::checkZjuLan()
     disconnect(process, &QProcess::finished, this, nullptr);
     connect(process, &QProcess::finished, this, [&]()
     {
-        QString output = QString::fromLocal8Bit(process->readAllStandardOutput());
+        QString output = Utils::ConsoleOutputToQString(process->readAllStandardOutput());
         QString line;
         QTextStream stream(&output);
 
@@ -151,7 +152,7 @@ void NetworkDetector::checkInternet()
     disconnect(process, &QProcess::finished, this, nullptr);
     connect(process, &QProcess::finished, this, [&]()
     {
-        QString output = QString::fromLocal8Bit(process->readAllStandardOutput());
+        QString output = Utils::ConsoleOutputToQString(process->readAllStandardOutput());
         if (output.contains("(0%") && !output.contains("unreachable") && !output.contains("无法"))
         {
             result.isInternetAvailable = true;

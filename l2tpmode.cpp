@@ -48,7 +48,7 @@ void MainWindow::setModeToL2tp()
     disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
     connect(processForL2tp, &QProcess::finished, this, [&]()
     {
-        QString output = QString::fromLocal8Bit(processForL2tp->readAllStandardOutput()).trimmed();
+        QString output = Utils::ConsoleOutputToQString(processForL2tp->readAllStandardOutput()).trimmed();
         if (output.isEmpty())
         {
             addLog("警告：在系统中未发现 VPN 配置！请使用高级 - 创建 L2TP VPN 创建 VPN");
@@ -122,7 +122,7 @@ void MainWindow::setModeToL2tp()
                     disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
                     connect(processForL2tp, &QProcess::finished, this, [&]()
                     {
-                        QString output = QString::fromLocal8Bit(processForL2tp->readAllStandardOutput()).trimmed();
+                        QString output = Utils::ConsoleOutputToQString(processForL2tp->readAllStandardOutput()).trimmed();
                         if (output.contains("命令已完成") || output.contains("Command completed successfully"))
                         {
                             isL2tpLinked = true;
@@ -138,7 +138,7 @@ void MainWindow::setModeToL2tp()
                                     disconnect(processForL2tpCheck, &QProcess::finished, nullptr, nullptr);
                                     connect(processForL2tpCheck, &QProcess::finished, this, [&]()
                                     {
-                                        QString output = QString::fromLocal8Bit(
+                                        QString output = Utils::ConsoleOutputToQString(
                                             processForL2tpCheck->readAllStandardOutput()
                                         ).trimmed();
                                         if (output.contains("(0%") && !output.contains("unreachable") &&
@@ -229,7 +229,7 @@ void MainWindow::setModeToL2tp()
                     disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
                     connect(processForL2tp, &QProcess::finished, this, [&]()
                     {
-                        QString output = QString::fromLocal8Bit(processForL2tp->readAllStandardOutput());
+                        QString output = Utils::ConsoleOutputToQString(processForL2tp->readAllStandardOutput());
                         if (output.contains("命令已完成") || output.contains("Command completed successfully"))
                         {
                             isL2tpLinked = false;

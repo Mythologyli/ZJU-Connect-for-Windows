@@ -1,7 +1,7 @@
 #include <QMessageBox>
 #include <QApplication>
-#include <QSettings>
 #include <QNetworkInterface>
+#include <QTextCodec>
 
 #include "windows.h"
 #include "wininet.h"
@@ -9,6 +9,53 @@
 #include "raserror.h"
 
 #include "utils.h"
+
+QString Utils::ConsoleOutputToQString(const QByteArray &byteArray)
+{
+    static QString codeName = "";
+    if (codeName == "UTF-8")
+    {
+        return QTextCodec::codecForName("UTF-8")->toUnicode(byteArray);;
+    }
+    else if (codeName == "GBK")
+    {
+        return QTextCodec::codecForName("GBK")->toUnicode(byteArray);;
+    }
+    else if (codeName == "locale")
+    {
+        return QString::fromLocal8Bit(byteArray);
+    }
+    else
+    {
+        QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
+        QString utf8Str = utf8Codec->toUnicode(byteArray);
+        QByteArray utf8ByteArrayBack = utf8Codec->fromUnicode(utf8Str);
+
+        QTextCodec *gbkCodec = QTextCodec::codecForName("GBK");
+        QString gbkStr = gbkCodec->toUnicode(byteArray);
+        QByteArray gbkByteArrayBack = gbkCodec->fromUnicode(gbkStr);
+
+        if (utf8ByteArrayBack == byteArray || gbkByteArrayBack != byteArray)
+        {
+            codeName = "UTF-8";
+            return utf8Str;
+        }
+        else if (gbkByteArrayBack == byteArray || utf8ByteArrayBack != byteArray)
+        {
+            codeName = "GBK";
+            return QTextCodec::codecForName("GBK")->toUnicode(byteArray);;
+        }
+        else if (gbkByteArrayBack == byteArray && utf8ByteArrayBack == byteArray)
+        {
+            return utf8Str;
+        }
+        else
+        {
+            codeName = "locale";
+            return QString::fromLocal8Bit(byteArray);
+        }
+    }
+}
 
 void Utils::setWidgetFixedWhenHidden(QWidget *widget)
 {

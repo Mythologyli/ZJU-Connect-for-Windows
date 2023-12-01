@@ -1,10 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "../networkdetector/networkdetector.h"
-
 namespace Utils
 {
+    QString ConsoleOutputToQString(const QByteArray &byteArray);
+
     void setWidgetFixedWhenHidden(QWidget *widget);
 
     void showAboutMessageBox(QWidget *parent = nullptr);

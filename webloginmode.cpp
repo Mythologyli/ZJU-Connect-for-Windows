@@ -69,7 +69,7 @@ void MainWindow::setModeToWebLogin()
                     disconnect(processForWebLogin, &QProcess::finished, nullptr, nullptr);
                     connect(processForWebLogin, &QProcess::finished, this, [&]()
                     {
-                        QString output = QString::fromLocal8Bit(processForWebLogin->readAllStandardOutput()).trimmed();
+                        QString output = Utils::ConsoleOutputToQString(processForWebLogin->readAllStandardOutput()).trimmed();
                         if (output.contains("[Login Successful]") || output.contains("[Already Online]"))
                         {
                             isWebLogged = true;

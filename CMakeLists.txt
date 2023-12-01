@@ -12,6 +12,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         Network
         Svg
+        Core5Compat
         REQUIRED
 )
 
@@ -44,6 +45,7 @@ target_link_libraries(ZJUConnectForWindows
         Qt::Widgets
         Qt::Network
         Qt::Svg
+        Qt::Core5Compat
         SingleApplication::SingleApplication
         QrCodeGenerator
         wininet
