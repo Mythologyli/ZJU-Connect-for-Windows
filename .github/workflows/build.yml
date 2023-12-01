@@ -25,6 +25,7 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2019_64'
+          modules: 'qt5compat'
           cache: 'true'
           cache-key-prefix: 'install-qt-action'
 
