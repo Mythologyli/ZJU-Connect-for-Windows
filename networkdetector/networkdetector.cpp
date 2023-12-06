@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "networkdetector.h"
 #include "../utils/utils.h"
 
@@ -29,7 +30,7 @@ void NetworkDetector::start()
             {
                 result.isDefaultDnsAvailable = true;
 
-                if (output.contains("10."))
+                if (output.contains("Address:  10."))
                 {
                     result.isZjuNet = true;
                     result.isZjuDnsCorrect = true;
