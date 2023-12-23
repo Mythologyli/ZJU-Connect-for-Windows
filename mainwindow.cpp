@@ -886,6 +886,7 @@ void MainWindow::cleanUpWhenQuit()
         settings->setValue("Common/ConfigVersion", 2);
         settings->setValue("Common/LastMode", mode);
         settings->setValue("WebLogin/LastInterface", ui->interfaceComboBox->currentText());
+        settings->setValue("ZJUConnect/TunMode", ui->tunCheckBox->isChecked());
         settings->sync();
     }
 

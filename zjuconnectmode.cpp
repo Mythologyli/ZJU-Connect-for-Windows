@@ -17,6 +17,14 @@ void MainWindow::setModeToZjuConnect()
     ui->interfaceComboBox->hide();
     ui->tunCheckBox->show();
 
+    if (settings->contains("ZJUConnect/TunMode"))
+    {
+        if (settings->value("ZJUConnect/TunMode").toBool())
+        {
+            ui->tunCheckBox->setChecked(true);
+        }
+    }
+
     zjuConnectController = new ZjuConnectController();
 
     disconnect(ui->pushButton1, &QPushButton::clicked, nullptr, nullptr);
@@ -76,7 +84,8 @@ void MainWindow::setModeToZjuConnect()
         {
             isZjuConnectLoginError = false;
             QMessageBox::critical(this, "错误", "登录失败");
-        } else if (isZjuConnectAccessDenied)
+        }
+        else if (isZjuConnectAccessDenied)
         {
             isZjuConnectAccessDenied = false;
             QMessageBox::critical(this, "错误", "权限不足！\n请关闭程序，点击右键以管理员身份运行");
