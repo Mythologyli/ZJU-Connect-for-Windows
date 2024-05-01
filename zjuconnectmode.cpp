@@ -83,7 +83,7 @@ void MainWindow::setModeToZjuConnect()
         if (isZjuConnectLoginError)
         {
             isZjuConnectLoginError = false;
-            QMessageBox::critical(this, "错误", "登录失败");
+            QMessageBox::critical(this, "错误", "登录失败！\n请检查设置中的网络账号和密码是否设置正确");
         }
         else if (isZjuConnectAccessDenied)
         {
