@@ -164,7 +164,7 @@ void MainWindow::setModeToL2tp()
                                         QStringList()
                                             << "-n"
                                             << "1"
-                                            << settings->value("L2TP/CheckIp", "39.156.66.10").toString()
+                                            << settings->value("L2TP/CheckIp", "223.5.5.5").toString()
                                     );
                                 });
 

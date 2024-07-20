@@ -286,7 +286,7 @@
        <item row="2" column="1">
         <widget class="QLineEdit" name="l2tpCheckIpLineEdit">
          <property name="text">
-          <string>39.156.66.10</string>
+          <string>223.5.5.5</string>
          </property>
         </widget>
        </item>

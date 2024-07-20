@@ -72,7 +72,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
         ui->l2tpAutoCheckComboBox->setCurrentText("否");
     }
 
-    ui->l2tpCheckIpLineEdit->setText(settings->value("L2TP/CheckIp", "39.156.66.10").toString());
+    ui->l2tpCheckIpLineEdit->setText(settings->value("L2TP/CheckIp", "223.5.5.5").toString());
     ui->l2tpCheckTimeSpinBox->setValue(settings->value("L2TP/CheckTime", 600).toInt());
 
     if (settings->value("WebLogin/IntlUrl", false).toBool())

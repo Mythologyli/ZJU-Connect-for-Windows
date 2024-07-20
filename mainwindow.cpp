@@ -794,6 +794,13 @@ void MainWindow::upgradeSettings()
             }
         }
 
+        // Replace old ineffective check ip
+        if (settings->value("L2TP/CheckIp", "223.5.5.5").toString() == "39.156.66.10")
+        {
+            settings->setValue("L2TP/CheckIp", "223.5.5.5");
+            settings->sync();
+        }
+
         return;
     }
 

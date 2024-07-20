@@ -164,7 +164,7 @@ void NetworkDetector::checkInternet()
         checkProxy();
     });
 
-    process->start("ping", QStringList() << "39.156.66.10" << "-n" << "1");
+    process->start("ping", QStringList() << "223.5.5.5" << "-n" << "1");
 }
 
 void NetworkDetector::checkProxy()
