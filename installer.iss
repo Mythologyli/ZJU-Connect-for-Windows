@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ZJU Connect for Windows"
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.1.2"
 #define MyAppPublisher "Myth"
 #define MyAppURL "https://github.com/Mythologyli/ZJU-Connect-for-Windows"
 #define MyAppExeName "ZJUConnectForWindows.exe"
