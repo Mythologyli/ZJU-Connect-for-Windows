@@ -63,19 +63,19 @@ jobs:
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ZJU-Connect-for-Windows
           path: ZJU-Connect-for-Windows.zip
 
       - name: Upload SHA256.txt
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SHA256
           path: SHA256.txt
 
       - name: Upload installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ZJU-Connect-for-Windows-Installer
           path: Output/ZJUConnectForWindowsInstaller.exe
