@@ -722,29 +722,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 }
 
                 ui->logPlainTextEdit->appendPlainText(resultString);
-
-                if (!result.isDefaultDnsAvailable && !result.isZjuNet)
-                {
-                    QMessageBox::warning(
-                        this,
-                        "警告",
-                        "检测到您的 DNS 配置错误！\n"
-                        "这可能导致您无法访问大多数网络服务\n"
-                        "请打开设置-网络，正确设置您正在使用的上网方式的 DNS"
-                    );
-                }
-
-                if (result.isZjuNet && (!result.isZjuDnsCorrect || !result.isDefaultDnsAvailable))
-                {
-                    QMessageBox::warning(
-                        this,
-                        "警告",
-                        "检测到网络环境为 ZJU 校园网，但 DNS 配置错误！\n"
-                        "这可能导致您无法访问学在浙大等校内网站\n"
-                        "请打开设置-网络，设置您正在使用的上网方式的 DNS 为自动获取或 10.10.0.21\n"
-                        "如果您正在使用路由器，请检查您路由器的 DNS 配置"
-                    );
-                }
             });
 
     connect(this, &MainWindow::SetModeFinished, this, [&]()
