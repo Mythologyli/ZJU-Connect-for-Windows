@@ -123,8 +123,8 @@ void MainWindow::setModeToZjuConnect()
                         settings->value("ZJUConnect/ServerPort", 443).toInt(),
                         !settings->value("ZJUConnect/MultiLine", true).toBool(),
                         settings->value("ZJUConnect/ProxyAll", false).toBool(),
-                        "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 1080).toInt()),
-                        "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 1081).toInt()),
+                        "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
+                        "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
                         ui->tunCheckBox->isChecked(),
                         settings->value("ZJUConnect/Route", false).toBool(),
                         settings->value("ZJUConnect/Debug", false).toBool(),
@@ -183,7 +183,7 @@ void MainWindow::setModeToZjuConnect()
                         }
                     }
 
-                    Utils::setSystemProxy(settings->value("ZJUConnect/HttpPort", 1081).toInt());
+                    Utils::setSystemProxy(settings->value("ZJUConnect/HttpPort", 11081).toInt());
                     ui->pushButton2->setText("清除系统代理");
                     isSystemProxySet = true;
                 }

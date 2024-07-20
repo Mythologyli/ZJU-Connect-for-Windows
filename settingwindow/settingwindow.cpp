@@ -49,8 +49,8 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
 
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "rvpn.zju.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
-    ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 1080).toInt());
-    ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 1081).toInt());
+    ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 11080).toInt());
+    ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 11081).toInt());
     ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", true).toBool());
     ui->proxyAllCheckBox->setChecked(settings->value("ZJUConnect/ProxyAll", false).toBool());
     ui->debugCheckBox->setChecked(settings->value("ZJUConnect/Debug", false).toBool());
