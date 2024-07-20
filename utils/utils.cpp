@@ -35,15 +35,15 @@ QString Utils::ConsoleOutputToQString(const QByteArray &byteArray)
         QString gbkStr = gbkCodec->toUnicode(byteArray);
         QByteArray gbkByteArrayBack = gbkCodec->fromUnicode(gbkStr);
 
-        if (utf8ByteArrayBack == byteArray || gbkByteArrayBack != byteArray)
+        if (utf8ByteArrayBack == byteArray && gbkByteArrayBack != byteArray)
         {
             codeName = "UTF-8";
             return utf8Str;
         }
-        else if (gbkByteArrayBack == byteArray || utf8ByteArrayBack != byteArray)
+        else if (gbkByteArrayBack == byteArray && utf8ByteArrayBack != byteArray)
         {
             codeName = "GBK";
-            return QTextCodec::codecForName("GBK")->toUnicode(byteArray);;
+            return gbkStr;
         }
         else if (gbkByteArrayBack == byteArray && utf8ByteArrayBack == byteArray)
         {
