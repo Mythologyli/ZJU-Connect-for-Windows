@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(ZJUConnectForWindows)
+project(HITszConnectForWindows)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
@@ -18,7 +18,7 @@ find_package(Qt6 COMPONENTS
 
 enable_language("RC")
 
-add_executable(ZJUConnectForWindows WIN32
+add_executable(${PROJECT_NAME} WIN32
         main.cpp
         mainwindow.cpp
         zjuconnectmode.cpp
@@ -37,7 +37,7 @@ set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleAp
 
 add_subdirectory(singleapplication)
 
-target_link_libraries(ZJUConnectForWindows
+target_link_libraries(${PROJECT_NAME}
         Qt::Core
         Qt::Gui
         Qt::Widgets

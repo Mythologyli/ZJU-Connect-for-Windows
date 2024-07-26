@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>619</width>
-    <height>288</height>
+    <width>731</width>
+    <height>265</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -150,7 +150,7 @@ Windows Version: Arch Linux
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>619</width>
+     <width>731</width>
      <height>22</height>
     </rect>
    </property>
