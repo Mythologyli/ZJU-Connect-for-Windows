@@ -139,7 +139,8 @@ Windows Version: Arch Linux
     <item row="2" column="1" colspan="3">
      <widget class="QLabel" name="accountLabel">
       <property name="text">
-       <string>提示：左上角“功能”-&gt;“设置”里可以填写账号信息</string>
+       <string>提示：左上角“功能”-&gt;“设置”里可以填写账号信息
+可以使用 TUN 模式解决部分软件的代理问题</string>
       </property>
      </widget>
     </item>
@@ -206,6 +207,10 @@ Windows Version: Arch Linux
   </action>
  </widget>
  <tabstops>
+  <tabstop>pushButton1</tabstop>
+  <tabstop>pushButton2</tabstop>
+  <tabstop>tunCheckBox</tabstop>
+  <tabstop>copyLogPushButton</tabstop>
   <tabstop>logPlainTextEdit</tabstop>
  </tabstops>
  <resources/>

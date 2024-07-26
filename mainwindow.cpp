@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     zjuConnectController = nullptr;
 
     networkAccessManager = new QNetworkAccessManager(this);
-    networkDetector = new NetworkDetector();
 
     process = new QProcess(this);
     processForL2tp = new QProcess(this);
@@ -126,7 +125,7 @@ MainWindow::MainWindow(QWidget *parent) :
                     return;
                 }
 
-                if (mode == "RVPN" && isSystemProxySet)
+                if (isSystemProxySet)
                 {
                     ui->pushButton2->click();
                 }
@@ -154,91 +153,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 QApplication::clipboard()->setText(logText);
             }
     );
-
-    // 检查更新
-    /*
-    QTimer::singleShot(10000, [&]()
-    {
-        QNetworkRequest request(QUrl("https://zjuconnect.myth.cx/version.json"));
-        request.setHeader(
-            QNetworkRequest::UserAgentHeader,
-            QApplication::applicationName() + " v" + QApplication::applicationVersion()
-        );
-        networkAccessManager->get(request);
-    });
-    */
-
-    connect(networkAccessManager, &QNetworkAccessManager::finished,
-            [&](QNetworkReply *reply)
-            {
-                if (reply->error() == QNetworkReply::NoError)
-                {
-                    QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
-                    QJsonObject jsonObject = jsonDocument.object();
-                    QString version = jsonObject["version"].toString();
-                    QString description = jsonObject["description"].toString();
-                    QString url = jsonObject["url"].toString();
-
-                    if (version != QApplication::applicationVersion())
-                    {
-                        disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
-                        trayIcon->showMessage(
-                            "有新版本可用",
-                            "v" + version + "\n更新内容：" + description + "\n点击查看详情",
-                            QSystemTrayIcon::Information,
-                            10000
-                        );
-
-                        connect(trayIcon, &QSystemTrayIcon::messageClicked, this, [&, url]()
-                        {
-                            disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
-
-                            QDesktopServices::openUrl(QUrl(url));
-
-                            show();
-                            setWindowState(Qt::WindowState::WindowActive);
-                        });
-                    }
-                }
-            });
-
-    // 网络检测
-    connect(networkDetector, &NetworkDetector::finished, this,
-            [&](const NetworkDetectResult &result)
-            {
-                networkDetectResult = result;
-
-                QString resultString = "";
-                resultString += "网络检测结果 | ";
-                if (result.isDefaultDnsAvailable)
-                {
-                    resultString += "默认 DNS 可用：是 | ";
-                }
-                else
-                {
-                    resultString += "默认 DNS 可用：否 | ";
-                }
-
-                if (result.isInternetAvailable)
-                {
-                    resultString += "互联网连接：是 | ";
-                }
-                else
-                {
-                    resultString += "互联网连接：否 | ";
-                }
-
-                if (result.isProxyEnabled)
-                {
-                    resultString += "是否启用代理：是";
-                }
-                else
-                {
-                    resultString += "是否启用代理：否";
-                }
-
-                ui->logPlainTextEdit->appendPlainText(resultString);
-            });
 
     connect(this, &MainWindow::SetModeFinished, this, [&]()
     {
@@ -280,7 +194,7 @@ void MainWindow::upgradeSettings()
     int configVersion = settings->value("Common/ConfigVersion", 1).toInt();
     if (configVersion > 2)
     {
-        addLog("警告：配置文件版本高于 2。请使用关闭当前 ZJU Connect 并运行新版本！");
+        addLog("警告：配置文件版本高于 2。请运行新版本！");
     }
     else if (configVersion == 2)
     {
@@ -293,7 +207,7 @@ void MainWindow::upgradeSettings()
                     QSettings::NativeFormat
                 );
                 autoStartSettings.setValue(
-                    "ZjuConnectForWindows",
+                    "HITszConnectForWindows",
                     QCoreApplication::applicationFilePath().replace('/', '\\')
                 );
             }
@@ -301,44 +215,6 @@ void MainWindow::upgradeSettings()
 
         return;
     }
-
-    if (settings->contains("EasyConnect/ServerAddress"))
-    {
-        settings->setValue("ZJUConnect/ServerAddress", settings->value("EasyConnect/ServerAddress"));
-        settings->remove("EasyConnect/ServerAddress");
-    }
-
-    if (settings->contains("EasyConnect/ServerPort"))
-    {
-        settings->setValue("ZJUConnect/ServerPort", settings->value("EasyConnect/ServerPort"));
-        settings->remove("EasyConnect/ServerPort");
-    }
-
-    if (settings->contains("EasyConnect/Username"))
-    {
-        settings->setValue("Common/Username", settings->value("EasyConnect/Username"));
-        settings->remove("EasyConnect/Username");
-
-    }
-
-    if (settings->contains("EasyConnect/Password"))
-    {
-        settings->setValue("Common/Password", settings->value("EasyConnect/Password"));
-        settings->remove("EasyConnect/Password");
-    }
-
-    if (settings->contains("GUI/AutoReconnect"))
-    {
-        settings->setValue("ZJUConnect/AutoReconnect", settings->value("GUI/AutoReconnect"));
-        settings->remove("GUI/AutoReconnect");
-    }
-
-    if (settings->contains("GUI/ReconnectTime"))
-    {
-        settings->setValue("ZJUConnect/ReconnectTime", settings->value("GUI/ReconnectTime"));
-        settings->remove("GUI/ReconnectTime");
-    }
-
     settings->sync();
 }
 
@@ -381,8 +257,6 @@ void MainWindow::cleanUpWhenQuit()
 
 MainWindow::~MainWindow()
 {
-    delete networkDetector;
-
     if (zjuConnectController != nullptr)
     {
         disconnect(zjuConnectController, &ZjuConnectController::finished, nullptr, nullptr);

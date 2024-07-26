@@ -25,7 +25,6 @@ add_executable(${PROJECT_NAME} WIN32
         zjuconnectcontroller/zjuconnectcontroller.cpp
         portforwardingwindow/portforwardingwindow.cpp
         settingwindow/settingwindow.cpp
-        networkdetector/networkdetector.cpp
         utils/utils.cpp
         resource.qrc
         ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc

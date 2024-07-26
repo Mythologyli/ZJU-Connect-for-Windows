@@ -10,7 +10,6 @@
 
 #include "portforwardingwindow/portforwardingwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
-#include "networkdetector/networkdetector.h"
 #include "settingwindow/settingwindow.h"
 #include "QrCodeGenerator/QrCodeGenerator.h"
 
@@ -64,7 +63,6 @@ private:
     QAction *trayShowAction;
     QAction *trayCloseAction;
     ZjuConnectController *zjuConnectController;
-    NetworkDetector *networkDetector;
     QNetworkAccessManager *networkAccessManager;
     QSettings *settings;
     QProcess *process;
@@ -79,7 +77,6 @@ private:
     SettingWindow *settingWindow;
 
     QString mode;
-    NetworkDetectResult networkDetectResult;
 
     bool isFirstTimeSetMode;
 

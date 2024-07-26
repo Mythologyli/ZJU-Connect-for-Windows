@@ -10,7 +10,6 @@ void MainWindow::setModeToZjuConnect()
 
     clearLog();
 
-    networkDetector->start();
     ui->tunCheckBox->show();
 
     if (settings->contains("ZJUConnect/TunMode"))
@@ -28,8 +27,6 @@ void MainWindow::setModeToZjuConnect()
     disconnect(ui->pushButton2, &QPushButton::clicked, nullptr, nullptr);
     ui->pushButton2->setText("设置系统代理");
     ui->pushButton2->hide();
-
-    addLog("工作模式设置为：RVPN");
 
     // 连接服务器
     connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString &output)
@@ -70,8 +67,8 @@ void MainWindow::setModeToZjuConnect()
             return;
         }
 
-        addLog("RVPN 断开！");
-        showNotification("RVPN", "RVPN 断开！", QSystemTrayIcon::MessageIcon::Warning);
+        addLog("VPN 断开！");
+        showNotification("VPN", "VPN 断开！", QSystemTrayIcon::MessageIcon::Warning);
         isZjuConnectLinked = false;
         ui->pushButton1->setText("连接服务器");
 
@@ -159,7 +156,11 @@ void MainWindow::setModeToZjuConnect()
             {
                 if (!isSystemProxySet)
                 {
-                    if (networkDetectResult.isProxyEnabled)
+                    QSettings proxySettings(
+                        R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings)",
+                        QSettings::NativeFormat
+                    );
+                    if (proxySettings.value("ProxyEnable", 0).toInt() == 1)
                     {
                         QMessageBox messageBox(this);
                         messageBox.setWindowTitle("警告");

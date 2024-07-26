@@ -14,10 +14,6 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
 
     this->settings = inputSettings;
 
-    setWindowIcon(QIcon(QPixmap(":/resource/icon.png").scaled(
-        512, 512, Qt::KeepAspectRatio, Qt::SmoothTransformation
-    )));
-
     setWindowFlag(Qt::Window);
     setWindowModality(Qt::WindowModal);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -111,7 +107,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                         QSettings::NativeFormat
                     );
                     autoStartSettings.setValue(
-                        "ZjuConnectForWindows",
+                        "HITszConnectForWindows",
                         QCoreApplication::applicationFilePath().replace('/', '\\')
                     );
                 }
@@ -121,17 +117,13 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                         R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run)",
                         QSettings::NativeFormat
                     );
-                    autoStartSettings.remove("ZjuConnectForWindows");
+                    autoStartSettings.remove("HITszConnectForWindows");
                 }
 
-                ui->cancelPushButton->setText("关闭");
-            });
-
-    connect(ui->cancelPushButton, &QPushButton::clicked,
-            [&]()
-            {
                 close();
             });
+
+    connect(ui->cancelPushButton, &QPushButton::clicked, [&]()  { close(); });
 }
 
 SettingWindow::~SettingWindow()

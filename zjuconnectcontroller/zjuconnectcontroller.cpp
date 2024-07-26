@@ -131,11 +131,6 @@ void ZjuConnectController::start(
         args.append(udpPortForwarding);
     }
 
-    QString cmd = program;
-    for (const auto& arg : args)
-        cmd += " " + arg;
-    emit outputRead(cmd);
-
     zjuConnectProcess->start(program, args);
     zjuConnectProcess->waitForStarted();
 }

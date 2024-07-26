@@ -27,7 +27,7 @@
    <item row="0" column="0" colspan="4">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="commonTab">
       <attribute name="title">
@@ -385,6 +385,13 @@
      </widget>
     </widget>
    </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="applyPushButton">
+     <property name="text">
+      <string>确定</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <spacer name="horizontalSpacer">
      <property name="orientation">
@@ -398,15 +405,30 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="applyPushButton">
-     <property name="text">
-      <string>应用</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>usernameLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>autoStartComboBox</tabstop>
+  <tabstop>connectAfterStartComboBox</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>applyPushButton</tabstop>
+  <tabstop>cancelPushButton</tabstop>
+  <tabstop>serverAddressLineEdit</tabstop>
+  <tabstop>serverPortSpinBox</tabstop>
+  <tabstop>socks5PortSpinBox</tabstop>
+  <tabstop>httpPortSpinBox</tabstop>
+  <tabstop>reconnectTimeSpinBox</tabstop>
+  <tabstop>multiLineCheckBox</tabstop>
+  <tabstop>proxyAllCheckBox</tabstop>
+  <tabstop>autoReconnectCheckBox</tabstop>
+  <tabstop>autoSetProxyCheckBox</tabstop>
+  <tabstop>portForwardingPushButton</tabstop>
+  <tabstop>debugCheckBox</tabstop>
+  <tabstop>routeCheckBox</tabstop>
+  <tabstop>dnsLineEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
