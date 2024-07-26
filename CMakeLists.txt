@@ -30,8 +30,6 @@ add_executable(${PROJECT_NAME} WIN32
         ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc
 )
 
-add_subdirectory(QrCodeGenerator)
-
 set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
 
 add_subdirectory(singleapplication)
@@ -44,7 +42,6 @@ target_link_libraries(${PROJECT_NAME}
         Qt::Svg
         Qt::Core5Compat
         SingleApplication::SingleApplication
-        QrCodeGenerator
         wininet
         rasapi32
 )
