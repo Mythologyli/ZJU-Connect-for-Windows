@@ -11,7 +11,6 @@
 #include "portforwardingwindow/portforwardingwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
 #include "settingwindow/settingwindow.h"
-#include "QrCodeGenerator/QrCodeGenerator.h"
 
 namespace Ui
 {
@@ -70,7 +69,6 @@ private:
     QProcess *processForL2tpCheck;
     QProcess *processForWebLogin;
     QTimer *l2tpCheckTimer;
-    QrCodeGenerator qrGenerator;
 
     QObject *diagnosisContext;
 
