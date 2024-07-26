@@ -167,7 +167,7 @@
      </widget>
      <widget class="QWidget" name="zjuConnectTab">
       <attribute name="title">
-       <string>VPN</string>
+       <string>高级</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="1" column="0">
@@ -412,9 +412,9 @@
   <tabstop>passwordLineEdit</tabstop>
   <tabstop>autoStartComboBox</tabstop>
   <tabstop>connectAfterStartComboBox</tabstop>
-  <tabstop>tabWidget</tabstop>
   <tabstop>applyPushButton</tabstop>
   <tabstop>cancelPushButton</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>serverAddressLineEdit</tabstop>
   <tabstop>serverPortSpinBox</tabstop>
   <tabstop>socks5PortSpinBox</tabstop>
