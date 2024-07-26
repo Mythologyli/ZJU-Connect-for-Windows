@@ -6,172 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>798</width>
-    <height>391</height>
+    <width>619</width>
+    <height>288</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ZJU Connect for Windows</string>
+   <string>HITsz Connect for Windows</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="1">
-     <widget class="QLabel" name="interfaceLabel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip">
-       <string>只有同时连接有线无线时需要设置</string>
-      </property>
-      <property name="text">
-       <string>网络接口</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLabel" name="label2">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>工作模式</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QPushButton" name="refreshInterfaceButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>刷新网络接口</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2" colspan="2">
-     <widget class="QComboBox" name="interfaceComboBox">
-      <item>
-       <property name="text">
-        <string>默认</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="3" column="2" colspan="2">
-     <widget class="QComboBox" name="modeComboBox">
-      <item>
-       <property name="text">
-        <string>RVPN</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>网页认证登录</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>有线网 L2TP</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="3">
-     <widget class="QLabel" name="versionLabel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Version: 1.0
-Windows Version: Windows 11
-</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1" colspan="3">
-     <widget class="QLabel" name="label1">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>17</pointsize>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>你好呀</string>
-      </property>
-      <property name="text">
-       <string>ZJU Connect for Windows</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" rowspan="8">
-     <widget class="QPlainTextEdit" name="logPlainTextEdit">
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="maximumBlockCount">
-       <number>1000</number>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1" colspan="3">
-     <widget class="QLabel" name="statusLabel">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::RichText</enum>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <property name="openExternalLinks">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QPushButton" name="copyLogPushButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip">
-       <string>复制日志到剪贴板</string>
-      </property>
-      <property name="text">
-       <string>复制日志</string>
-      </property>
-     </widget>
-    </item>
     <item row="8" column="1">
      <widget class="QPushButton" name="pushButton1">
       <property name="font">
@@ -196,22 +39,6 @@ Windows Version: Windows 11
       </property>
      </widget>
     </item>
-    <item row="8" column="2">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Fixed</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="7" column="1">
      <widget class="QCheckBox" name="tunCheckBox">
       <property name="sizePolicy">
@@ -228,6 +55,94 @@ Windows Version: Windows 11
       </property>
      </widget>
     </item>
+    <item row="8" column="2">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="1" colspan="3">
+     <widget class="QLabel" name="label1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>你好呀</string>
+      </property>
+      <property name="text">
+       <string>HITsz Connect for Windows</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QPushButton" name="copyLogPushButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>复制日志到剪贴板</string>
+      </property>
+      <property name="text">
+       <string>复制日志</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="3">
+     <widget class="QLabel" name="versionLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Version: 1.0
+Windows Version: Arch Linux
+</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="8">
+     <widget class="QPlainTextEdit" name="logPlainTextEdit">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="maximumBlockCount">
+       <number>1000</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="3">
+     <widget class="QLabel" name="accountLabel">
+      <property name="text">
+       <string>提示：左上角“功能”-&gt;“设置”里可以填写账号信息</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -235,7 +150,7 @@ Windows Version: Windows 11
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>798</width>
+     <width>619</width>
      <height>22</height>
     </rect>
    </property>
@@ -254,32 +169,16 @@ Windows Version: Windows 11
      <string>帮助</string>
     </property>
     <addaction name="disableProxyAction"/>
-    <addaction name="diagnosisAction"/>
     <addaction name="aboutAction"/>
    </widget>
    <widget class="QMenu" name="fileMenu">
     <property name="title">
-     <string>文件</string>
+     <string>功能</string>
     </property>
     <addaction name="settingAction"/>
     <addaction name="exitAction"/>
    </widget>
-   <widget class="QMenu" name="advanceMenu">
-    <property name="title">
-     <string>高级</string>
-    </property>
-    <widget class="QMenu" name="routeMenu">
-     <property name="title">
-      <string>静态路由</string>
-     </property>
-     <addaction name="setRouteAction"/>
-     <addaction name="deleteRouteAction"/>
-    </widget>
-    <addaction name="createL2tpAction"/>
-    <addaction name="routeMenu"/>
-   </widget>
    <addaction name="fileMenu"/>
-   <addaction name="advanceMenu"/>
    <addaction name="helpMenu"/>
   </widget>
   <action name="aboutAction">
@@ -298,26 +197,6 @@ Windows Version: Windows 11
   <action name="settingAction">
    <property name="text">
     <string>设置</string>
-   </property>
-  </action>
-  <action name="createL2tpAction">
-   <property name="text">
-    <string>创建 L2TP VPN</string>
-   </property>
-  </action>
-  <action name="setRouteAction">
-   <property name="text">
-    <string>设置静态路由</string>
-   </property>
-  </action>
-  <action name="deleteRouteAction">
-   <property name="text">
-    <string>删除静态路由</string>
-   </property>
-  </action>
-  <action name="diagnosisAction">
-   <property name="text">
-    <string>网络诊断</string>
    </property>
   </action>
   <action name="disableProxyAction">

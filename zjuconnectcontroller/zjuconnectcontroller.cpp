@@ -49,6 +49,7 @@ void ZjuConnectController::start(
     const QString &password,
     const QString &server,
     int port,
+    const QString& dns,
     bool disableMultiLine,
     bool proxyAll,
     const QString &socksBind,
@@ -72,6 +73,12 @@ void ZjuConnectController::start(
     {
         args.append("-port");
         args.append(QString::number(port));
+    }
+
+    if (!dns.isEmpty())
+    {
+        args.append("-zju-dns-server");
+        args.append(dns);
     }
 
     if (disableMultiLine)
@@ -123,6 +130,11 @@ void ZjuConnectController::start(
         args.append("-udp-port-forwarding");
         args.append(udpPortForwarding);
     }
+
+    QString cmd = program;
+    for (const auto& arg : args)
+        cmd += " " + arg;
+    emit outputRead(cmd);
 
     zjuConnectProcess->start(program, args);
     zjuConnectProcess->waitForStarted();

@@ -21,8 +21,6 @@ enable_language("RC")
 add_executable(ZJUConnectForWindows WIN32
         main.cpp
         mainwindow.cpp
-        l2tpmode.cpp
-        webloginmode.cpp
         zjuconnectmode.cpp
         zjuconnectcontroller/zjuconnectcontroller.cpp
         portforwardingwindow/portforwardingwindow.cpp

@@ -70,7 +70,11 @@ void Utils::showAboutMessageBox(QWidget *parent)
     messageBox.setWindowTitle("关于本软件");
     messageBox.setTextFormat(Qt::RichText);
     QString aboutText = QApplication::applicationName() + " v" + QApplication::applicationVersion() +
+                        "<br>针对哈工大深圳的修改版 ZJU-Connect-for-Windows" +
+                        "<br>作者: <a href='https://github.com/chenx-dust'>尘息</a>" +
+                        "<br>项目主页: <a href='https://github.com/Mythologyli/HITsz-Connect-for-Windows'>https://github.com/chenx-dust/HITsz-Connect-for-Windows</a>" +
                         "<br>基于 Qt 编写的 ZJUConnect 图形界面" +
+                        "<br><br>ZJU-Connect-for-Windows" +
                         "<br>作者: <a href='https://myth.cx'>Myth</a>" +
                         "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect-for-Windows'>https://github.com/Mythologyli/ZJU-Connect-for-Windows</a>" +
                         "<br><br>zju-connect" +

@@ -109,260 +109,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 settingWindow->show();
             });
 
-    // 高级-创建 L2TP VPN
-    connect(ui->createL2tpAction, &QAction::triggered,
-            [&]()
-            {
-                QMessageBox messageBox(this);
-                messageBox.setWindowTitle("创建 L2TP VPN");
-                messageBox.setText(
-                    "是否创建名称为 "
-                    + settings->value("L2TP/Name", "ZJUVPN").toString()
-                    + " 的 L2TP VPN？\n要创建的 VPN 名称可在设置中更改\n在创建过程中会请求管理员权限"
-                );
-
-                messageBox.addButton(QMessageBox::Yes)->setText("是");
-                messageBox.addButton(QMessageBox::No)->setText("否");
-                messageBox.setDefaultButton(QMessageBox::Yes);
-
-                if (messageBox.exec() == QMessageBox::Yes)
-                {
-                    disconnect(process, &QProcess::finished, nullptr, nullptr);
-                    connect(process, &QProcess::finished, this, [&]()
-                    {
-                        QString output = Utils::ConsoleOutputToQString(process->readAllStandardError());
-                        if (!output.contains("Add-VpnConnection"))
-                        {
-                            HINSTANCE hInstance = ShellExecute(
-                                nullptr,
-                                L"runas",
-                                L"cmd.exe",
-                                L"/c reg add \"HKLM\\System\\CurrentControlSet\\Services\\Rasman\\Parameters\" /v ProhibitIpSec /t REG_DWORD /d 0x1 /f",
-                                nullptr,
-                                SW_HIDE
-                            );
-
-                            if (hInstance > (HINSTANCE) 32)
-                            {
-                                addLog("创建 L2TP VPN 成功！");
-
-                                QMessageBox::information(
-                                    this,
-                                    "提示",
-                                    "创建成功！\n如果这是您第一次创建 L2TP VPN，请重启电脑"
-                                );
-                            }
-                            else
-                            {
-                                addLog("创建 L2TP VPN 成功，但添加注册表项失败！");
-
-                                QMessageBox::critical(
-                                    this,
-                                    "错误",
-                                    "创建 VPN 成功，但添加注册表项失败！\n这可能是您拒绝了权限请求导致的\n请打开系统设置-网络-VPN，删除存在的 VPN 后重试"
-                                );
-                            }
-                        }
-                        else
-                        {
-                            addLog("创建 L2TP VPN 失败！");
-                            addLog(output);
-                            QMessageBox::critical(
-                                this,
-                                "错误",
-                                "创建失败！请检查是否已存在同名 VPN。详细信息：\n" + output
-                            );
-                        }
-                    });
-
-                    process->start(
-                        "powershell",
-                        QStringList()
-                            << "-command"
-                            << "Add-VpnConnection"
-                            << "-Name"
-                            << '"' + settings->value("L2TP/Name", "ZJUVPN").toString() + '"'
-                            << "-ServerAddress"
-                            << "lns.zju.edu.cn"
-                            << "-TunnelType"
-                            << "L2tp"
-                            << "-EncryptionLevel"
-                            << "Optional"
-                            << "-AuthenticationMethod"
-                            << "('Chap','MSChapv2')"
-                            << "-RememberCredential"
-                    );
-                }
-            });
-
-    // 高级-静态路由-设置静态路由
-    connect(ui->setRouteAction, &QAction::triggered,
-            [&]()
-            {
-                connect(networkDetector, &NetworkDetector::finished, this,
-                        [&](const NetworkDetectResult &result)
-                        {
-                            disconnect(networkDetector, &NetworkDetector::finished, this, nullptr);
-                            networkDetectResult = result;
-
-                            if (!networkDetectResult.isZjuLan)
-                            {
-                                QMessageBox::critical(
-                                    this, "错误",
-                                    "未检测到 ZJU 有线网，无法设置静态路由！\n如果你正在使用路由器，请在路由器端设置静态路由"
-                                );
-                                return;
-                            }
-
-                            QMessageBox messageBox(this);
-                            messageBox.setWindowTitle("设置静态路由");
-                            messageBox.setText(
-                                "在使用 L2TP 时，设置静态路由有助于从校网访问 RDP、NHD 等服务\n是否设置网关为 "
-                                + networkDetectResult.zjuLanGateway
-                                + " 的静态路由？\n在设置过程中会请求管理员权限"
-                            );
-
-                            messageBox.addButton(QMessageBox::Yes)->setText("是");
-                            messageBox.addButton(QMessageBox::No)->setText("否");
-                            messageBox.setDefaultButton(QMessageBox::Yes);
-
-                            if (messageBox.exec() == QMessageBox::Yes)
-                            {
-                                QString command =
-                                    "/c route -p add 10.0.0.0 mask 255.0.0.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 210.32.0.0 mask 255.255.240.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 222.205.0.0 mask 255.255.128.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 210.32.128.0 mask 255.255.224.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 210.32.160.0 mask 255.255.248.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 210.32.168.0 mask 255.255.252.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 210.32.172.0 mask 255.255.254.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 210.32.174.0 mask 255.255.255.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 210.32.176.0 mask 255.255.240.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 58.196.192.0 mask 255.255.224.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1 & "
-                                    + "route -p add 58.196.224.0 mask 255.255.240.0 "
-                                    + networkDetectResult.zjuLanGateway
-                                    + " metric 1";
-
-                                HINSTANCE hInstance = ShellExecute(
-                                    nullptr,
-                                    L"runas",
-                                    L"cmd.exe",
-                                    command.toStdWString().c_str(),
-                                    nullptr,
-                                    SW_HIDE
-                                );
-
-                                if (hInstance > (HINSTANCE) 32)
-                                {
-                                    addLog("设置静态路由成功！");
-
-                                    QMessageBox successBox(this);
-                                    successBox.setWindowTitle("提示");
-                                    successBox.setTextFormat(Qt::RichText);
-                                    successBox.setText(
-                                        "设置成功！"
-                                        "<br>请打开 <a href='http://speedtest.zju.edu.cn'>http://speedtest.zju.edu.cn</a> 测速"
-                                        "<br>若显示的 IP 地址为 10.x.x.x，说明静态路由已生效！"
-                                    );
-                                    successBox.exec();
-                                }
-                                else
-                                {
-                                    addLog("设置静态路由失败！");
-
-                                    QMessageBox::critical(
-                                        this,
-                                        "错误",
-                                        "设置失败！\n这可能是您拒绝了权限请求导致的"
-                                    );
-                                }
-                            }
-                        });
-
-                networkDetector->start();
-            });
-
-    // 高级-静态路由-删除静态路由
-    connect(ui->deleteRouteAction, &QAction::triggered,
-            [&]()
-            {
-                QMessageBox messageBox(this);
-                messageBox.setWindowTitle("删除静态路由");
-                messageBox.setText(
-                    "是否删除静态路由？\n在删除过程中会请求管理员权限"
-                );
-
-                messageBox.addButton(QMessageBox::Yes)->setText("是");
-                messageBox.addButton(QMessageBox::No)->setText("否");
-                messageBox.setDefaultButton(QMessageBox::Yes);
-
-                if (messageBox.exec() == QMessageBox::Yes)
-                {
-                    QString command =
-                        QString("/c route -p delete 10.0.0.0 mask 255.0.0.0 & ")
-                        + "route -p delete 210.32.0.0 mask 255.255.240.0 & "
-                        + "route -p delete 222.205.0.0 mask 255.255.128.0 & "
-                        + "route -p delete 210.32.128.0 mask 255.255.224.0 & "
-                        + "route -p delete 210.32.160.0 mask 255.255.248.0 & "
-                        + "route -p delete 210.32.168.0 mask 255.255.252.0 & "
-                        + "route -p delete 210.32.172.0 mask 255.255.254.0 & "
-                        + "route -p delete 210.32.174.0 mask 255.255.255.0 & "
-                        + "route -p delete 210.32.176.0 mask 255.255.240.0 & "
-                        + "route -p delete 58.196.192.0 mask 255.255.224.0 & "
-                        + "route -p delete 58.196.224.0 mask 255.255.240.0";
-
-                    HINSTANCE hInstance = ShellExecute(
-                        nullptr,
-                        L"runas",
-                        L"cmd.exe",
-                        command.toStdWString().c_str(),
-                        nullptr,
-                        SW_HIDE
-                    );
-
-                    if (hInstance > (HINSTANCE) 32)
-                    {
-                        addLog("删除静态路由成功！");
-
-                        QMessageBox::information(
-                            this,
-                            "提示",
-                            "删除成功！"
-                        );
-                    }
-                    else
-                    {
-                        addLog("删除静态路由失败！");
-
-                        QMessageBox::critical(
-                            this,
-                            "错误",
-                            "删除失败！\n这可能是您拒绝了权限请求导致的"
-                        );
-                    }
-                }
-            });
-
     // 帮助-清除系统代理
     connect(ui->disableProxyAction, &QAction::triggered,
             [&]()
@@ -392,116 +138,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 addLog("已清除系统代理设置");
             });
 
-    // 帮助-网络诊断
-    connect(ui->diagnosisAction, &QAction::triggered,
-            [&]()
-            {
-                diagnosisContext = new QObject(this);
-                connect(networkDetector, &NetworkDetector::finished, diagnosisContext,
-                        [&](const NetworkDetectResult &result)
-                        {
-                            networkDetectResult = result;
-
-                            delete diagnosisContext;
-
-                            QString resultString = "";
-                            if (result.isDefaultDnsAvailable)
-                            {
-                                resultString += "dns=true&";
-                            }
-                            else
-                            {
-                                resultString += "dns=false&";
-                            }
-
-                            if (result.isZjuNet)
-                            {
-                                resultString += "zjunet=true&";
-                            }
-                            else
-                            {
-                                resultString += "zjunet=false&";
-                            }
-
-                            if (result.isZjuDnsCorrect)
-                            {
-                                resultString += "zjudns=true&";
-                            }
-                            else
-                            {
-                                resultString += "zjudns=false&";
-                            }
-
-                            if (result.isZjuWlan)
-                            {
-                                resultString += "zjuwlan=true&";
-                            }
-                            else
-                            {
-                                resultString += "zjuwlan=false&";
-                            }
-
-                            if (result.isZjuWlanSecure)
-                            {
-                                resultString += "zjuwlansecure=true&";
-                            }
-                            else
-                            {
-                                resultString += "zjuwlansecure=false&";
-                            }
-
-                            if (result.isZjuLan)
-                            {
-                                resultString += "zjulan=true&";
-                                resultString += "zjulangateway=" + result.zjuLanGateway + "&";
-                            }
-                            else
-                            {
-                                resultString += "zjulan=false&";
-                            }
-
-                            if (result.isInternetAvailable)
-                            {
-                                resultString += "internet=true&";
-                            }
-                            else
-                            {
-                                resultString += "internet=false&";
-                            }
-
-                            if (result.isProxyEnabled)
-                            {
-                                resultString += "proxy=true";
-                            }
-                            else
-                            {
-                                resultString += "proxy=false";
-                            }
-
-                            auto url = "https://diagnosis.myth.cx/query?" + resultString;
-                            auto qrCode = qrGenerator.generateQr(url);
-                            auto *dialog = new QDialog(this);
-                            auto *layout = new QVBoxLayout();
-                            auto *textLabel = new QLabel(dialog);
-                            textLabel->setWordWrap(true);
-                            textLabel->setText(
-                                "请使用手机扫描下方二维码。如当前电脑有网络，也可<a href=\"" + url + "\">点此</a>进行诊断"
-                            );
-                            textLabel->setTextFormat(Qt::RichText);
-                            textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-                            textLabel->setOpenExternalLinks(true);
-                            auto *imageLabel = new QLabel(dialog);
-                            imageLabel->setAlignment(Qt::AlignCenter);
-                            imageLabel->setPixmap(QPixmap::fromImage(qrCode));
-                            layout->addWidget(textLabel);
-                            layout->addWidget(imageLabel);
-                            dialog->setLayout(layout);
-                            dialog->setWindowTitle("网络诊断");
-                            dialog->exec();
-                        });
-
-                networkDetector->start();
-            });
 
     // 帮助-关于本软件
     connect(ui->aboutAction, &QAction::triggered,
@@ -520,6 +156,7 @@ MainWindow::MainWindow(QWidget *parent) :
     );
 
     // 检查更新
+    /*
     QTimer::singleShot(10000, [&]()
     {
         QNetworkRequest request(QUrl("https://zjuconnect.myth.cx/version.json"));
@@ -529,6 +166,7 @@ MainWindow::MainWindow(QWidget *parent) :
         );
         networkAccessManager->get(request);
     });
+    */
 
     connect(networkAccessManager, &QNetworkAccessManager::finished,
             [&](QNetworkReply *reply)
@@ -543,12 +181,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
                     if (version != QApplication::applicationVersion())
                     {
-                        QString text = "有新版本可用：v" + version +
-                                       "<br>更新内容：" + description +
-                                       "<br>点击<a href='" + url + "'>此处</a>下载";
-
-                        ui->statusLabel->setText(text);
-
                         disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
                         trayIcon->showMessage(
                             "有新版本可用",
@@ -570,76 +202,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 }
             });
 
-    // 网络接口
-    connect(ui->refreshInterfaceButton, &QPushButton::clicked,
-            [&]()
-            {
-                auto currentInterfaceName = ui->interfaceComboBox->currentText();
-                ui->interfaceComboBox->clear();
-                ui->interfaceComboBox->addItem("默认");
-                auto interfaces = QNetworkInterface::allInterfaces();
-                bool notDefault = false;
-                for (auto &singleInterface: interfaces)
-                {
-                    if ((singleInterface.type() != QNetworkInterface::Ethernet
-                         && singleInterface.type() != QNetworkInterface::Wifi)
-                        || !singleInterface.flags().testFlag(QNetworkInterface::IsRunning))
-                    {
-                        continue;
-                    }
-
-                    QString ipv4Address;
-                    auto addresses = singleInterface.addressEntries();
-                    for (auto &address: addresses)
-                    {
-                        if (address.ip().protocol() == QAbstractSocket::IPv4Protocol)
-                        {
-                            ipv4Address = address.ip().toString();
-                            break;
-                        }
-                    }
-
-                    ui->interfaceComboBox->addItem(singleInterface.humanReadableName(), ipv4Address);
-
-                    if (currentInterfaceName == singleInterface.humanReadableName())
-                    {
-                        notDefault = true;
-                        ui->interfaceComboBox->setCurrentText(singleInterface.humanReadableName());
-                    }
-                }
-
-                if (!notDefault)
-                {
-                    ui->interfaceComboBox->setCurrentText("默认");
-                }
-            });
-
-    Utils::setWidgetFixedWhenHidden(ui->interfaceLabel);
-    Utils::setWidgetFixedWhenHidden(ui->refreshInterfaceButton);
-    Utils::setWidgetFixedWhenHidden(ui->interfaceComboBox);
-
-    ui->interfaceLabel->hide();
-    ui->refreshInterfaceButton->hide();
-    ui->interfaceComboBox->hide();
-
-    // 更改工作模式
-    connect(ui->modeComboBox, &QComboBox::currentTextChanged,
-            [&](const QString &text)
-            {
-                if (text == "有线网 L2TP")
-                {
-                    setModeToL2tp();
-                }
-                else if (text == "网页认证登录")
-                {
-                    setModeToWebLogin();
-                }
-                else if (text == "RVPN")
-                {
-                    setModeToZjuConnect();
-                }
-            });
-
     // 网络检测
     connect(networkDetector, &NetworkDetector::finished, this,
             [&](const NetworkDetectResult &result)
@@ -655,52 +217,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 else
                 {
                     resultString += "默认 DNS 可用：否 | ";
-                }
-
-                if (result.isZjuNet)
-                {
-                    resultString += "ZJU 校园网：是 | ";
-                }
-                else
-                {
-                    resultString += "ZJU 校园网：否 | ";
-                }
-
-                if (result.isZjuDnsCorrect)
-                {
-                    resultString += "ZJU 内网 DNS 解析：是 | ";
-                }
-                else
-                {
-                    resultString += "ZJU 内网 DNS 解析：否 | ";
-                }
-
-                if (result.isZjuWlan)
-                {
-                    resultString += "ZJUWLAN：是 | ";
-                }
-                else
-                {
-                    resultString += "ZJUWLAN：否 | ";
-                }
-
-                if (result.isZjuWlanSecure)
-                {
-                    resultString += "ZJUWLAN-Secure：是 | ";
-                }
-                else
-                {
-                    resultString += "ZJUWLAN-Secure：否 | ";
-                }
-
-                if (result.isZjuLan)
-                {
-                    resultString += "ZJU 有线网：是 | ";
-                    resultString += "ZJU 有线网网关：" + result.zjuLanGateway + " | ";
-                }
-                else
-                {
-                    resultString += "ZJU 有线网：否 | ";
                 }
 
                 if (result.isInternetAvailable)
@@ -736,19 +252,8 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
-    auto lastMode = settings->value("Common/LastMode", "RVPN").toString();
-    if (lastMode == "有线网 L2TP")
-    {
-        ui->modeComboBox->setCurrentText("有线网 L2TP");
-    }
-    else if (lastMode == "网页认证登录")
-    {
-        ui->modeComboBox->setCurrentText("网页认证登录");
-    }
-    else
-    {
-        setModeToZjuConnect();
-    }
+    
+    setModeToZjuConnect();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -794,13 +299,6 @@ void MainWindow::upgradeSettings()
             }
         }
 
-        // Replace old ineffective check ip
-        if (settings->value("L2TP/CheckIp", "223.5.5.5").toString() == "39.156.66.10")
-        {
-            settings->setValue("L2TP/CheckIp", "223.5.5.5");
-            settings->sync();
-        }
-
         return;
     }
 
@@ -820,6 +318,7 @@ void MainWindow::upgradeSettings()
     {
         settings->setValue("Common/Username", settings->value("EasyConnect/Username"));
         settings->remove("EasyConnect/Username");
+
     }
 
     if (settings->contains("EasyConnect/Password"))
@@ -869,7 +368,6 @@ void MainWindow::cleanUpWhenQuit()
     {
         settings->setValue("Common/ConfigVersion", 2);
         settings->setValue("Common/LastMode", mode);
-        settings->setValue("WebLogin/LastInterface", ui->interfaceComboBox->currentText());
         settings->setValue("ZJUConnect/TunMode", ui->tunCheckBox->isChecked());
         settings->sync();
     }

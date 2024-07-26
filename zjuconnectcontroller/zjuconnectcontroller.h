@@ -18,6 +18,7 @@ public:
         const QString &password,
         const QString &server = "",
         int port = 0,
+        const QString& dns = "",
         bool disableMultiLine = false,
         bool proxyAll = false,
         const QString &socksBind = "",

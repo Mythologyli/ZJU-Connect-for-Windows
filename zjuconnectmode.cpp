@@ -11,10 +11,6 @@ void MainWindow::setModeToZjuConnect()
     clearLog();
 
     networkDetector->start();
-
-    ui->interfaceLabel->hide();
-    ui->refreshInterfaceButton->hide();
-    ui->interfaceComboBox->hide();
     ui->tunCheckBox->show();
 
     if (settings->contains("ZJUConnect/TunMode"))
@@ -78,7 +74,6 @@ void MainWindow::setModeToZjuConnect()
         showNotification("RVPN", "RVPN 断开！", QSystemTrayIcon::MessageIcon::Warning);
         isZjuConnectLinked = false;
         ui->pushButton1->setText("连接服务器");
-        ui->modeComboBox->setEnabled(true);
 
         if (isZjuConnectLoginError)
         {
@@ -97,7 +92,7 @@ void MainWindow::setModeToZjuConnect()
             {
                 if (!isZjuConnectLinked)
                 {
-                    if (settings->value("ZJUConnect/ServerAddress", "rvpn.zju.edu.cn").toString().isEmpty())
+                    if (settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString().isEmpty())
                     {
                         QMessageBox::critical(this, "错误", "服务器地址不能为空");
                         return;
@@ -121,6 +116,7 @@ void MainWindow::setModeToZjuConnect()
                         QByteArray::fromBase64(settings->value("Common/Password").toString().toUtf8()),
                         settings->value("ZJUConnect/ServerAddress").toString(),
                         settings->value("ZJUConnect/ServerPort", 443).toInt(),
+                        settings->value("ZJUConnect/DNS").toString(),
                         !settings->value("ZJUConnect/MultiLine", true).toBool(),
                         settings->value("ZJUConnect/ProxyAll", false).toBool(),
                         "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
@@ -133,7 +129,6 @@ void MainWindow::setModeToZjuConnect()
                     );
 
                     isZjuConnectLinked = true;
-                    ui->modeComboBox->setEnabled(false);
                     ui->pushButton1->setText("断开服务器");
                     ui->pushButton2->show();
 
@@ -155,7 +150,6 @@ void MainWindow::setModeToZjuConnect()
 
                     ui->pushButton1->setText("连接服务器");
                     ui->pushButton2->hide();
-                    ui->modeComboBox->setEnabled(true);
                 }
             });
 

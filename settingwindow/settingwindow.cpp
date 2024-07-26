@@ -47,8 +47,9 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
         ui->connectAfterStartComboBox->setCurrentText("否");
     }
 
-    ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "rvpn.zju.edu.cn").toString());
+    ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
+    ui->dnsLineEdit->setText(settings->value("ZJUConnect/DNS", "10.248.98.30").toString());
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 11080).toInt());
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 11081).toInt());
     ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", true).toBool());
@@ -60,40 +61,6 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
     ui->reconnectTimeSpinBox->setValue(settings->value("ZJUConnect/ReconnectTime", 1).toInt());
     ui->autoSetProxyCheckBox->setChecked(settings->value("ZJUConnect/AutoSetProxy", false).toBool());
     ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", false).toBool());
-
-    ui->l2tpNameLineEdit->setText(settings->value("L2TP/Name", "ZJUVPN").toString());
-
-    if (settings->value("L2TP/AutoReconnect", false).toBool())
-    {
-        ui->l2tpAutoCheckComboBox->setCurrentText("是");
-    }
-    else
-    {
-        ui->l2tpAutoCheckComboBox->setCurrentText("否");
-    }
-
-    ui->l2tpCheckIpLineEdit->setText(settings->value("L2TP/CheckIp", "223.5.5.5").toString());
-    ui->l2tpCheckTimeSpinBox->setValue(settings->value("L2TP/CheckTime", 600).toInt());
-
-    if (settings->value("WebLogin/IntlUrl", false).toBool())
-    {
-        ui->intlUrlComboBox->setCurrentText("是");
-    }
-    else
-    {
-        ui->intlUrlComboBox->setCurrentText("否");
-    }
-
-    if (settings->value("WebLogin/EnableCustomUrl", false).toBool())
-    {
-        ui->customUrlComboBox->setCurrentText("是");
-    }
-    else
-    {
-        ui->customUrlComboBox->setCurrentText("否");
-    }
-
-    ui->customUrlLineEdit->setText(settings->value("WebLogin/CustomUrl", "https://net.zju.edu.cn").toString());
 
     connect(ui->portForwardingPushButton, &QPushButton::clicked,
             [&]()
@@ -114,33 +81,6 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
     connect(ui->applyPushButton, &QPushButton::clicked,
             [&]()
             {
-                QRegularExpression re("^[A-Za-z]+$");
-                QRegularExpressionMatch match = re.match(ui->l2tpNameLineEdit->text());
-                if (!match.hasMatch())
-                {
-                    ui->tabWidget->setCurrentWidget(ui->l2tpTab);
-                    QMessageBox::warning(
-                        this,
-                        "警告",
-                        "建议 L2TP VPN 名称只包含英文字母，否则可能导致系统代理出错！\n"
-                        "如果您之前自行配置过 VPN，建议修改此处 L2TP VPN 名称，之后在主界面点击高级-创建 L2TP VPN"
-                    );
-                }
-
-                if (ui->l2tpCheckIpLineEdit->text().isEmpty() and ui->l2tpAutoCheckComboBox->currentText() == "是")
-                {
-                    ui->tabWidget->setCurrentWidget(ui->l2tpTab);
-                    QMessageBox::critical(this, "错误", "检测使用的 IP 不能为空！");
-                    return;
-                }
-
-                QHostAddress address(ui->l2tpCheckIpLineEdit->text());
-                if (QAbstractSocket::IPv4Protocol != address.protocol())
-                {
-                    ui->tabWidget->setCurrentWidget(ui->l2tpTab);
-                    QMessageBox::critical(this, "错误", "请填写有效的 IPv4 地址！");
-                    return;
-                }
 
                 settings->setValue("Common/Username", ui->usernameLineEdit->text());
                 settings->setValue("Common/Password", QString(ui->passwordLineEdit->text().toUtf8().toBase64()));
@@ -149,6 +89,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
 
                 settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
                 settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
+                settings->setValue("ZJUConnect/DNS", ui->dnsLineEdit->text());
                 settings->setValue("ZJUConnect/Socks5Port", ui->socks5PortSpinBox->value());
                 settings->setValue("ZJUConnect/HttpPort", ui->httpPortSpinBox->value());
                 settings->setValue("ZJUConnect/MultiLine", ui->multiLineCheckBox->isChecked());
@@ -160,15 +101,6 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                 settings->setValue("ZJUConnect/ReconnectTime", ui->reconnectTimeSpinBox->value());
                 settings->setValue("ZJUConnect/AutoSetProxy", ui->autoSetProxyCheckBox->isChecked());
                 settings->setValue("ZJUConnect/Route", ui->routeCheckBox->isChecked());
-
-                settings->setValue("L2TP/Name", ui->l2tpNameLineEdit->text());
-                settings->setValue("L2TP/AutoReconnect", ui->l2tpAutoCheckComboBox->currentText() == "是");
-                settings->setValue("L2TP/CheckIp", ui->l2tpCheckIpLineEdit->text());
-                settings->setValue("L2TP/CheckTime", ui->l2tpCheckTimeSpinBox->value());
-
-                settings->setValue("WebLogin/IntlUrl", ui->intlUrlComboBox->currentText() == "是");
-                settings->setValue("WebLogin/EnableCustomUrl", ui->customUrlComboBox->currentText() == "是");
-                settings->setValue("WebLogin/CustomUrl", ui->customUrlLineEdit->text());
 
                 settings->sync();
 
