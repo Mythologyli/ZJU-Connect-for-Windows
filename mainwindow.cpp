@@ -21,8 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     zjuConnectController = nullptr;
 
-    networkAccessManager = new QNetworkAccessManager(this);
-
     process = new QProcess(this);
     processForL2tp = new QProcess(this);
     processForL2tpCheck = new QProcess(this);
@@ -53,8 +51,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle(QApplication::applicationName() + " v" + QApplication::applicationVersion());
 
+    ui->applicationNameLabel->setText(QApplication::applicationDisplayName());
     ui->versionLabel->setText(
-        "Version: " + QApplication::applicationVersion() + "\n" + QSysInfo::prettyProductName() + "\n"
+        "当前版本：v" + QApplication::applicationVersion() + "\n正在检查更新……\n"
     );
 
     // 系统托盘
@@ -137,6 +136,12 @@ MainWindow::MainWindow(QWidget *parent) :
                 addLog("已清除系统代理设置");
             });
 
+    // 帮助-检查更新
+    connect(ui->checkUpdateAction, &QAction::triggered, this,
+            [&]()
+            {
+                checkUpdate();
+            });
 
     // 帮助-关于本软件
     connect(ui->aboutAction, &QAction::triggered,
@@ -166,6 +171,67 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
+    // 自动检查更新
+    checkUpdateNAM = new QNetworkAccessManager(this);
+
+    connect(checkUpdateNAM, &QNetworkAccessManager::finished,
+        this, [&](QNetworkReply* reply) {
+            if (reply->error() != QNetworkReply::NoError)
+            {
+                addLog("检查更新失败。原因是：" + reply->errorString());
+                reply->deleteLater();
+                return;
+            }
+
+            QJsonObject json = QJsonDocument::fromJson(reply->readAll()).object();
+            reply->deleteLater();
+
+            QString nowVersion = QApplication::applicationVersion();
+            QString latestVersion = json["tag_name"].toString();
+            addLog("检查更新成功。最新版本：" + latestVersion);
+            ui->versionLabel->setText(
+                "当前版本：v" + nowVersion + "\n"
+                "最新版本：" + latestVersion + "\n"
+            );
+
+            // 移除开头的 'v'
+            if (latestVersion.startsWith('v'))
+            {
+                latestVersion = latestVersion.mid(1);
+            }
+
+            qsizetype nowVersionSuffix, latestVersionSuffix;
+            auto nowVersionQ = QVersionNumber::fromString(nowVersion, &nowVersionSuffix);
+            auto latestVersionQ = QVersionNumber::fromString(latestVersion, &latestVersionSuffix);
+
+            if (latestVersionQ > nowVersionQ || 
+                (latestVersionQ == nowVersionQ && latestVersion.right(latestVersionSuffix) != nowVersion.right(nowVersionSuffix)))
+            {
+                QMessageBox msgBox;
+                msgBox.setText("版本更新");
+                msgBox.setInformativeText("存在版本更新：" + latestVersion + "\n"
+                    "是否前往 Github 发布页面查看？");
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+
+                int ret = msgBox.exec();
+                if (ret == QMessageBox::Ok)
+                {
+                    QDesktopServices::openUrl(QUrl("https://github.com/" + Utils::REPO_NAME + "/releases/latest"));
+                }
+            }
+        });
+
+    if (settings->value("Common/AutoCheckUpdate", true).toBool())
+    {
+        checkUpdate();
+    }
+    else
+    {
+        ui->versionLabel->setText(
+            "当前版本：v" + QApplication::applicationVersion() + "\n自动检查更新已禁用\n"
+        );
+    }
     
     setModeToZjuConnect();
 }
@@ -179,14 +245,22 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::addLog(const QString &log)
 {
     QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    ui->logPlainTextEdit->appendPlainText(timeString + " " + log);
+    ui->logPlainTextEdit->appendPlainText(timeString + " " + log.trimmed());
 }
 
 void MainWindow::clearLog()
 {
     ui->logPlainTextEdit->clear();
     ui->logPlainTextEdit->appendPlainText(
-        "Version: " + QApplication::applicationVersion() + "\n" + QSysInfo::prettyProductName());
+        "欢迎使用 " + QApplication::applicationDisplayName() + "\n"
+        "当前版本：v" + QApplication::applicationVersion() + "\n"
+        "系统版本：" + QSysInfo::prettyProductName());
+}
+
+void MainWindow::checkUpdate()
+{
+    QNetworkRequest request(QUrl("https://api.github.com/repos/" + Utils::REPO_NAME + "/releases/latest"));
+    checkUpdateNAM->get(request);
 }
 
 void MainWindow::upgradeSettings()

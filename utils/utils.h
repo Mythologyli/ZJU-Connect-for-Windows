@@ -3,6 +3,8 @@
 
 namespace Utils
 {
+    const QString REPO_NAME("hitszosa/HITsz-Connect-for-Windows");
+
     QString ConsoleOutputToQString(const QByteArray &byteArray);
 
     void setWidgetFixedWhenHidden(QWidget *widget);

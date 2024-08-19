@@ -38,6 +38,8 @@ protected:
     void closeEvent(QCloseEvent *e) override;
 
 private:
+    void checkUpdate();
+
     void upgradeSettings();
 
     void clearLog();
@@ -62,7 +64,7 @@ private:
     QAction *trayShowAction;
     QAction *trayCloseAction;
     ZjuConnectController *zjuConnectController;
-    QNetworkAccessManager *networkAccessManager;
+    QNetworkAccessManager *checkUpdateNAM;
     QSettings *settings;
     QProcess *process;
     QProcess *processForL2tp;

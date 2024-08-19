@@ -109,6 +109,8 @@ void MainWindow::setModeToZjuConnect()
             {
                 if (!isZjuConnectLinked)
                 {
+                    addLog("VPN 启动！");
+
                     if (settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString().isEmpty())
                     {
                         QMessageBox::critical(this, "错误", "服务器地址不能为空");

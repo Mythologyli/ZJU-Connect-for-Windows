@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>731</width>
-    <height>265</height>
+    <height>266</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,7 +72,7 @@
      </spacer>
     </item>
     <item row="0" column="1" colspan="3">
-     <widget class="QLabel" name="label1">
+     <widget class="QLabel" name="applicationNameLabel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -85,7 +85,7 @@
        </font>
       </property>
       <property name="toolTip">
-       <string>你好呀</string>
+       <string>关注 HITSZ OSA 谢谢喵！n(*≧▽≦*)n</string>
       </property>
       <property name="text">
        <string>HITsz Connect for Windows</string>
@@ -117,8 +117,8 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Version: 1.0
-Windows Version: Arch Linux
+       <string>Version：1.0
+Windows Version：Arch Linux
 </string>
       </property>
       <property name="alignment">
@@ -139,7 +139,7 @@ Windows Version: Arch Linux
     <item row="2" column="1" colspan="3">
      <widget class="QLabel" name="accountLabel">
       <property name="text">
-       <string>提示：左上角“功能”-&gt;“设置”里可以填写账号信息。
+       <string>提示：左上角“功能”→“设置”里可以填写账号信息。
 可以使用 TUN 模式解决部分软件无法代理的问题。
 建议关闭 Clash 等代理后开启系统代理。
 
@@ -173,6 +173,7 @@ Windows Version: Arch Linux
      <string>帮助</string>
     </property>
     <addaction name="disableProxyAction"/>
+    <addaction name="checkUpdateAction"/>
     <addaction name="aboutAction"/>
    </widget>
    <widget class="QMenu" name="fileMenu">
@@ -206,6 +207,16 @@ Windows Version: Arch Linux
   <action name="disableProxyAction">
    <property name="text">
     <string>清除系统代理</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>检查更新</string>
+   </property>
+  </action>
+  <action name="checkUpdateAction">
+   <property name="text">
+    <string>检查更新</string>
    </property>
   </action>
  </widget>

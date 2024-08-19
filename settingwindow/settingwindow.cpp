@@ -43,6 +43,15 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
         ui->connectAfterStartComboBox->setCurrentText("否");
     }
 
+    if (settings->value("Common/AutoCheckUpdate", true).toBool())
+    {
+        ui->autoCheckUpdateComboBox->setCurrentText("是");
+    }
+    else
+    {
+        ui->autoCheckUpdateComboBox->setCurrentText("否");
+    }
+
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
     ui->dnsLineEdit->setText(settings->value("ZJUConnect/DNS", "10.248.98.30").toString());
@@ -82,6 +91,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                 settings->setValue("Common/Password", QString(ui->passwordLineEdit->text().toUtf8().toBase64()));
                 settings->setValue("Common/AutoStart", ui->autoStartComboBox->currentText() == "是");
                 settings->setValue("Common/ConnectAfterStart", ui->connectAfterStartComboBox->currentText() == "是");
+                settings->setValue("Common/AutoCheckUpdate", ui->autoCheckUpdateComboBox->currentText() == "是");
 
                 settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
                 settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
