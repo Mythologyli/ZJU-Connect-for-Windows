@@ -41,6 +41,8 @@ signals:
 
     void listenFailed();
 
+    void setupError();
+
     void outputRead(const QString &output);
 
     void finished();

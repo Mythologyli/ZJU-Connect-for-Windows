@@ -23,6 +23,10 @@ ZjuConnectController::ZjuConnectController()
         {
             emit listenFailed();
         }
+        else if (output.contains("client setup error"))
+        {
+            emit setupError();
+        }
     });
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
@@ -42,6 +46,10 @@ ZjuConnectController::ZjuConnectController()
         else if (output.contains("listen failed"))
         {
             emit listenFailed();
+        }
+        else if (output.contains("client setup error"))
+        {
+            emit setupError();
         }
     });
 

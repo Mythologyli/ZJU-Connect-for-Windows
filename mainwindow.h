@@ -87,6 +87,7 @@ private:
     bool isZjuConnectLoginError;
     bool isZjuConnectAccessDenied;
     bool isZjuConnectListenFailed;
+    bool isZjuConnectSetupError;
     bool isSystemProxySet;
 };
 

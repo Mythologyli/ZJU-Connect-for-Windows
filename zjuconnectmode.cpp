@@ -49,6 +49,11 @@ void MainWindow::setModeToZjuConnect()
         isZjuConnectListenFailed = true;
     });
 
+    connect(zjuConnectController, &ZjuConnectController::setupError, this, [&]()
+    {
+        isZjuConnectSetupError = true;
+    });
+
     connect(zjuConnectController, &ZjuConnectController::finished, this, [&]()
     {
         if (
@@ -91,6 +96,11 @@ void MainWindow::setModeToZjuConnect()
         {
             isZjuConnectListenFailed = false;
             QMessageBox::critical(this, "错误", "监听失败！\n请关闭占用端口的程序（如残留的 zju-connect.exe），或者监听其它端口");
+        }
+        else if (isZjuConnectSetupError)
+        {
+            isZjuConnectSetupError = false;
+            QMessageBox::critical(this, "错误", "连接失败！\n请检查网络和服务器设置是否正确");
         }
     });
 
