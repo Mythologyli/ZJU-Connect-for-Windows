@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent) :
     isZjuConnectLinked = false;
     isZjuConnectLoginError = false;
     isZjuConnectAccessDenied = false;
+    isZjuConnectListenFailed = false;
+    isZjuConnectSetupError = false;
     isSystemProxySet = false;
 
     ui->setupUi(this);
@@ -48,8 +50,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(QIcon(QPixmap(":/resource/icon.png").scaled(
         512, 512, Qt::KeepAspectRatio, Qt::SmoothTransformation
     )));
-
-    setWindowTitle(QApplication::applicationName() + " v" + QApplication::applicationVersion());
 
     ui->applicationNameLabel->setText(QApplication::applicationDisplayName());
     ui->versionLabel->setText(
@@ -159,17 +159,19 @@ MainWindow::MainWindow(QWidget *parent) :
             }
     );
 
-    connect(this, &MainWindow::SetModeFinished, this, [&]()
-    {
-        if (isFirstTimeSetMode)
-        {
-            isFirstTimeSetMode = false;
-            if (settings->value("Common/ConnectAfterStart", false).toBool())
-            {
-                ui->pushButton1->click();
-            }
-        }
-    });
+    connect(this, &MainWindow::SetModeFinished, this, 
+			[&]()
+		    {
+		        if (isFirstTimeSetMode)
+		        {
+		            isFirstTimeSetMode = false;
+		            if (settings->value("Common/ConnectAfterStart", false).toBool())
+		            {
+		                ui->pushButton1->click();
+		            }
+		        }
+			}
+    );
 
     // 自动检查更新
     checkUpdateNAM = new QNetworkAccessManager(this);
@@ -179,6 +181,9 @@ MainWindow::MainWindow(QWidget *parent) :
             if (reply->error() != QNetworkReply::NoError)
             {
                 addLog("检查更新失败。原因是：" + reply->errorString());
+                ui->versionLabel->setText(
+                    "当前版本：v" + QApplication::applicationVersion() + "\n检查更新失败\n"
+                );
                 reply->deleteLater();
                 return;
             }
@@ -222,7 +227,7 @@ MainWindow::MainWindow(QWidget *parent) :
             }
         });
 
-    if (settings->value("Common/AutoCheckUpdate", true).toBool())
+    if (settings->value("Common/checkUpdateAfterStart", true).toBool())
     {
         checkUpdate();
     }
@@ -281,7 +286,7 @@ void MainWindow::upgradeSettings()
                     QSettings::NativeFormat
                 );
                 autoStartSettings.setValue(
-                    "HITszConnectForWindows",
+                    QApplication::applicationName(),
                     QCoreApplication::applicationFilePath().replace('/', '\\')
                 );
             }

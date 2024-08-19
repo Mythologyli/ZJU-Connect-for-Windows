@@ -3,7 +3,7 @@
 
 namespace Utils
 {
-    const QString REPO_NAME("hitszosa/HITsz-Connect-for-Windows");
+    const inline QString REPO_NAME("chenx-dust/HITsz-Connect-for-Windows");
 
     QString ConsoleOutputToQString(const QByteArray &byteArray);
 

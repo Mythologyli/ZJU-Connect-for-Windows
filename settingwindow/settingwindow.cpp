@@ -43,13 +43,13 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
         ui->connectAfterStartComboBox->setCurrentText("否");
     }
 
-    if (settings->value("Common/AutoCheckUpdate", true).toBool())
+    if (settings->value("Common/checkUpdateAfterStart", true).toBool())
     {
-        ui->autoCheckUpdateComboBox->setCurrentText("是");
+        ui->checkUpdateAfterStartComboBox->setCurrentText("是");
     }
     else
     {
-        ui->autoCheckUpdateComboBox->setCurrentText("否");
+        ui->checkUpdateAfterStartComboBox->setCurrentText("否");
     }
 
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString());
@@ -91,7 +91,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                 settings->setValue("Common/Password", QString(ui->passwordLineEdit->text().toUtf8().toBase64()));
                 settings->setValue("Common/AutoStart", ui->autoStartComboBox->currentText() == "是");
                 settings->setValue("Common/ConnectAfterStart", ui->connectAfterStartComboBox->currentText() == "是");
-                settings->setValue("Common/AutoCheckUpdate", ui->autoCheckUpdateComboBox->currentText() == "是");
+                settings->setValue("Common/checkUpdateAfterStart", ui->checkUpdateAfterStartComboBox->currentText() == "是");
 
                 settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
                 settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
@@ -117,7 +117,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                         QSettings::NativeFormat
                     );
                     autoStartSettings.setValue(
-                        "HITszConnectForWindows",
+                        QApplication::applicationName(),
                         QCoreApplication::applicationFilePath().replace('/', '\\')
                     );
                 }
@@ -127,7 +127,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                         R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run)",
                         QSettings::NativeFormat
                     );
-                    autoStartSettings.remove("HITszConnectForWindows");
+                    autoStartSettings.remove(QApplication::applicationName());
                 }
 
                 close();

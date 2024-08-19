@@ -10,9 +10,6 @@
     <height>266</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>HITsz Connect for Windows</string>
-  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="8" column="1">
@@ -88,7 +85,7 @@
        <string>关注 HITSZ OSA 谢谢喵！n(*≧▽≦*)n</string>
       </property>
       <property name="text">
-       <string>HITsz Connect for Windows</string>
+       <string>Application Name</string>
       </property>
      </widget>
     </item>
@@ -117,8 +114,8 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Version：1.0
-Windows Version：Arch Linux
+       <string>Line 1
+Line 2
 </string>
       </property>
       <property name="alignment">
@@ -143,7 +140,8 @@ Windows Version：Arch Linux
 可以使用 TUN 模式解决部分软件无法代理的问题。
 建议关闭 Clash 等代理后开启系统代理。
 
-一般而言，设置系统代理↘后即可使用。</string>
+一般而言，设置系统代理↘后即可使用。
+使用中遇到任何问题欢迎加入 HITSZ OSA 进行反馈。</string>
       </property>
      </widget>
     </item>
