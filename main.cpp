@@ -11,10 +11,10 @@ int main(int argc, char *argv[])
     QApplication::setApplicationDisplayName("HITsz Connect for Windows");
     QApplication::setApplicationVersion("1.1.6");
 
-    // Easter Egg
+    // 愚人节彩蛋
     QDate currentDate = QDate::currentDate();
     if (currentDate.month() == 4 && currentDate.day() == 1) {
-        QApplication::setApplicationDisplayName("Connect Strike: HashenU");
+        QApplication::setApplicationDisplayName("Connect Strike: HashenU for ウィンドウズ");
     }
 
     MainWindow mainWindow;

@@ -77,7 +77,7 @@ void ZjuConnectController::start(
     const QString &udpPortForwarding
 )
 {
-    QList<QString> args = QStringList({"-username", username, "-password", password});
+    QStringList args;
 
     if (!server.isEmpty())
     {
@@ -147,7 +147,9 @@ void ZjuConnectController::start(
         args.append(udpPortForwarding);
     }
 
-    zjuConnectProcess->start(program, args);
+    emit outputRead("参数：" + args.join(' '));
+
+    zjuConnectProcess->start(program, QStringList({ "-username", username, "-password", password }) + args);
     zjuConnectProcess->waitForStarted();
 }
 
