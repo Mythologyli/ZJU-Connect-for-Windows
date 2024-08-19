@@ -31,7 +31,7 @@ void MainWindow::setModeToZjuConnect()
     // 连接服务器
     connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString &output)
     {
-        ui->logPlainTextEdit->appendPlainText(output);
+        ui->logPlainTextEdit->appendPlainText(output.trimmed());
     });
 
     connect(zjuConnectController, &ZjuConnectController::loginFailed, this, [&]()
@@ -81,6 +81,11 @@ void MainWindow::setModeToZjuConnect()
         showNotification("VPN", "VPN 断开！", QSystemTrayIcon::MessageIcon::Warning);
         isZjuConnectLinked = false;
         ui->pushButton1->setText("连接服务器");
+        if (isSystemProxySet)
+        {
+            ui->pushButton2->click();
+        }
+        ui->pushButton2->hide();
 
         if (isZjuConnectLoginError)
         {
@@ -209,6 +214,10 @@ void MainWindow::setModeToZjuConnect()
                     Utils::clearSystemProxy();
                     ui->pushButton2->setText("设置系统代理");
                     isSystemProxySet = false;
+                    if (!isZjuConnectLinked)
+                    {
+                        ui->pushButton2->hide();
+                    }
                 }
             });
 

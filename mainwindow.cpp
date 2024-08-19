@@ -289,6 +289,9 @@ void MainWindow::upgradeSettings()
                     QApplication::applicationName(),
                     QCoreApplication::applicationFilePath().replace('/', '\\')
                 );
+
+                // 删除旧版自启动项
+                autoStartSettings.remove("HITszConnectForWindows");
             }
         }
 
