@@ -72,7 +72,7 @@ void Utils::showAboutMessageBox(QWidget *parent)
     QString aboutText = QApplication::applicationName() + " v" + QApplication::applicationVersion() +
                         "<br>针对哈工大深圳的修改版 ZJU-Connect-for-Windows" +
                         "<br>作者: <a href='https://github.com/chenx-dust'>Chenx Dust</a>" +
-                        "<br>项目主页: <a href='https://github.com/Mythologyli/HITsz-Connect-for-Windows'>https://github.com/chenx-dust/HITsz-Connect-for-Windows</a>" +
+                        "<br>项目主页: <a href='https://github.com/hitszosa/HITsz-Connect-for-Windows'>https://github.com/hitszosa/HITsz-Connect-for-Windows</a>" +
                         "<br><br>ZJU-Connect-for-Windows" +
                         "<br>基于 Qt 编写的 ZJUConnect 图形界面" +
                         "<br>作者: <a href='https://myth.cx'>Myth</a>" +

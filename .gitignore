@@ -37,4 +37,10 @@
 # CLion
 /.idea
 
+# Visual Studio
+/.vs
+/out
+CMakePresets.json
+CMakeUserPresets.json
+
 !wintun.dll
