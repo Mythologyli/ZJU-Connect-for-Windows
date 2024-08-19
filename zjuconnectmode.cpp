@@ -44,6 +44,11 @@ void MainWindow::setModeToZjuConnect()
         isZjuConnectAccessDenied = true;
     });
 
+    connect(zjuConnectController, &ZjuConnectController::listenFailed, this, [&]()
+    {
+        isZjuConnectListenFailed = true;
+    });
+
     connect(zjuConnectController, &ZjuConnectController::finished, this, [&]()
     {
         if (
@@ -81,6 +86,11 @@ void MainWindow::setModeToZjuConnect()
         {
             isZjuConnectAccessDenied = false;
             QMessageBox::critical(this, "错误", "权限不足！\n请关闭程序，点击右键以管理员身份运行");
+        }
+        else if (isZjuConnectListenFailed)
+        {
+            isZjuConnectListenFailed = false;
+            QMessageBox::critical(this, "错误", "监听失败！\n请关闭占用端口的程序（如残留的 zju-connect.exe），或者监听其它端口");
         }
     });
 

@@ -39,6 +39,8 @@ signals:
 
     void accessDenied();
 
+    void listenFailed();
+
     void outputRead(const QString &output);
 
     void finished();

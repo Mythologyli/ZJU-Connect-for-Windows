@@ -11,13 +11,17 @@ ZjuConnectController::ZjuConnectController()
 
         emit outputRead(output);
 
-        if (output.contains("Login FAILED") || output.contains("too many login failures"))
+        if (output.contains("Login failed") || output.contains("too many login failures"))
         {
             emit loginFailed();
         }
         else if (output.contains("Access is denied."))
         {
             emit accessDenied();
+        }
+        else if (output.contains("listen failed"))
+        {
+            emit listenFailed();
         }
     });
 
@@ -27,13 +31,17 @@ ZjuConnectController::ZjuConnectController()
 
         emit outputRead(output);
 
-        if (output.contains("Login FAILED") || output.contains("too many login failures"))
+        if (output.contains("Login failed") || output.contains("too many login failures"))
         {
             emit loginFailed();
         }
         else if (output.contains("Access is denied."))
         {
             emit accessDenied();
+        }
+        else if (output.contains("listen failed"))
+        {
+            emit listenFailed();
         }
     });
 
