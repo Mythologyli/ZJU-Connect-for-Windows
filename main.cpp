@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     SingleApplication app(argc, argv);
     QApplication::setApplicationName("HITsz Connect for Windows");
-    QApplication::setApplicationVersion("1.1.4");
+    QApplication::setApplicationVersion("1.1.5");
 
     MainWindow mainWindow;
 
