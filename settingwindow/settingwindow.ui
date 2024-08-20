@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>SettingWindow</class>
- <widget class="QWidget" name="SettingWindow">
+ <widget class="QDialog" name="SettingWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>486</width>
-    <height>348</height>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,35 +17,11 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>213</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="applyPushButton">
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QPushButton" name="cancelPushButton">
-     <property name="text">
-      <string>取消</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="4">
+   <item row="0" column="0" colspan="2">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="locale">
+      <locale language="Chinese" country="China"/>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -54,7 +30,113 @@
        <string>通用</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="7" column="0" colspan="4">
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>启动时</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="1" column="0">
+           <widget class="QLabel" name="commonTabLable5">
+            <property name="text">
+             <string>启动后自动连接</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="commonTabLable4">
+            <property name="text">
+             <string>开机自启动</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="autoStartComboBox">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maxVisibleItems">
+             <number>12</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>否</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>是</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="connectAfterStartComboBox">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>否</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>是</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="3">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>221</width>
+              <height>72</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="commonTabLable6">
+            <property name="text">
+             <string>启动后检查更新</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QComboBox" name="checkUpdateAfterStartComboBox">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>否</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>是</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
         <spacer name="commonTabVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -68,123 +150,52 @@
         </spacer>
        </item>
        <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="commonTabLable2">
-         <property name="text">
-          <string>网络账号</string>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>保存的信息</string>
          </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="commonTabLable6">
-         <property name="text">
-          <string>启动后检查更新</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="commonTabLable3">
-         <property name="text">
-          <string>网络密码</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="QComboBox" name="connectAfterStartComboBox">
-         <item>
-          <property name="text">
-           <string>否</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>是</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QLineEdit" name="passwordLineEdit">
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLineEdit" name="usernameLineEdit"/>
-       </item>
-       <item row="4" column="3">
-        <widget class="QComboBox" name="autoStartComboBox">
-         <property name="maxVisibleItems">
-          <number>12</number>
-         </property>
-         <item>
-          <property name="text">
-           <string>否</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>是</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="6" column="3">
-        <widget class="QComboBox" name="checkUpdateAfterStartComboBox">
-         <item>
-          <property name="text">
-           <string>否</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>是</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="4" column="2" rowspan="3">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>170</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QLabel" name="commonTabLable4">
-         <property name="text">
-          <string>开机启动</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2" rowspan="2">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>170</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="commonTabLable5">
-         <property name="text">
-          <string>启动后自动连接</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="4">
-        <widget class="Line" name="commonTabLine1">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="usernameLineEdit"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="commonTabLable2">
+            <property name="text">
+             <string>账号</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="passwordLineEdit">
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="commonTabLable3">
+            <property name="text">
+             <string>密码</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="2">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>100</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -194,37 +205,139 @@
        <string>高级</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel2">
+       <item row="6" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel7">
          <property name="font">
           <font>
            <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>服务器端口</string>
+          <string>自动重连时间（秒）</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
-        <widget class="QCheckBox" name="debugCheckBox">
-         <property name="text">
-          <string>调试模式</string>
+       <item row="2" column="1" colspan="3">
+        <widget class="QLineEdit" name="secondaryDnsLineEdit">
+         <property name="font">
+          <font>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="placeholderText">
+          <string>不填则采用系统 DNS ，使用 DNS 劫持必须填写</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
-        <widget class="QCheckBox" name="autoReconnectCheckBox">
-         <property name="toolTip">
-          <string>断线自动重连</string>
+       <item row="1" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel8">
+         <property name="font">
+          <font>
+           <bold>false</bold>
+          </font>
          </property>
          <property name="text">
-          <string>自动重连</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
+          <string>DNS 服务器</string>
          </property>
         </widget>
+       </item>
+       <item row="8" column="0" colspan="4">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="4">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="autoSetProxyCheckBox">
+           <property name="toolTip">
+            <string>连接服务器后自动设置代理</string>
+           </property>
+           <property name="text">
+            <string>自动设置系统代理</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="multiLineCheckBox">
+           <property name="text">
+            <string>自动选择线路</string>
+           </property>
+           <property name="autoExclusive">
+            <bool>false</bool>
+           </property>
+           <property name="tristate">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QCheckBox" name="proxyAllCheckBox">
+           <property name="text">
+            <string>代理全部流量</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="keepAliveCheckBox">
+           <property name="toolTip">
+            <string>连接服务器后自动设置代理</string>
+           </property>
+           <property name="text">
+            <string>定时保活</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QCheckBox" name="outsideAccessCheckBox">
+           <property name="toolTip">
+            <string>连接服务器后自动设置代理</string>
+           </property>
+           <property name="text">
+            <string>允许外部访问</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QCheckBox" name="debugCheckBox">
+           <property name="text">
+            <string>核心调试模式</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QCheckBox" name="dnsHijackCheckBox">
+           <property name="toolTip">
+            <string>TUN 模式下有效</string>
+           </property>
+           <property name="text">
+            <string>DNS 劫持（TUN）</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="routeCheckBox">
+           <property name="toolTip">
+            <string>TUN 模式下有效</string>
+           </property>
+           <property name="text">
+            <string>设置路由（TUN）</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="tunCheckBox">
+           <property name="toolTip">
+            <string>TUN 模式下有效</string>
+           </property>
+           <property name="text">
+            <string>TUN 模式</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel6">
@@ -233,38 +346,17 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QSpinBox" name="socks5PortSpinBox">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
+       <item row="6" column="1" colspan="2">
+        <widget class="QSpinBox" name="reconnectTimeSpinBox">
          <property name="maximum">
-          <number>65535</number>
+          <number>86400</number>
          </property>
          <property name="value">
-          <number>11080</number>
+          <number>1</number>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QCheckBox" name="multiLineCheckBox">
-         <property name="text">
-          <string>自动选择线路</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-         <property name="autoExclusive">
-          <bool>false</bool>
-         </property>
-         <property name="tristate">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="2">
+       <item row="4" column="1" colspan="3">
         <widget class="QSpinBox" name="httpPortSpinBox">
          <property name="maximum">
           <number>65535</number>
@@ -274,39 +366,19 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
-        <widget class="QCheckBox" name="routeCheckBox">
-         <property name="toolTip">
-          <string>TUN 模式下有效</string>
-         </property>
-         <property name="text">
-          <string>自动设置路由</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QCheckBox" name="autoSetProxyCheckBox">
-         <property name="toolTip">
-          <string>连接服务器后自动设置代理</string>
-         </property>
-         <property name="text">
-          <string>自动设置系统代理</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel5">
+       <item row="1" column="1" colspan="3">
+        <widget class="QLineEdit" name="dnsLineEdit">
          <property name="font">
           <font>
-           <pointsize>9</pointsize>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
-          <string>SOCKS5 代理端口</string>
+          <string>10.248.98.30</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="2">
+       <item row="0" column="3">
         <widget class="QSpinBox" name="serverPortSpinBox">
          <property name="font">
           <font>
@@ -318,42 +390,6 @@
          </property>
          <property name="value">
           <number>443</number>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="3">
-        <widget class="QPushButton" name="portForwardingPushButton">
-         <property name="text">
-          <string>设置端口转发</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="2">
-        <widget class="QLineEdit" name="serverAddressLineEdit">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>vpn.hitsz.edu.cn</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1" colspan="2">
-        <widget class="QSpinBox" name="reconnectTimeSpinBox">
-         <property name="maximum">
-          <number>86400</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QCheckBox" name="proxyAllCheckBox">
-         <property name="text">
-          <string>代理全部流量</string>
          </property>
         </widget>
        </item>
@@ -369,39 +405,118 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel7">
+       <item row="3" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel5">
          <property name="font">
           <font>
            <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>自动重连时间 (s)</string>
+          <string>SOCKS5 代理端口</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="serverAddressLineEdit">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>vpn.hitsz.edu.cn</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel8">
+        <widget class="QLabel" name="zjuConnectTabLabel9">
          <property name="font">
           <font>
            <bold>false</bold>
           </font>
          </property>
          <property name="text">
-          <string>DNS 服务器</string>
+          <string>备用 DNS</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QLineEdit" name="dnsLineEdit">
+       <item row="12" column="0" colspan="4">
+        <widget class="QPushButton" name="portForwardingPushButton">
+         <property name="text">
+          <string>设置端口转发</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="3">
+        <widget class="QSpinBox" name="socks5PortSpinBox">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+         <property name="value">
+          <number>11080</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0" colspan="4">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="3">
+        <widget class="QCheckBox" name="autoReconnectCheckBox">
+         <property name="toolTip">
+          <string>断线自动重连</string>
+         </property>
+         <property name="text">
+          <string>启用</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel7_2">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Shadowsocks 服务器</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" colspan="3">
+        <widget class="QLineEdit" name="shadowsocksUrlLineEdit">
          <property name="font">
           <font>
            <bold>false</bold>
           </font>
          </property>
-         <property name="text">
-          <string>10.248.98.30</string>
+         <property name="placeholderText">
+          <string>不填则不启用，格式：ss://chiper:password@server:port</string>
          </property>
         </widget>
        </item>
@@ -409,30 +524,75 @@
      </widget>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
   <tabstop>usernameLineEdit</tabstop>
   <tabstop>passwordLineEdit</tabstop>
   <tabstop>autoStartComboBox</tabstop>
   <tabstop>connectAfterStartComboBox</tabstop>
-  <tabstop>applyPushButton</tabstop>
-  <tabstop>cancelPushButton</tabstop>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>checkUpdateAfterStartComboBox</tabstop>
   <tabstop>serverAddressLineEdit</tabstop>
   <tabstop>serverPortSpinBox</tabstop>
+  <tabstop>dnsLineEdit</tabstop>
+  <tabstop>secondaryDnsLineEdit</tabstop>
   <tabstop>socks5PortSpinBox</tabstop>
   <tabstop>httpPortSpinBox</tabstop>
+  <tabstop>shadowsocksUrlLineEdit</tabstop>
   <tabstop>reconnectTimeSpinBox</tabstop>
-  <tabstop>multiLineCheckBox</tabstop>
-  <tabstop>proxyAllCheckBox</tabstop>
   <tabstop>autoReconnectCheckBox</tabstop>
+  <tabstop>multiLineCheckBox</tabstop>
+  <tabstop>keepAliveCheckBox</tabstop>
+  <tabstop>outsideAccessCheckBox</tabstop>
   <tabstop>autoSetProxyCheckBox</tabstop>
-  <tabstop>portForwardingPushButton</tabstop>
+  <tabstop>proxyAllCheckBox</tabstop>
   <tabstop>debugCheckBox</tabstop>
+  <tabstop>tunCheckBox</tabstop>
   <tabstop>routeCheckBox</tabstop>
-  <tabstop>dnsLineEdit</tabstop>
+  <tabstop>dnsHijackCheckBox</tabstop>
+  <tabstop>portForwardingPushButton</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>SettingWindow</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>239</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>SettingWindow</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>239</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 #include <QSettings>
 
+#include "loginwindow/loginwindow.h"
 #include "portforwardingwindow/portforwardingwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
 #include "settingwindow/settingwindow.h"
@@ -75,22 +76,13 @@ private:
     QObject *diagnosisContext;
 
     SettingWindow *settingWindow;
-
-    QString mode;
+    LoginWindow *login_window;
 
     bool isFirstTimeSetMode;
 
-    bool isL2tpLinked;
-    bool isL2tpReconnecting;
-
-    bool isWebLogged;
-
     bool isZjuConnectLinked;
-    bool isZjuConnectLoginError;
-    bool isZjuConnectAccessDenied;
-    bool isZjuConnectListenFailed;
-    bool isZjuConnectSetupError;
     bool isSystemProxySet;
+    ZJU_ERROR zjuConnectError;
 };
 
 #endif //MAINWINDOW_H

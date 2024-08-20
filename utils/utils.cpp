@@ -67,7 +67,7 @@ void Utils::setWidgetFixedWhenHidden(QWidget *widget)
 void Utils::showAboutMessageBox(QWidget *parent)
 {
     QMessageBox messageBox(parent);
-    messageBox.setWindowTitle("关于本软件");
+    messageBox.setWindowTitle("关于");
     messageBox.setTextFormat(Qt::RichText);
     QString aboutText = QApplication::applicationDisplayName() + " v" + QApplication::applicationVersion() +
                         "<br>针对哈工大深圳的修改版 ZJU-Connect-for-Windows" +

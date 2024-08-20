@@ -2,23 +2,12 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "loginwindow/loginwindow.h"
 #include "utils/utils.h"
 
 void MainWindow::setModeToZjuConnect()
 {
-    mode = "RVPN";
-
     clearLog();
-
-    ui->tunCheckBox->show();
-
-    if (settings->contains("ZJUConnect/TunMode"))
-    {
-        if (settings->value("ZJUConnect/TunMode").toBool())
-        {
-            ui->tunCheckBox->setChecked(true);
-        }
-    }
 
     zjuConnectController = new ZjuConnectController();
 
@@ -29,36 +18,26 @@ void MainWindow::setModeToZjuConnect()
     ui->pushButton2->hide();
 
     // 连接服务器
-    connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString &output)
-    {
-        ui->logPlainTextEdit->appendPlainText(output.trimmed());
-    });
+    connect(zjuConnectController, &ZjuConnectController::outputRead, this,
+        [&](const QString &output)
+        {
+            ui->logPlainTextEdit->appendPlainText(output.trimmed());
+        });
 
-    connect(zjuConnectController, &ZjuConnectController::loginFailed, this, [&]()
-    {
-        isZjuConnectLoginError = true;
-    });
-
-    connect(zjuConnectController, &ZjuConnectController::accessDenied, this, [&]()
-    {
-        isZjuConnectAccessDenied = true;
-    });
-
-    connect(zjuConnectController, &ZjuConnectController::listenFailed, this, [&]()
-    {
-        isZjuConnectListenFailed = true;
-    });
-
-    connect(zjuConnectController, &ZjuConnectController::setupError, this, [&]()
-    {
-        isZjuConnectSetupError = true;
-    });
+    connect(zjuConnectController, &ZjuConnectController::error, this,
+        [&](ZJU_ERROR err)
+        {
+            if (zjuConnectError == ZJU_ERROR::NONE)
+            {
+                zjuConnectError = err;
+            }
+        });
 
     connect(zjuConnectController, &ZjuConnectController::finished, this, [&]()
     {
         if (
-            !isZjuConnectLoginError &&
-            !isZjuConnectAccessDenied &&
+            zjuConnectError != ZJU_ERROR::NONE &&
+            zjuConnectError != ZJU_ERROR::OTHER &&
             settings->value("ZJUConnect/AutoReconnect", false).toBool() &&
             isZjuConnectLinked
             )
@@ -87,26 +66,34 @@ void MainWindow::setModeToZjuConnect()
         }
         ui->pushButton2->hide();
 
-        if (isZjuConnectLoginError)
+        switch (zjuConnectError)
         {
-            isZjuConnectLoginError = false;
-            QMessageBox::critical(this, "错误", "登录失败！\n请检查设置中的网络账号和密码是否设置正确");
+        case ZJU_ERROR::INVALID_DETAIL:
+            QMessageBox::critical(this, "错误", "登录失败！\n请检查设置中的网络账号和密码是否设置正确。");
+            break;
+        case ZJU_ERROR::BRUTE_FORCE:
+            QMessageBox::critical(this, "错误", "登录失败！\n登录尝试过于频繁，IP 被风控，请稍后重试或换用 EasyConnect。");
+            break;
+        case ZJU_ERROR::OTHER_LOGIN_FAILED:
+            QMessageBox::critical(this, "错误", "登录失败！\n未知原因，可将日志反馈给开发者以便调查。");
+            break;
+        case ZJU_ERROR::ACCESS_DENIED:
+            QMessageBox::critical(this, "错误", "权限不足！\n请关闭程序，点击右键以管理员身份运行。");
+            break;
+        case ZJU_ERROR::LISTEN_FAILED:
+            QMessageBox::critical(this, "错误", "监听失败！\n请关闭占用端口的程序（如残留的 zju-connect.exe），或者监听其它端口。");
+            break;
+        case ZJU_ERROR::CLIENT_FAILED:
+            QMessageBox::critical(this, "错误", "连接失败！\n可能是响应超时，请检查本地网络配置是否正常，服务器设置是否正确。");
+            break;
+        case ZJU_ERROR::OTHER:
+            QMessageBox::critical(this, "错误", "其它错误！\n未知原因，可将日志反馈给开发者以便调查。");
+            break;
+        case ZJU_ERROR::NONE:
+        default:
+            break;
         }
-        else if (isZjuConnectAccessDenied)
-        {
-            isZjuConnectAccessDenied = false;
-            QMessageBox::critical(this, "错误", "权限不足！\n请关闭程序，点击右键以管理员身份运行");
-        }
-        else if (isZjuConnectListenFailed)
-        {
-            isZjuConnectListenFailed = false;
-            QMessageBox::critical(this, "错误", "监听失败！\n请关闭占用端口的程序（如残留的 zju-connect.exe），或者监听其它端口");
-        }
-        else if (isZjuConnectSetupError)
-        {
-            isZjuConnectSetupError = false;
-            QMessageBox::critical(this, "错误", "连接失败！\n请检查网络和服务器设置是否正确");
-        }
+        zjuConnectError = ZJU_ERROR::NONE;
     });
 
     connect(ui->pushButton1, &QPushButton::clicked,
@@ -114,51 +101,72 @@ void MainWindow::setModeToZjuConnect()
             {
                 if (!isZjuConnectLinked)
                 {
-                    addLog("VPN 启动！");
-
-                    if (settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString().isEmpty())
+                    if (settings->contains("ZJUConnect/ServerAddress") &&
+                        settings->value("ZJUConnect/ServerAddress").toString().isEmpty())
                     {
                         QMessageBox::critical(this, "错误", "服务器地址不能为空");
                         return;
                     }
 
-                    if (settings->value("Common/Username", "").toString().isEmpty())
+                    QString username_ = settings->value("Common/Username", "").toString();
+                    QString password_ = QByteArray::fromBase64(settings->value("Common/Password", "").toString().toUtf8());
+
+                    auto startZjuConnect = [this](const QString& username, const QString& password)
+                	{
+                        zjuConnectController->start(
+                            "zju-connect.exe",
+                            username,
+                            password,
+                            settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString(),
+                            settings->value("ZJUConnect/ServerPort", 443).toInt(),
+                            settings->value("ZJUConnect/DNS").toString(),
+                            settings->value("ZJUConnect/SecondaryDNS", "").toString(),
+                            !settings->value("ZJUConnect/MultiLine", true).toBool(),
+                            !settings->value("ZJUConnect/KeepAlive", true).toBool(),
+                            settings->value("ZJUConnect/ProxyAll", false).toBool(),
+                            "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
+                            "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
+                            settings->value("ZJUConnect/ShadowsocksUrl", "").toString(),
+                            settings->value("ZJUConnect/TunMode", false).toBool(),
+                            settings->value("ZJUConnect/Route", false).toBool(),
+                            settings->value("ZJUConnect/DNSHijack", false).toBool(),
+                            settings->value("ZJUConnect/Debug", false).toBool(),
+                            settings->value("ZJUConnect/TcpPortForwarding", "").toString(),
+                            settings->value("ZJUConnect/UdpPortForwarding", "").toString()
+                        );
+
+                        isZjuConnectLinked = true;
+                        ui->pushButton1->setText("断开服务器");
+                        ui->pushButton2->show();
+
+                        if (settings->value("ZJUConnect/AutoSetProxy", true).toBool())
+                        {
+                            ui->pushButton2->click();
+                        }
+                	};
+
+                    if (username_.isEmpty() || password_.isEmpty())
                     {
-                        QMessageBox::critical(this, "错误", "用户名不能为空");
-                        return;
+                        login_window = new LoginWindow(this);
+                        login_window->setDetail(username_, password_);
+
+                        connect(login_window, &LoginWindow::login, this,
+                            [&, startZjuConnect](const QString& username, const QString& password, bool saveDetail)
+                            {
+                                if (saveDetail)
+                                {
+                                    settings->setValue("Common/Username", username);
+                                    settings->setValue("Common/Password", QString(password.toUtf8().toBase64()));
+                                    settings->sync();
+                                }
+                                startZjuConnect(username, password);
+                            }
+                        );
+                        login_window->show();
                     }
-
-                    if (QByteArray::fromBase64(settings->value("Common/Password", "").toString().toUtf8()).isEmpty())
+                    else
                     {
-                        QMessageBox::critical(this, "错误", "密码不能为空");
-                        return;
-                    }
-
-                    zjuConnectController->start(
-                        "zju-connect.exe",
-                        settings->value("Common/Username").toString(),
-                        QByteArray::fromBase64(settings->value("Common/Password").toString().toUtf8()),
-                        settings->value("ZJUConnect/ServerAddress").toString(),
-                        settings->value("ZJUConnect/ServerPort", 443).toInt(),
-                        settings->value("ZJUConnect/DNS").toString(),
-                        !settings->value("ZJUConnect/MultiLine", true).toBool(),
-                        settings->value("ZJUConnect/ProxyAll", false).toBool(),
-                        "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
-                        "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
-                        ui->tunCheckBox->isChecked(),
-                        settings->value("ZJUConnect/Route", false).toBool(),
-                        settings->value("ZJUConnect/Debug", false).toBool(),
-                        settings->value("ZJUConnect/TcpPortForwarding", "").toString(),
-                        settings->value("ZJUConnect/UdpPortForwarding", "").toString()
-                    );
-
-                    isZjuConnectLinked = true;
-                    ui->pushButton1->setText("断开服务器");
-                    ui->pushButton2->show();
-
-                    if (settings->value("ZJUConnect/AutoSetProxy", false).toBool())
-                    {
-                        ui->pushButton2->click();
+                        startZjuConnect(username_, password_);
                     }
                 }
                 else
@@ -189,17 +197,11 @@ void MainWindow::setModeToZjuConnect()
                     );
                     if (proxySettings.value("ProxyEnable", 0).toInt() == 1)
                     {
-                        QMessageBox messageBox(this);
-                        messageBox.setWindowTitle("警告");
-                        messageBox.setText(
-                            "当前已存在系统代理配置\n是否覆盖当前系统代理配置？"
-                        );
+                        int rtn = QMessageBox::warning(this, "警告",
+                            "当前已存在系统代理配置（可能是 Clash 或其它代理软件）\n是否覆盖当前系统代理配置？",
+                            QMessageBox::Yes | QMessageBox::No);
 
-                        messageBox.addButton(QMessageBox::Yes)->setText("是");
-                        messageBox.addButton(QMessageBox::No)->setText("否");
-                        messageBox.setDefaultButton(QMessageBox::Yes);
-
-                        if (messageBox.exec() == QMessageBox::No)
+                        if (rtn == QMessageBox::No)
                         {
                             return;
                         }

@@ -11,21 +11,33 @@ ZjuConnectController::ZjuConnectController()
 
         emit outputRead(output);
 
-        if (output.contains("Login failed") || output.contains("too many login failures"))
+        if (output.contains("Access is denied."))
         {
-            emit loginFailed();
-        }
-        else if (output.contains("Access is denied."))
-        {
-            emit accessDenied();
+            emit error(ZJU_ERROR::ACCESS_DENIED);
         }
         else if (output.contains("listen failed"))
         {
-            emit listenFailed();
+            emit error(ZJU_ERROR::LISTEN_FAILED);
         }
         else if (output.contains("client setup error"))
         {
-            emit setupError();
+            emit error(ZJU_ERROR::CLIENT_FAILED);
+        }
+        else if (output.contains("Invalid username or password!"))
+        {
+            emit error(ZJU_ERROR::INVALID_DETAIL);
+        }
+        else if (output.contains("You are trying brute-force login on this IP address."))
+        {
+            emit error(ZJU_ERROR::BRUTE_FORCE);
+        }
+        else if (output.contains("Login failed") || output.contains("too many login failures"))
+        {
+            emit error(ZJU_ERROR::OTHER_LOGIN_FAILED);
+        }
+        else if (output.contains("panic"))
+        {
+            emit error(ZJU_ERROR::OTHER);
         }
     });
 
@@ -35,21 +47,33 @@ ZjuConnectController::ZjuConnectController()
 
         emit outputRead(output);
 
-        if (output.contains("Login failed") || output.contains("too many login failures"))
+        if (output.contains("Access is denied."))
         {
-            emit loginFailed();
-        }
-        else if (output.contains("Access is denied."))
-        {
-            emit accessDenied();
+            emit error(ZJU_ERROR::ACCESS_DENIED);
         }
         else if (output.contains("listen failed"))
         {
-            emit listenFailed();
+            emit error(ZJU_ERROR::LISTEN_FAILED);
         }
         else if (output.contains("client setup error"))
         {
-            emit setupError();
+            emit error(ZJU_ERROR::CLIENT_FAILED);
+        }
+    	else if (output.contains("Invalid username or password!"))
+        {
+            emit error(ZJU_ERROR::INVALID_DETAIL);
+        }
+        else if (output.contains("You are trying brute-force login on this IP address."))
+        {
+            emit error(ZJU_ERROR::BRUTE_FORCE);
+        }
+        else if (output.contains("Login failed") || output.contains("too many login failures"))
+        {
+            emit error(ZJU_ERROR::OTHER_LOGIN_FAILED);
+        }
+        else if (output.contains("panic"))
+        {
+            emit error(ZJU_ERROR::OTHER);
         }
     });
 
@@ -60,21 +84,25 @@ ZjuConnectController::ZjuConnectController()
 }
 
 void ZjuConnectController::start(
-    const QString &program,
-    const QString &username,
-    const QString &password,
-    const QString &server,
+    const QString& program,
+    const QString& username,
+    const QString& password,
+    const QString& server,
     int port,
     const QString& dns,
+    const QString& secondaryDns,
     bool disableMultiLine,
+    bool disableKeepAlive,
     bool proxyAll,
-    const QString &socksBind,
-    const QString &httpBind,
+    const QString& socksBind,
+    const QString& httpBind,
+    const QString& shadowsocksUrl,
     bool tunMode,
     bool addRoute,
+    bool dnsHijack,
     bool debugDump,
-    const QString &tcpPortForwarding,
-    const QString &udpPortForwarding
+    const QString& tcpPortForwarding,
+    const QString& udpPortForwarding
 )
 {
     QStringList args;
@@ -97,9 +125,20 @@ void ZjuConnectController::start(
         args.append(dns);
     }
 
+    if (!secondaryDns.isEmpty())
+    {
+        args.append("-secondary-dns-server");
+        args.append(secondaryDns);
+    }
+
     if (disableMultiLine)
     {
         args.append("-disable-multi-line");
+    }
+
+    if (disableKeepAlive)
+    {
+        args.append("-disable-keep-alive");
     }
 
     if (proxyAll)
@@ -110,7 +149,11 @@ void ZjuConnectController::start(
     if (tunMode)
     {
         args.append("-tun-mode");
-        args.append("-dns-hijack");
+
+        if (dnsHijack)
+        {
+            args.append("-dns-hijack");
+        }
 
         if (addRoute)
         {
@@ -135,6 +178,12 @@ void ZjuConnectController::start(
         args.append(httpBind);
     }
 
+    if (!shadowsocksUrl.isEmpty())
+    {
+        args.append("-shadowsocks-url");
+        args.append(shadowsocksUrl);
+    }
+
     if (!tcpPortForwarding.isEmpty())
     {
         args.append("-tcp-port-forwarding");
@@ -147,7 +196,8 @@ void ZjuConnectController::start(
         args.append(udpPortForwarding);
     }
 
-    emit outputRead("参数：" + args.join(' '));
+    QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    emit outputRead(timeString + " VPN 启动！参数：" + args.join(' '));
 
     zjuConnectProcess->start(program, QStringList({ "-username", username, "-password", password }) + args);
     zjuConnectProcess->waitForStarted();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PortForwardingWindow</class>
- <widget class="QWidget" name="PortForwardingWindow">
+ <widget class="QDialog" name="PortForwardingWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,13 +17,6 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <widget class="QPushButton" name="applyPushButton">
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" colspan="3">
     <widget class="QTextEdit" name="textEdit">
      <property name="html">
@@ -38,19 +31,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>213</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -64,8 +44,48 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </property>
     </widget>
    </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PortForwardingWindow</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>244</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PortForwardingWindow</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>244</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

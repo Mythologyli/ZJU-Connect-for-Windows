@@ -1,7 +1,7 @@
 #ifndef SETTINGWINDOW_H
 #define SETTINGWINDOW_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QSettings>
 #include "ui_settingwindow.h"
 #include "../portforwardingwindow/portforwardingwindow.h"
@@ -11,7 +11,7 @@ namespace Ui
     class SettingWindow;
 }
 
-class SettingWindow : public QWidget
+class SettingWindow : public QDialog
 {
 Q_OBJECT
 
@@ -21,6 +21,8 @@ public:
     ~SettingWindow() override;
 
 private:
+    void loadSettings();
+
     Ui::SettingWindow *ui;
 
     QSettings *settings;

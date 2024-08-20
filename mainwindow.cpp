@@ -35,15 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
     upgradeSettings();
 
     isFirstTimeSetMode = true;
-    isL2tpLinked = false;
-    isL2tpReconnecting = false;
-    isWebLogged = false;
     isZjuConnectLinked = false;
-    isZjuConnectLoginError = false;
-    isZjuConnectAccessDenied = false;
-    isZjuConnectListenFailed = false;
-    isZjuConnectSetupError = false;
     isSystemProxySet = false;
+    zjuConnectError = ZJU_ERROR::NONE;
 
     ui->setupUi(this);
 
@@ -325,8 +319,6 @@ void MainWindow::cleanUpWhenQuit()
     if (settings->value("Common/ConfigVersion", "1").toInt() <= 2)
     {
         settings->setValue("Common/ConfigVersion", 2);
-        settings->setValue("Common/LastMode", mode);
-        settings->setValue("ZJUConnect/TunMode", ui->tunCheckBox->isChecked());
         settings->sync();
     }
 

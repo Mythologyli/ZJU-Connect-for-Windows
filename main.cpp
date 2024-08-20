@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     SingleApplication app(argc, argv);
     QApplication::setApplicationName("HITsz Connect for Windows");
     QApplication::setApplicationDisplayName("HITsz Connect for Windows");
-    QApplication::setApplicationVersion("1.1.6");
+    QApplication::setApplicationVersion("1.2.0");
 
     // 愚人节彩蛋
     QDate currentDate = QDate::currentDate();

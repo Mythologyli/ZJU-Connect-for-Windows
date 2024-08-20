@@ -1,7 +1,7 @@
 #ifndef PORTFORWARDINGWINDOW_H
 #define PORTFORWARDINGWINDOW_H
 
-#include <QWidget>
+#include <QDialog>
 #include "ui_portforwardingwindow.h"
 
 namespace Ui
@@ -9,12 +9,12 @@ namespace Ui
     class PortForwardingWindow;
 }
 
-class PortForwardingWindow : public QWidget
+class PortForwardingWindow : public QDialog
 {
 Q_OBJECT
 
 public:
-    explicit PortForwardingWindow(QWidget *parent = nullptr);
+    explicit PortForwardingWindow(QDialog *parent = nullptr);
 
     ~PortForwardingWindow() override;
 

@@ -1,8 +1,8 @@
 #include "portforwardingwindow.h"
 #include "ui_portforwardingwindow.h"
 
-PortForwardingWindow::PortForwardingWindow(QWidget *parent) :
-    QWidget(parent),
+PortForwardingWindow::PortForwardingWindow(QDialog *parent) :
+    QDialog(parent),
     ui(new Ui::PortForwardingWindow)
 {
     ui->setupUi(this);
@@ -11,11 +11,10 @@ PortForwardingWindow::PortForwardingWindow(QWidget *parent) :
         512, 512, Qt::KeepAspectRatio, Qt::SmoothTransformation
     )));
 
-    setWindowFlag(Qt::Window);
     setWindowModality(Qt::WindowModal);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(ui->applyPushButton, &QPushButton::clicked,
+    connect(ui->buttonBox, &QDialogButtonBox::accepted,
             [&]()
             {
                 QStringList tcpPortForwardingList;
@@ -45,9 +44,8 @@ PortForwardingWindow::PortForwardingWindow(QWidget *parent) :
                 }
 
                 emit applied(tcpPortForwardingList.join(","), udpPortForwardingList.join(","));
-
-                close();
             });
+
 }
 
 PortForwardingWindow::~PortForwardingWindow()
