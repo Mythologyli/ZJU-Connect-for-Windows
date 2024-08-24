@@ -29,10 +29,19 @@ jobs:
           cache: 'true'
           cache-key-prefix: 'install-qt-action'
 
-      - name: Build
+      - name: Build nightly
+        if: github.event_name != 'release'
         run: |
           mkdir build
-          cmake -S . -B build
+          cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+          cmake --build build --target HITszConnectForWindows --config Release
+
+      - name: Build release
+        if: github.event_name == 'release'
+        run: |
+          TAG=$(git describe --tags)
+          mkdir build
+          cmake -D NIGHTLY_BUILD=OFF -D GIT_TAG=${TAG#v} -S . -B build
           cmake --build build --target HITszConnectForWindows --config Release
 
       - name: Download and copy files
