@@ -39,10 +39,10 @@ jobs:
       - name: Build release
         if: github.event_name == 'release'
         env:
-          TAG: ${{ github.event.release.tag_name }}
         run: |
+          $VER = "${{ github.event.release.tag_name }}".substring(1)
           mkdir build
-          cmake -D NIGHTLY_BUILD=OFF -D GIT_TAG=${TAG#v} -S . -B build
+          cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -S . -B build
           cmake --build build --target HITszConnectForWindows --config Release
 
       - name: Download and copy files
