@@ -38,8 +38,9 @@ jobs:
 
       - name: Build release
         if: github.event_name == 'release'
+        env:
+          TAG: ${{ github.event.release.tag_name }}
         run: |
-          TAG=${{ github.event.release.tag_name }}
           mkdir build
           cmake -D NIGHTLY_BUILD=OFF -D GIT_TAG=${TAG#v} -S . -B build
           cmake --build build --target HITszConnectForWindows --config Release
