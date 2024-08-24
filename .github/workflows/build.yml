@@ -38,7 +38,6 @@ jobs:
 
       - name: Build release
         if: github.event_name == 'release'
-        env:
         run: |
           $VER = "${{ github.event.release.tag_name }}".substring(1)
           mkdir build
