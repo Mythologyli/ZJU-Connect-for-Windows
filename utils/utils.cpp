@@ -69,7 +69,7 @@ void Utils::showAboutMessageBox(QWidget *parent)
     QMessageBox messageBox(parent);
     messageBox.setWindowTitle("关于");
     messageBox.setTextFormat(Qt::RichText);
-    QString aboutText = QApplication::applicationDisplayName() + " v" + QApplication::applicationVersion() +
+    QString aboutText = QApplication::applicationDisplayName() + " " + QApplication::applicationVersion() +
                         "<br>针对哈工大深圳的修改版 ZJU-Connect-for-Windows" +
                         "<br>作者：<a href='https://github.com/chenx-dust'>Chenx Dust</a>" +
                         "<br>项目主页：<a href='https://github.com/" + REPO_NAME + "'>https://github.com/" + REPO_NAME + "</a>" +

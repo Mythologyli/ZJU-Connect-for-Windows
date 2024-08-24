@@ -176,7 +176,7 @@ MainWindow::MainWindow(QWidget *parent) :
             {
                 addLog("检查更新失败。原因是：" + reply->errorString());
                 ui->versionLabel->setText(
-                    "当前版本：v" + QApplication::applicationVersion() + "\n检查更新失败\n"
+                    "当前版本：" + QApplication::applicationVersion() + "\n检查更新失败\n"
                 );
                 reply->deleteLater();
                 return;
@@ -187,17 +187,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
             QString nowVersion = QApplication::applicationVersion();
             QString latestVersion = json["tag_name"].toString();
-            addLog("检查更新成功。最新版本：" + latestVersion);
-            ui->versionLabel->setText(
-                "当前版本：v" + nowVersion + "\n"
-                "最新版本：" + latestVersion + "\n"
-            );
 
             // 移除开头的 'v'
             if (latestVersion.startsWith('v'))
             {
                 latestVersion = latestVersion.mid(1);
             }
+            addLog("检查更新成功。最新版本：" + latestVersion);
+            ui->versionLabel->setText(
+                "当前版本：" + nowVersion + "\n"
+                "最新版本：" + latestVersion + "\n"
+            );
 
             qsizetype nowVersionSuffix, latestVersionSuffix;
             auto nowVersionQ = QVersionNumber::fromString(nowVersion, &nowVersionSuffix);
@@ -228,7 +228,7 @@ MainWindow::MainWindow(QWidget *parent) :
     else
     {
         ui->versionLabel->setText(
-            "当前版本：v" + QApplication::applicationVersion() + "\n自动检查更新已禁用\n"
+            "当前版本：" + QApplication::applicationVersion() + "\n自动检查更新已禁用\n"
         );
     }
     
@@ -252,7 +252,7 @@ void MainWindow::clearLog()
     ui->logPlainTextEdit->clear();
     ui->logPlainTextEdit->appendPlainText(
         "欢迎使用 " + QApplication::applicationDisplayName() + "\n"
-        "当前版本：v" + QApplication::applicationVersion() + "\n"
+        "当前版本：" + QApplication::applicationVersion() + "\n"
         "系统版本：" + QSysInfo::prettyProductName());
 }
 
