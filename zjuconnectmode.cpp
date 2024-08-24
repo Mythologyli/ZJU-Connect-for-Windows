@@ -113,6 +113,7 @@ void MainWindow::setModeToZjuConnect()
 
                     auto startZjuConnect = [this](const QString& username, const QString& password)
                 	{
+						QString bind_prefix = settings->value("ZJUConnect/OutsideAccess", false).toBool() ? "0.0.0.0:" : "127.0.0.1:";
                         zjuConnectController->start(
                             "zju-connect.exe",
                             username,
@@ -124,8 +125,8 @@ void MainWindow::setModeToZjuConnect()
                             !settings->value("ZJUConnect/MultiLine", true).toBool(),
                             !settings->value("ZJUConnect/KeepAlive", true).toBool(),
                             settings->value("ZJUConnect/ProxyAll", false).toBool(),
-                            "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
-                            "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
+                            bind_prefix + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
+                            bind_prefix + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
                             settings->value("ZJUConnect/ShadowsocksUrl", "").toString(),
                             settings->value("ZJUConnect/TunMode", false).toBool(),
                             settings->value("ZJUConnect/Route", false).toBool(),
