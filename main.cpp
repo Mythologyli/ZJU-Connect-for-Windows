@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("ZJU Connect for Windows");
     QApplication::setApplicationVersion("1.1.2");
 
+    QApplication::setFont(QFont("Microsoft YaHei UI", 9));
+
     MainWindow mainWindow;
 
     QObject::connect(&app, &SingleApplication::aboutToQuit, &mainWindow, &MainWindow::cleanUpWhenQuit);
