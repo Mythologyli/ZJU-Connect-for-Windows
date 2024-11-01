@@ -108,7 +108,7 @@ void NetworkDetector::checkZjuLan()
         while (!stream.atEnd())
         {
             line = stream.readLine();
-            if (line.contains("以太网") || line.contains("Ethernet"))
+            if (line.contains("以太网") || line.contains("有线") || line.contains("Ethernet"))
             {
                 waitForIp = true;
             }
