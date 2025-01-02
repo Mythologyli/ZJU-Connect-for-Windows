@@ -4,11 +4,13 @@
 
 针对哈工大深圳的修改版 ZJU-Connect-for-Windows
 
-![main.png](./docs/main.png)
+![main.png](/docs/main.png)
+
+使用方法请见 [使用方式](/docs/USAGE.md)
 
 欢迎加入 HITSZ 开源技术协会 [@hitszosa](https://github.com/hitszosa)
 
 ## 致谢
 
-+ [Mythologyli/ZJU-Connect-for-Windows](https://github.com/Mythologyli/ZJU-Connect-for-Windows)
-+ [Mythologyli/zju-connect](https://github.com/Mythologyli/zju-connect)
+- [Mythologyli/ZJU-Connect-for-Windows](https://github.com/Mythologyli/ZJU-Connect-for-Windows)
+- [Mythologyli/zju-connect](https://github.com/Mythologyli/zju-connect)
