@@ -45,7 +45,7 @@ jobs:
         run: |
           mkdir build
           if ( [bool]"${{ env.NIGHTLY_BUILD }}" ) {
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D -S . -B build
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
             cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -S . -B build
