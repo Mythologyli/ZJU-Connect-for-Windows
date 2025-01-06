@@ -174,10 +174,10 @@ jobs:
         run: |
           mkdir build
           if [ ${{ env.NIGHTLY_BUILD }} ]; then
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build -G Ninja
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           else
             VER=${{ env.RELEASE_VERSION }}
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -S . -B build -G Ninja
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -S . -B build
           fi
 
       - name: Build
