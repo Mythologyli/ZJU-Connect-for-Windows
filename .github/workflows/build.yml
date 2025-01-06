@@ -151,6 +151,58 @@ jobs:
           name: ${{ env.ARCHIVE_NAME }}
           path: ${{ env.ARCHIVE_NAME }}.zip
 
+  build-macos-x64:
+    runs-on: macos-latest
+    env:
+      ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}-macos-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'mac'
+          target: 'desktop'
+          arch: 'clang_64'
+          modules: 'qt5compat'
+
+      - name: Configure
+        env:
+          NIGHTLY_BUILD: ${{ inputs.nightly || true }}
+          RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
+        run: |
+          mkdir build
+          if [ ${{ env.NIGHTLY_BUILD }} ]; then
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_OSX_ARCHITECTURES="x86_64" -S . -B build
+          else
+            VER=${{ env.RELEASE_VERSION }}
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -D CMAKE_OSX_ARCHITECTURES="x86_64" -S . -B build
+          fi
+
+      - name: Build
+        run: |
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+
+      - name: Download and copy files
+        run: |
+          mkdir "${{ env.DIR_NAME }}"
+          cd "${{ env.DIR_NAME }}"
+          cp -R ../build/${{ env.TARGET_NAME }}.app .
+          curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-darwin-amd64.zip
+          tar -xf zju-connect-darwin-amd64.zip
+          rm zju-connect-darwin-amd64.zip
+          cp zju-connect ${{ env.TARGET_NAME }}.app/Contents/MacOS/
+          macdeployqt ${{ env.TARGET_NAME }}.app
+          cd ..
+          mv ${{ env.TARGET_NAME }}.dmg ${{ env.ARCHIVE_NAME }}.dmg
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARCHIVE_NAME }}
+          path: ${{ env.ARCHIVE_NAME }}.dmg
+
   build-macos-arm64:
     runs-on: macos-latest
     env:
@@ -174,10 +226,10 @@ jobs:
         run: |
           mkdir build
           if [ ${{ env.NIGHTLY_BUILD }} ]; then
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_OSX_ARCHITECTURES="arm64" -S . -B build
           else
             VER=${{ env.RELEASE_VERSION }}
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -S . -B build
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -D CMAKE_OSX_ARCHITECTURES="arm64" -S . -B build
           fi
 
       - name: Build
@@ -195,6 +247,13 @@ jobs:
           cp zju-connect ${{ env.TARGET_NAME }}.app/Contents/MacOS/
           macdeployqt ${{ env.TARGET_NAME }}.app
           cd ..
+          mv ${{ env.TARGET_NAME }}.dmg ${{ env.ARCHIVE_NAME }}.dmg
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARCHIVE_NAME }}
+          path: ${{ env.ARCHIVE_NAME }}.dmg
 
   release:
     runs-on: ubuntu-latest
@@ -212,4 +271,5 @@ jobs:
         run: |
           gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-windows-x64.zip
           gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-windows-arm64.zip
-          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-macos-arm64.zip
+          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-macos-x64.dmg
+          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-macos-arm64.dmg
