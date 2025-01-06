@@ -16,10 +16,6 @@ on:
         default: v0.0.0
         description: "Version to build (e.g. v0.0.0)"
 
-env:
-  NIGHTLY_BUILD: ${{ inputs.nightly || false }}
-  RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
-
 jobs:
   build-windows-x64:
     runs-on: windows-latest
@@ -39,8 +35,8 @@ jobs:
 
       - name: Configure
         env:
-          NIGHTLY_BUILD: ${{ env.NIGHTLY_BUILD }}
-          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          NIGHTLY_BUILD: ${{ inputs.nightly || true }}
+          RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
           if ( $NIGHTLY_BUILD ){
