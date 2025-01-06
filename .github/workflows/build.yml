@@ -19,6 +19,8 @@ on:
 jobs:
   build-windows-x64:
     runs-on: windows-latest
+    env:
+      ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}-windows-x64
     steps:
       - uses: actions/checkout@v4
 
@@ -39,7 +41,7 @@ jobs:
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
-          if ( ${{ env.NIGHTLY_BUILD }} ) {
+          if ( ${{ env.NIGHTLY_BUILD }} == true ) {
             cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
@@ -48,7 +50,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target HITszConnectForWindows --config Release
+          cmake --build build --target HITszConnectForWindows --config Release --parallel 4
 
       - name: Download and copy files
         env:
@@ -64,22 +66,23 @@ jobs:
           rm zju-connect-windows-amd64.zip
           cp ../libs/wintun/bin/amd64/wintun.dll .
           cd ..
-          Compress-Archive -Path "HITsz Connect for Windows" -DestinationPath HITsz-Connect-for-Windows.zip
+          Compress-Archive -Path "HITsz Connect for Windows" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: HITsz-Connect-for-Windows
-          path: HITsz-Connect-for-Windows.zip
+          name: ${{ env.ARCHIVE_NAME }}
+          path: ${{ env.ARCHIVE_NAME }}.zip
 
   release:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     needs: build-windows-x64
+    env:
+      ARCHIVE_PREFIX: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
       - name: Upload to release
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} HITsz-Connect-for-Windows.zip
-          gh release upload ${{ github.event.release.tag_name }} SHA256.txt
+          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-windows-x64.zip
