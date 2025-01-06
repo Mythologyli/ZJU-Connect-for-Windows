@@ -193,9 +193,9 @@ jobs:
           tar -xf zju-connect-darwin-amd64.zip
           rm zju-connect-darwin-amd64.zip
           cp zju-connect ${{ env.TARGET_NAME }}.app/Contents/MacOS/
-          macdeployqt ${{ env.TARGET_NAME }}.app
+          macdeployqt ${{ env.TARGET_NAME }}.app -dmg
+          mv ${{ env.TARGET_NAME }}.dmg ../${{ env.ARCHIVE_NAME }}.dmg
           cd ..
-          mv ${{ env.TARGET_NAME }}.dmg ${{ env.ARCHIVE_NAME }}.dmg
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -245,9 +245,9 @@ jobs:
           tar -xf zju-connect-darwin-arm64.zip
           rm zju-connect-darwin-arm64.zip
           cp zju-connect ${{ env.TARGET_NAME }}.app/Contents/MacOS/
-          macdeployqt ${{ env.TARGET_NAME }}.app
+          macdeployqt ${{ env.TARGET_NAME }}.app -dmg
+          mv ${{ env.TARGET_NAME }}.dmg ../${{ env.ARCHIVE_NAME }}.dmg
           cd ..
-          mv ${{ env.TARGET_NAME }}.dmg ${{ env.ARCHIVE_NAME }}.dmg
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
