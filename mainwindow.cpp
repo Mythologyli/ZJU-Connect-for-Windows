@@ -3,14 +3,15 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSysInfo>
-#include <QNetworkInterface>
-#include <QClipboard>
-#include <QDesktopServices>
 
 #ifdef WIN32
 #include <shellapi.h>
 #include <windows.h>
 #endif
+
+#include <QNetworkInterface>
+#include <QClipboard>
+#include <QDesktopServices>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
