@@ -132,7 +132,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
-    needs: build-windows-x64
+    needs:
+      - build-windows-x64
+      - build-windows-arm64
     env:
       ARCHIVE_PREFIX: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
