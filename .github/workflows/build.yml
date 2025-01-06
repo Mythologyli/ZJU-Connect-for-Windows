@@ -188,7 +188,7 @@ jobs:
         run: |
           mkdir "${{ env.DIR_NAME }}"
           cd "${{ env.DIR_NAME }}"
-          cp ../build/${{ env.TARGET_NAME }}.app .
+          cp -R ../build/${{ env.TARGET_NAME }}.app .
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-darwin-arm64.zip
           tar -xf zju-connect-darwin-arm64.zip
           rm zju-connect-darwin-arm64.zip
