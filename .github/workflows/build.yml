@@ -41,7 +41,7 @@ jobs:
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
-          if ( ${{ env.NIGHTLY_BUILD }} == true ) {
+          if ( [bool]${{ env.NIGHTLY_BUILD }} ) {
             cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
