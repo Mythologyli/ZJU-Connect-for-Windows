@@ -38,6 +38,9 @@ jobs:
           cache-key-prefix: 'install-qt-action'
 
       - name: Configure
+        env:
+          NIGHTLY_BUILD: ${{ env.NIGHTLY_BUILD }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
         run: |
           mkdir build
           if ( $NIGHTLY_BUILD ){
@@ -67,19 +70,12 @@ jobs:
           cp ../libs/wintun/bin/amd64/wintun.dll .
           cd ..
           Compress-Archive -Path "HITsz Connect for Windows" -DestinationPath HITsz-Connect-for-Windows.zip
-          Get-FileHash HITsz-Connect-for-Windows.zip | Format-List | Out-File -FilePath SHA256.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: HITsz-Connect-for-Windows
           path: HITsz-Connect-for-Windows.zip
-
-      - name: Upload SHA256.txt
-        uses: actions/upload-artifact@v4
-        with:
-          name: SHA256
-          path: SHA256.txt
 
   release:
     runs-on: ubuntu-latest
