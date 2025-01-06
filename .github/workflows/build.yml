@@ -13,8 +13,12 @@ on:
         description: "Whether to build nightly version"
       version:
         type: string
-        default: dev
-        description: "Version to build"
+        default: v0.0.0
+        description: "Version to build (e.g. v0.0.0)"
+
+env:
+  NIGHTLY_BUILD: ${{ inputs.nightly || false }}
+  RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
 
 jobs:
   build-windows-x64:
@@ -34,15 +38,15 @@ jobs:
           cache-key-prefix: 'install-qt-action'
 
       - name: Configure nightly
-        if: inputs.nightly
+        if: env.NIGHTLY_BUILD
         run: |
           mkdir build
           cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
 
       - name: Configure release
-        if: !inputs.nightly
+        if: !env.NIGHTLY_BUILD
         run: |
-          $VER = "${{ github.event.release.tag_name }}".substring(1)
+          $VER = "$RELEASE_VERSION".substring(1)
           mkdir build
           cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -S . -B build
       
