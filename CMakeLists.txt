@@ -52,9 +52,19 @@ if (WIN32)
     )
 
     set(PLATFORM_LIBS wininet rasapi32)
-else()
-    message("Building for other platforms")
+elseif(APPLE)
+    message("Building for MacOS")
+    
+    set(MACOSX_BUNDLE_ICON_FILE icon.icns)
+    
+    set(app_icon_macos ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.icns)
+    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+        ${SOURCE_FILES}
+        ${app_icon_macos}
+    )
+else()
     add_executable(${PROJECT_NAME}
         ${SOURCE_FILES}
     )

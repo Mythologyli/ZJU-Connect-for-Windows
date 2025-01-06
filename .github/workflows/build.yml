@@ -18,6 +18,8 @@ on:
 
 env:
   QT_VERSION: '6.8.1'
+  TARGET_NAME: 'HITszConnectForWindows'
+  DIR_NAME: 'HITsz Connect for Windows'
 
 jobs:
   build-windows-x64:
@@ -53,22 +55,22 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target HITszConnectForWindows --config Release --parallel 4
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
 
       - name: Download and copy files
         env:
           VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
         run: |
-          mkdir "HITsz Connect for Windows"
-          cd "HITsz Connect for Windows"
-          cp ../build/Release/HITszConnectForWindows.exe .
-          windeployqt.exe HITszConnectForWindows.exe
+          mkdir "${{ env.DIR_NAME }}"
+          cd "${{ env.DIR_NAME }}"
+          cp ../build/Release/${{ env.TARGET_NAME }}.exe .
+          windeployqt.exe ${{ env.TARGET_NAME }}.exe
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
           tar -xf zju-connect-windows-amd64.zip
           rm zju-connect-windows-amd64.zip
           cp ../libs/wintun/bin/amd64/wintun.dll .
           cd ..
-          Compress-Archive -Path "HITsz Connect for Windows" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
+          Compress-Archive -Path "${{ env.DIR_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -126,22 +128,22 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target HITszConnectForWindows --config Release --parallel 4
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
 
       - name: Download and copy files
         env:
           VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
         run: |
-          mkdir "HITsz Connect for Windows"
-          cd "HITsz Connect for Windows"
-          cp ../build/Release/HITszConnectForWindows.exe .
-          windeployqt.exe HITszConnectForWindows.exe
+          mkdir "${{ env.DIR_NAME }}"
+          cd "${{ env.DIR_NAME }}"
+          cp ../build/Release/${{ env.TARGET_NAME }}.exe .
+          windeployqt.exe ${{ env.TARGET_NAME }}.exe
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-arm64.zip
           tar -xf zju-connect-windows-arm64.zip
           rm zju-connect-windows-arm64.zip
           cp ../libs/wintun/bin/arm64/wintun.dll .
           cd ..
-          Compress-Archive -Path "HITsz Connect for Windows" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
+          Compress-Archive -Path "${{ env.DIR_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -149,12 +151,58 @@ jobs:
           name: ${{ env.ARCHIVE_NAME }}
           path: ${{ env.ARCHIVE_NAME }}.zip
 
+  build-macos-arm64:
+    runs-on: macos-latest
+    env:
+      ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}-macos-arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'macos'
+          target: 'desktop'
+          arch: 'clang_64'
+          modules: 'qt5compat'
+
+      - name: Configure
+        env:
+          NIGHTLY_BUILD: ${{ inputs.nightly || true }}
+          RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
+        run: |
+          mkdir build
+          if [ ${{ env.NIGHTLY_BUILD }} ]; then
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build -G Ninja
+          else
+            VER=${{ env.RELEASE_VERSION }}
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -S . -B build -G Ninja
+          fi
+
+      - name: Build
+        run: |
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+
+      - name: Download and copy files
+        run: |
+          mkdir "${{ env.DIR_NAME }}"
+          cd "${{ env.DIR_NAME }}"
+          cp ../build/Release/${{ env.TARGET_NAME }}.app .
+          curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-darwin-arm64.zip
+          tar -xf zju-connect-darwin-arm64.zip
+          rm zju-connect-darwin-arm64.zip
+          cp zju-connect ${{ env.TARGET_NAME }}.app/Contents/MacOS/
+          macdeployqt ${{ env.TARGET_NAME }}.app
+          cd ..
+
   release:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     needs:
       - build-windows-x64
       - build-windows-arm64
+      - build-macos-arm64
     env:
       ARCHIVE_PREFIX: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
@@ -164,3 +212,4 @@ jobs:
         run: |
           gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-windows-x64.zip
           gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-windows-arm64.zip
+          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-macos-arm64.zip
