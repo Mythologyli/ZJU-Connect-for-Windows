@@ -16,6 +16,9 @@ on:
         default: v0.0.0
         description: "Version to build (e.g. v0.0.0)"
 
+env:
+  QT_VERSION: '6.8.1'
+
 jobs:
   build-windows-x64:
     runs-on: windows-latest
@@ -27,7 +30,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '6.8.1'
+          version: ${{ env.QT_VERSION }}
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2022_64'
@@ -42,7 +45,7 @@ jobs:
         run: |
           mkdir build
           if ( [bool]"${{ env.NIGHTLY_BUILD }}" ) {
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
             cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -S . -B build
@@ -54,7 +57,7 @@ jobs:
 
       - name: Download and copy files
         env:
-          VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Community\VC'
+          VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
         run: |
           mkdir "HITsz Connect for Windows"
           cd "HITsz Connect for Windows"
@@ -80,10 +83,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Qt
+      - name: Install host Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '6.8.1'
+          version: ${{ env.QT_VERSION }}
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          modules: 'qt5compat'
+          cache: 'true'
+          cache-key-prefix: 'install-qt-action'
+
+      - name: Install target Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2022_arm64_cross_compiled'
@@ -91,10 +105,16 @@ jobs:
           cache: 'true'
           cache-key-prefix: 'install-qt-action'
 
+      - name: Set up cross-compilation environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_arm64
+
       - name: Configure
         env:
           NIGHTLY_BUILD: ${{ inputs.nightly || true }}
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
+          EXTRA_CMAKE_ARGS: -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/windows-arm64.cmake
         run: |
           mkdir build
           if ( [bool]"${{ env.NIGHTLY_BUILD }}" ) {
@@ -110,7 +130,7 @@ jobs:
 
       - name: Download and copy files
         env:
-          VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Community\VC'
+          VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
         run: |
           mkdir "HITsz Connect for Windows"
           cd "HITsz Connect for Windows"
