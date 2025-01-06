@@ -261,6 +261,7 @@ jobs:
     needs:
       - build-windows-x64
       - build-windows-arm64
+      - build-macos-x64
       - build-macos-arm64
     env:
       ARCHIVE_PREFIX: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
