@@ -20,41 +20,43 @@ add_compile_definitions(PROJ_VER="${PROJ_VER}")
 message("PROJ_VER=${PROJ_VER}")
 
 find_package(Qt6 COMPONENTS
-        Core
-        Gui
-        Widgets
-        Network
-        Svg
-        Core5Compat
-        REQUIRED
+    Core
+    Gui
+    Widgets
+    Network
+    Svg
+    Core5Compat
+    REQUIRED
 )
 
 set(SOURCE_FILES
-        main.cpp
-        mainwindow.cpp
-        zjuconnectmode.cpp
-        zjuconnectcontroller/zjuconnectcontroller.cpp
-        portforwardingwindow/portforwardingwindow.cpp
-        settingwindow/settingwindow.cpp
-        loginwindow/loginwindow.cpp
-        utils/utils.cpp
-        resource.qrc
+    main.cpp
+    mainwindow.cpp
+    zjuconnectmode.cpp
+    zjuconnectcontroller/zjuconnectcontroller.cpp
+    portforwardingwindow/portforwardingwindow.cpp
+    settingwindow/settingwindow.cpp
+    loginwindow/loginwindow.cpp
+    utils/utils.cpp
+    resource.qrc
 )
 
 if (WIN32)
+    message("Building for Windows")
+
     enable_language("RC")
 
     add_executable(${PROJECT_NAME} WIN32
-            ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc
-            ${SOURCE_FILES}
+        ${SOURCE_FILES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc
     )
 
     set(PLATFORM_LIBS wininet rasapi32)
 else()
+    message("Building for other platforms")
+
     add_executable(${PROJECT_NAME}
-            ${SOURCE_FILES}
-            utils/utils.cpp
-            resource.qrc
+        ${SOURCE_FILES}
     )
 endif()
 
