@@ -29,9 +29,7 @@ find_package(Qt6 COMPONENTS
         REQUIRED
 )
 
-enable_language("RC")
-
-add_executable(${PROJECT_NAME} WIN32
+set(SOURCE_FILES
         main.cpp
         mainwindow.cpp
         zjuconnectmode.cpp
@@ -41,8 +39,24 @@ add_executable(${PROJECT_NAME} WIN32
         loginwindow/loginwindow.cpp
         utils/utils.cpp
         resource.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc
 )
+
+if (WIN32)
+    enable_language("RC")
+
+    add_executable(${PROJECT_NAME} WIN32
+            ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc
+            ${SOURCE_FILES}
+    )
+
+    set(PLATFORM_LIBS wininet rasapi32)
+else()
+    add_executable(${PROJECT_NAME}
+            ${SOURCE_FILES}
+            utils/utils.cpp
+            resource.qrc
+    )
+endif()
 
 set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
 
@@ -56,6 +70,5 @@ target_link_libraries(${PROJECT_NAME}
         Qt::Svg
         Qt::Core5Compat
         SingleApplication::SingleApplication
-        wininet
-        rasapi32
+        ${PLATFORM_LIBS}
 )

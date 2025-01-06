@@ -3,11 +3,12 @@
 #include <QNetworkInterface>
 #include <QTextCodec>
 
+#ifdef WIN32
 #include "windows.h"
 #include "wininet.h"
 #include "ras.h"
 #include "raserror.h"
-
+#endif
 #include "utils.h"
 
 QString Utils::ConsoleOutputToQString(const QByteArray &byteArray)
@@ -98,6 +99,7 @@ void Utils::showAboutMessageBox(QWidget *parent)
 
 void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString &bypass)
 {
+#ifdef WIN32
     INTERNET_PER_CONN_OPTION_LIST optionList;
     INTERNET_PER_CONN_OPTION optionsArr[3];
     unsigned long optionListSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
@@ -165,6 +167,7 @@ void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString 
 
     free(proxyServerWStr);
     free(bypassWStr);
+#endif
 }
 
 void Utils::setSystemProxy(int port)

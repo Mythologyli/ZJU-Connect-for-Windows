@@ -14,11 +14,6 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="8" column="1">
      <widget class="QPushButton" name="pushButton1">
-      <property name="font">
-       <font>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>连接服务器</string>
       </property>
@@ -26,11 +21,6 @@
     </item>
     <item row="8" column="3">
      <widget class="QPushButton" name="pushButton2">
-      <property name="font">
-       <font>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>设置系统代理</string>
       </property>
@@ -62,7 +52,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>17</pointsize>
+        <pointsize>20</pointsize>
        </font>
       </property>
       <property name="toolTip">

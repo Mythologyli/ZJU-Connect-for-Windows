@@ -207,11 +207,6 @@
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="6" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel7">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="text">
           <string>自动重连时间（秒）</string>
          </property>
@@ -219,11 +214,6 @@
        </item>
        <item row="2" column="1" colspan="3">
         <widget class="QLineEdit" name="secondaryDnsLineEdit">
-         <property name="font">
-          <font>
-           <bold>false</bold>
-          </font>
-         </property>
          <property name="placeholderText">
           <string>不填则采用系统 DNS ，使用 DNS 劫持必须填写</string>
          </property>
@@ -231,11 +221,6 @@
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel8">
-         <property name="font">
-          <font>
-           <bold>false</bold>
-          </font>
-         </property>
          <property name="text">
           <string>DNS 服务器</string>
          </property>
@@ -368,11 +353,6 @@
        </item>
        <item row="1" column="1" colspan="3">
         <widget class="QLineEdit" name="dnsLineEdit">
-         <property name="font">
-          <font>
-           <bold>false</bold>
-          </font>
-         </property>
          <property name="text">
           <string>10.248.98.30</string>
          </property>
@@ -380,11 +360,6 @@
        </item>
        <item row="0" column="3">
         <widget class="QSpinBox" name="serverPortSpinBox">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="maximum">
           <number>65535</number>
          </property>
@@ -395,11 +370,6 @@
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel1">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="text">
           <string>服务器地址</string>
          </property>
@@ -407,11 +377,6 @@
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel5">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="text">
           <string>SOCKS5 代理端口</string>
          </property>
@@ -419,11 +384,6 @@
        </item>
        <item row="0" column="1">
         <widget class="QLineEdit" name="serverAddressLineEdit">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="text">
           <string>vpn.hitsz.edu.cn</string>
          </property>
@@ -431,11 +391,6 @@
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel9">
-         <property name="font">
-          <font>
-           <bold>false</bold>
-          </font>
-         </property>
          <property name="text">
           <string>备用 DNS</string>
          </property>
@@ -450,11 +405,6 @@
        </item>
        <item row="3" column="1" colspan="3">
         <widget class="QSpinBox" name="socks5PortSpinBox">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="maximum">
           <number>65535</number>
          </property>
@@ -498,11 +448,6 @@
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel7_2">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="text">
           <string>Shadowsocks 服务器</string>
          </property>
@@ -510,11 +455,6 @@
        </item>
        <item row="5" column="1" colspan="3">
         <widget class="QLineEdit" name="shadowsocksUrlLineEdit">
-         <property name="font">
-          <font>
-           <bold>false</bold>
-          </font>
-         </property>
          <property name="placeholderText">
           <string>不填则不启用，格式：ss://chiper:password@server:port</string>
          </property>
