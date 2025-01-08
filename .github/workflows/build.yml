@@ -199,7 +199,7 @@ jobs:
           mkdir dmg-build
           create-dmg \
             --app-drop-link 200 0 \
-            --add-file HITszConnectForWindows.app HITszConnectForWindows.app 0 0 \
+            --add-file ${{ env.TARGET_NAME }}.app ${{ env.TARGET_NAME }}.app 0 0 \
             --add-file 修复脚本.sh ../resource/macos-fix.sh 100 200 \
             --filesystem APFS \
             ${{ env.ARCHIVE_NAME }}.dmg dmg-build
@@ -258,7 +258,7 @@ jobs:
           mkdir dmg-build
           create-dmg \
             --app-drop-link 200 0 \
-            --add-file HITszConnectForWindows.app HITszConnectForWindows.app 0 0 \
+            --add-file ${{ env.TARGET_NAME }}.app ${{ env.TARGET_NAME }}.app 0 0 \
             --add-file 修复脚本.sh ../resource/macos-fix.sh 100 200 \
             --filesystem APFS \
             ${{ env.ARCHIVE_NAME }}.dmg dmg-build
