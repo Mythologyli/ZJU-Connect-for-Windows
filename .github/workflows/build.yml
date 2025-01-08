@@ -19,7 +19,7 @@ on:
 env:
   QT_VERSION: '6.8.1'
   TARGET_NAME: 'HITszConnectForWindows'
-  DIR_NAME: 'HITsz Connect for Windows'
+  DISPLAY_NAME: 'HITsz Connect for Windows'
 
 jobs:
   build-windows-x64:
@@ -61,8 +61,8 @@ jobs:
         env:
           VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
         run: |
-          mkdir "${{ env.DIR_NAME }}"
-          cd "${{ env.DIR_NAME }}"
+          mkdir "${{ env.DISPLAY_NAME }}"
+          cd "${{ env.DISPLAY_NAME }}"
           cp ../build/Release/${{ env.TARGET_NAME }}.exe .
           windeployqt.exe ${{ env.TARGET_NAME }}.exe
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
@@ -70,7 +70,7 @@ jobs:
           rm zju-connect-windows-amd64.zip
           cp ../libs/wintun/bin/amd64/wintun.dll .
           cd ..
-          Compress-Archive -Path "${{ env.DIR_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
+          Compress-Archive -Path "${{ env.DISPLAY_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -134,8 +134,8 @@ jobs:
         env:
           VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
         run: |
-          mkdir "${{ env.DIR_NAME }}"
-          cd "${{ env.DIR_NAME }}"
+          mkdir "${{ env.DISPLAY_NAME }}"
+          cd "${{ env.DISPLAY_NAME }}"
           cp ../build/Release/${{ env.TARGET_NAME }}.exe .
           windeployqt.exe ${{ env.TARGET_NAME }}.exe
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-arm64.zip
@@ -143,7 +143,7 @@ jobs:
           rm zju-connect-windows-arm64.zip
           cp ../libs/wintun/bin/arm64/wintun.dll .
           cd ..
-          Compress-Archive -Path "${{ env.DIR_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
+          Compress-Archive -Path "${{ env.DISPLAY_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -198,9 +198,11 @@ jobs:
           brew install create-dmg
           mkdir dmg-build
           create-dmg \
+            --background ../resource/dmg-background.png \
+            --window-size 430 480 \
             --app-drop-link 200 0 \
-            --add-file ${{ env.TARGET_NAME }}.app ./${{ env.TARGET_NAME }}.app 0 0 \
-            --add-file 修复脚本.sh ./resource/macos-fix.sh 100 200 \
+            --add-file ${{ env.DISPLAY_NAME }}.app ./${{ env.TARGET_NAME }}.app 0 0 \
+            --add-file 修复脚本.command ./resource/macos-fix.sh 100 200 \
             --filesystem APFS \
             ${{ env.ARCHIVE_NAME }}.dmg dmg-build
 
@@ -257,9 +259,11 @@ jobs:
           brew install create-dmg
           mkdir dmg-build
           create-dmg \
+            --background ../resource/dmg-background.png \
+            --window-size 430 480 \
             --app-drop-link 200 0 \
-            --add-file ${{ env.TARGET_NAME }}.app ./${{ env.TARGET_NAME }}.app 0 0 \
-            --add-file 修复脚本.sh ./resource/macos-fix.sh 100 200 \
+            --add-file ${{ env.DISPLAY_NAME }}.app ./${{ env.TARGET_NAME }}.app 0 0 \
+            --add-file 修复脚本.command ./resource/macos-fix.sh 100 200 \
             --filesystem APFS \
             ${{ env.ARCHIVE_NAME }}.dmg dmg-build
 

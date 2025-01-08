@@ -20,7 +20,7 @@ LIGHT_GRAY="\033[0;37m"
 WHITE="\033[1;37m" 
 NC="\033[0m"
 
-echo -e "${GREEN}已损坏，无法打开/ 来自身份不明的开发者 等问题修复工具${NC}"
+echo -e "${BLUE}『已损坏，无法打开/ 来自身份不明的开发者』等问题修复工具${NC}"
 echo
 
 parentPath=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
@@ -30,7 +30,7 @@ appPath=$( find "$parentPath" -name '*.app' -maxdepth 1)
 if [[ -z "$appPath" ]]
 then
     echo -e "${RED}❌ 错误：${NC}未找到应用"
-    echo "可关闭此窗口"
+    echo "${YELLOW}可关闭此窗口${NC}"
     exit 1
 fi
 
@@ -54,9 +54,9 @@ echo "1. 接下来会需要您输入系统的开机密码"
 echo "2. 密码输入没有回显，请直接输入"
 echo "3. 输入完密码后，按下回车，即可开始修复"
 echo
-echo -e "${GREEN}========== 开始修复 ==========${NC}"
+echo -e "${LIGHT_CYAN}========== 开始修复 ==========${NC}"
 sudo xattr -rd com.apple.quarantine /Applications/"$appBashName"
 sudo xattr -rc /Applications/"$appBashName"
 sudo codesign --sign - --force --deep /Applications/"$appBashName"
-echo -e "${GREEN}========== 修复完成 ==========${NC}"
-echo "可关闭此窗口"
+echo -e "${LIGHT_CYAN}========== 修复完成 ==========${NC}"
+echo "${YELLOW}可关闭此窗口${NC}"
