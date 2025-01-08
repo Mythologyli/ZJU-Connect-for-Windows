@@ -198,7 +198,7 @@ jobs:
           brew install create-dmg
           mkdir dmg-build
           create-dmg \
-            --background ../resource/dmg-background.png \
+            --background ./resource/dmg-background.png \
             --window-size 430 480 \
             --app-drop-link 200 0 \
             --add-file "${{ env.DISPLAY_NAME }}.app" "./${{ env.TARGET_NAME }}.app" 0 0 \
@@ -259,7 +259,7 @@ jobs:
           brew install create-dmg
           mkdir dmg-build
           create-dmg \
-            --background ../resource/dmg-background.png \
+            --background ./resource/dmg-background.png \
             --window-size 430 480 \
             --app-drop-link 200 0 \
             --add-file "${{ env.DISPLAY_NAME }}.app" "./${{ env.TARGET_NAME }}.app" 0 0 \
