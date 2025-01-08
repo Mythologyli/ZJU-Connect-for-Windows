@@ -9,6 +9,8 @@ namespace Utils
 {
     const inline QString REPO_NAME("chenx-dust/HITsz-Connect-for-Windows");
 
+    const inline QString APP_NAME("HITsz Connect for Windows");
+
     QString ConsoleOutputToQString(const QByteArray &byteArray);
 
     void setWidgetFixedWhenHidden(QWidget *widget);
