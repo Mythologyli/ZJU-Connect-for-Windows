@@ -12,6 +12,7 @@ enum class ZJU_ERROR
     ACCESS_DENIED,
     LISTEN_FAILED,
     CLIENT_FAILED,
+    PROGRAM_NOT_FOUND,
     OTHER,
 };
 

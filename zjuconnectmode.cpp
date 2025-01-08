@@ -86,6 +86,9 @@ void MainWindow::setModeToZjuConnect()
         case ZJU_ERROR::CLIENT_FAILED:
             QMessageBox::critical(this, "错误", "连接失败！\n可能是响应超时，请检查本地网络配置是否正常，服务器设置是否正确。");
             break;
+        case ZJU_ERROR::PROGRAM_NOT_FOUND:
+            QMessageBox::critical(this, "错误", "程序未找到！\n请检查核心是否在正确路径下，检查是否解压在当前目录下。");
+            break;
         case ZJU_ERROR::OTHER:
             QMessageBox::critical(this, "错误", "其它错误！\n未知原因，可将日志反馈给开发者以便调查。");
             break;
@@ -111,9 +114,22 @@ void MainWindow::setModeToZjuConnect()
                     QString username_ = settings->value("Common/Username", "").toString();
                     QString password_ = QByteArray::fromBase64(settings->value("Common/Password", "").toString().toUtf8());
 
-                    auto startZjuConnect = [this](const QString& username, const QString& password)
-                	{
+                    auto startZjuConnect = [this](const QString &username, const QString &password) {
+                        QString program_filename;
+                        if (QSysInfo::productType() == "windows")
+                        {
+                            program_filename = "zju-connect.exe";
+                        }
+                        else if (QSysInfo::productType() == "macos")
+                        {
+                            program_filename = "Contents/MacOS/zju-connect";
+                        }
+                        else
+                        {
+                            program_filename = "zju-connect";
+                        }
 						QString bind_prefix = settings->value("ZJUConnect/OutsideAccess", false).toBool() ? "0.0.0.0:" : "127.0.0.1:";
+                        
                         zjuConnectController->start(
                             "zju-connect.exe",
                             username,

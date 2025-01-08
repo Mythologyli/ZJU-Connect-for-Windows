@@ -77,6 +77,22 @@ ZjuConnectController::ZjuConnectController()
         }
     });
 
+    connect(zjuConnectProcess, &QProcess::errorOccurred, this, [&](QProcess::ProcessError err)
+    {
+        QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+        QString errorString = zjuConnectProcess->errorString();
+        emit outputRead(timeString + " 错误：" + errorString);
+
+        if (errorString.contains("No such file or directory"))
+        {
+            emit error(ZJU_ERROR::PROGRAM_NOT_FOUND);
+        }
+        else
+        {
+            emit error(ZJU_ERROR::OTHER);
+        }
+    });
+
     connect(zjuConnectProcess, &QProcess::finished, this, [&]()
     {
         emit finished();
@@ -201,6 +217,10 @@ void ZjuConnectController::start(
 
     zjuConnectProcess->start(program, QStringList({ "-username", username, "-password", password }) + args);
     zjuConnectProcess->waitForStarted();
+    if (zjuConnectProcess->state() == QProcess::NotRunning)
+    {
+        emit finished();
+    }
 }
 
 void ZjuConnectController::stop()
