@@ -186,16 +186,23 @@ jobs:
 
       - name: Download and copy files
         run: |
-          mkdir "${{ env.DIR_NAME }}"
-          cd "${{ env.DIR_NAME }}"
-          cp -R ../build/${{ env.TARGET_NAME }}.app .
+          cd build
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-darwin-amd64.zip
           tar -xf zju-connect-darwin-amd64.zip
           rm zju-connect-darwin-amd64.zip
           cp zju-connect ${{ env.TARGET_NAME }}.app/Contents/MacOS/
-          macdeployqt ${{ env.TARGET_NAME }}.app -dmg
-          mv ${{ env.TARGET_NAME }}.dmg ../${{ env.ARCHIVE_NAME }}.dmg
-          cd ..
+          macdeployqt ${{ env.TARGET_NAME }}.app
+
+      - name: Package dmg file
+        run: |
+          brew install create-dmg
+          mkdir dmg-build
+          create-dmg \
+            --app-drop-link 200 0 \
+            --add-file HITszConnectForWindows.app HITszConnectForWindows.app 0 0 \
+            --add-file 修复脚本.sh ../resource/macos-fix.sh 100 200 \
+            --filesystem APFS \
+            ${{ env.ARCHIVE_NAME }}.dmg dmg-build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -238,16 +245,23 @@ jobs:
 
       - name: Download and copy files
         run: |
-          mkdir "${{ env.DIR_NAME }}"
-          cd "${{ env.DIR_NAME }}"
-          cp -R ../build/${{ env.TARGET_NAME }}.app .
+          cd build
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-darwin-arm64.zip
           tar -xf zju-connect-darwin-arm64.zip
           rm zju-connect-darwin-arm64.zip
           cp zju-connect ${{ env.TARGET_NAME }}.app/Contents/MacOS/
-          macdeployqt ${{ env.TARGET_NAME }}.app -dmg
-          mv ${{ env.TARGET_NAME }}.dmg ../${{ env.ARCHIVE_NAME }}.dmg
-          cd ..
+          macdeployqt ${{ env.TARGET_NAME }}.app
+
+      - name: Package dmg file
+        run: |
+          brew install create-dmg
+          mkdir dmg-build
+          create-dmg \
+            --app-drop-link 200 0 \
+            --add-file HITszConnectForWindows.app HITszConnectForWindows.app 0 0 \
+            --add-file 修复脚本.sh ../resource/macos-fix.sh 100 200 \
+            --filesystem APFS \
+            ${{ env.ARCHIVE_NAME }}.dmg dmg-build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
