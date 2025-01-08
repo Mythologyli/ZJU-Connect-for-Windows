@@ -42,7 +42,7 @@ jobs:
 
       - name: Configure
         env:
-          NIGHTLY_BUILD: ${{ inputs.nightly || true }}
+          NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
@@ -114,7 +114,7 @@ jobs:
 
       - name: Configure
         env:
-          NIGHTLY_BUILD: ${{ inputs.nightly || true }}
+          NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
           EXTRA_CMAKE_ARGS: -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/windows-arm64.cmake
         run: |
@@ -169,7 +169,7 @@ jobs:
 
       - name: Configure
         env:
-          NIGHTLY_BUILD: ${{ inputs.nightly || true }}
+          NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
@@ -230,7 +230,7 @@ jobs:
 
       - name: Configure
         env:
-          NIGHTLY_BUILD: ${{ inputs.nightly || true }}
+          NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
