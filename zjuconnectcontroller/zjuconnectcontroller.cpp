@@ -81,16 +81,12 @@ ZjuConnectController::ZjuConnectController()
     {
         QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
         QString errorString = zjuConnectProcess->errorString();
-        emit outputRead(timeString + " 错误：" + errorString);
+        emit outputRead(timeString + " 退出原因：" + errorString);
 
         if (errorString.contains("No such file or directory") || errorString.contains("not found") || errorString.contains("找不到"))
         {
-            emit outputRead(timeString + " 当前路径：" + QCoreApplication::applicationDirPath());
+            emit outputRead(timeString + " 核心路径：" + zjuConnectProcess->program());
             emit error(ZJU_ERROR::PROGRAM_NOT_FOUND);
-        }
-        else
-        {
-            emit error(ZJU_ERROR::OTHER);
         }
     });
 

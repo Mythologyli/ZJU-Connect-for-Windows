@@ -120,10 +120,6 @@ void MainWindow::setModeToZjuConnect()
                         {
                             program_filename = "zju-connect.exe";
                         }
-                        else if (QSysInfo::productType() == "macos")
-                        {
-                            program_filename = "Contents/MacOS/zju-connect";
-                        }
                         else
                         {
                             program_filename = "zju-connect";
@@ -131,7 +127,7 @@ void MainWindow::setModeToZjuConnect()
 						QString bind_prefix = settings->value("ZJUConnect/OutsideAccess", false).toBool() ? "0.0.0.0:" : "127.0.0.1:";
                         
                         zjuConnectController->start(
-                            "zju-connect.exe",
+                            QCoreApplication::applicationDirPath() + "/" + program_filename,
                             username,
                             password,
                             settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString(),
