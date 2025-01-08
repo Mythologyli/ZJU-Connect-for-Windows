@@ -83,8 +83,9 @@ ZjuConnectController::ZjuConnectController()
         QString errorString = zjuConnectProcess->errorString();
         emit outputRead(timeString + " 错误：" + errorString);
 
-        if (errorString.contains("No such file or directory"))
+        if (errorString.contains("No such file or directory") || errorString.contains("not found") || errorString.contains("找不到"))
         {
+            emit outputRead(timeString + " 当前路径：" + QCoreApplication::applicationDirPath());
             emit error(ZJU_ERROR::PROGRAM_NOT_FOUND);
         }
         else
