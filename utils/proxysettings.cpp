@@ -3,6 +3,7 @@
 
 #include <QProcess>
 #include <QMessageBox>
+#include <QSettings>
 #include "utils.h"
 
 #if defined(Q_OS_WINDOWS)
