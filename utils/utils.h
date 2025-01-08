@@ -17,7 +17,7 @@ namespace Utils
 
     bool isSystemProxySet();
 
-    void setSystemProxy(int port);
+    void setSystemProxy(int http_port, int socks_port);
 
     void clearSystemProxy();
 

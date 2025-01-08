@@ -174,11 +174,14 @@ void Utils::setAutoStart(bool enable)
     {
         QStringList args;
         args << "-e tell application \"System Events\" to delete login item\"" + macOSAppBundleName() + "\"";
+        qDebug() << args;
 
         // int result = QProcess::execute("osascript", args);
         QProcess process;
         process.start("osascript", args);
         process.waitForFinished();
+        qDebug() << process.readAllStandardOutput();
+        qDebug() << process.readAllStandardError();
         if (!enable && process.error() != QProcess::UnknownError)
         {
             QMessageBox::critical(nullptr, "取消开机自启动失败", "无法删除登录项：" + process.errorString());
@@ -195,10 +198,13 @@ void Utils::setAutoStart(bool enable)
         QStringList args;
         args << "-e tell application \"System Events\" to make login item at end with properties {path:\"" +
                     macOSAppBundlePath() + "\", hidden:false}";
+        qDebug() << args;
 
         QProcess process;
         process.start("osascript", args);
         process.waitForFinished();
+        qDebug() << process.readAllStandardOutput();
+        qDebug() << process.readAllStandardError();
         if (process.error() != QProcess::UnknownError)
         {
             QMessageBox::critical(nullptr, "设置开机自启动失败", "无法创建登录项：" + process.errorString());
