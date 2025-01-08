@@ -205,11 +205,7 @@ void MainWindow::initZjuConnect()
             {
                 if (!isSystemProxySet)
                 {
-                    QSettings proxySettings(
-                        R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings)",
-                        QSettings::NativeFormat
-                    );
-                    if (proxySettings.value("ProxyEnable", 0).toInt() == 1)
+                    if (Utils::isSystemProxySet())
                     {
                         int rtn = QMessageBox::warning(this, "警告",
                             "当前已存在系统代理配置（可能是 Clash 或其它代理软件）\n是否覆盖当前系统代理配置？",

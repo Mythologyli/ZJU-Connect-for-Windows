@@ -5,6 +5,7 @@
 
 #include "settingwindow.h"
 #include "ui_settingwindow.h"
+#include "../utils/utils.h"
 
 SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
     QDialog(parent),
@@ -66,25 +67,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
 
             settings->sync();
 
-            if (settings->value("Common/AutoStart").toBool())
-            {
-                QSettings autoStartSettings(
-                    R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run)",
-                    QSettings::NativeFormat
-                );
-                autoStartSettings.setValue(
-                    QApplication::applicationName(),
-                    QCoreApplication::applicationFilePath().replace('/', '\\')
-                );
-            }
-            else
-            {
-                QSettings autoStartSettings(
-                    R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run)",
-                    QSettings::NativeFormat
-                );
-                autoStartSettings.remove(QApplication::applicationName());
-            }
+            Utils::setAutoStart(settings->value("Common/AutoStart").toBool());
         };
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, applySettings);

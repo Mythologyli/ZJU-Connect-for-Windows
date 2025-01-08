@@ -38,6 +38,7 @@ set(SOURCE_FILES
     settingwindow/settingwindow.cpp
     loginwindow/loginwindow.cpp
     utils/utils.cpp
+    utils/proxysettings.cpp
     resource.qrc
 )
 

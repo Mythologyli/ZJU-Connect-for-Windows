@@ -2,13 +2,12 @@
 #include <QApplication>
 #include <QNetworkInterface>
 #include <QTextCodec>
+#include <QSettings>
+#include <QProcess>
+#include <QtSystemDetection>
+#include <QDir>
+#include <QFileInfo>
 
-#ifdef WIN32
-#include "windows.h"
-#include "wininet.h"
-#include "ras.h"
-#include "raserror.h"
-#endif
 #include "utils.h"
 
 QString Utils::ConsoleOutputToQString(const QByteArray &byteArray)
@@ -97,92 +96,6 @@ void Utils::showAboutMessageBox(QWidget *parent)
     messageBox.exec();
 }
 
-void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString &bypass)
-{
-#ifdef WIN32
-    INTERNET_PER_CONN_OPTION_LIST optionList;
-    INTERNET_PER_CONN_OPTION optionsArr[3];
-    unsigned long optionListSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
-
-    optionsArr[1].dwOption = INTERNET_PER_CONN_FLAGS;
-    optionsArr[1].Value.dwValue = 0;
-    if (proxyServer != "")
-    {
-        optionsArr[1].Value.dwValue = PROXY_TYPE_DIRECT | PROXY_TYPE_PROXY;
-    }
-    else
-    {
-        optionsArr[1].Value.dwValue = PROXY_TYPE_DIRECT;
-    }
-
-    optionsArr[0].dwOption = INTERNET_PER_CONN_PROXY_SERVER;
-    auto *proxyServerWStr = (wchar_t *) calloc(sizeof(wchar_t), proxyServer.length() + 1);
-    proxyServer.toWCharArray(proxyServerWStr);
-    optionsArr[0].Value.pszValue = proxyServerWStr;
-
-    optionsArr[2].dwOption = INTERNET_PER_CONN_PROXY_BYPASS;
-    auto *bypassWStr = (wchar_t *) calloc(sizeof(wchar_t), bypass.length() + 1);
-    bypass.toWCharArray(bypassWStr);
-    optionsArr[2].Value.pszValue = bypassWStr;
-
-    optionList.dwSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
-    optionList.pszConnection = nullptr;
-    optionList.dwOptionCount = 3;
-    optionList.dwOptionError = 0;
-    optionList.pOptions = optionsArr;
-
-    InternetSetOption(nullptr, INTERNET_OPTION_PER_CONNECTION_OPTION, &optionList, optionListSize);
-
-    DWORD dwCb = 0;
-    DWORD dwRet = ERROR_SUCCESS;
-    DWORD dwEntries = 0;
-    LPRASENTRYNAME lpRasEntryName = nullptr;
-
-    dwRet = RasEnumEntries(nullptr, nullptr, lpRasEntryName, &dwCb, &dwEntries);
-
-    if (dwRet == ERROR_BUFFER_TOO_SMALL)
-    {
-        lpRasEntryName = (LPRASENTRYNAME) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwCb);
-        if (lpRasEntryName == nullptr)
-        {
-            free(proxyServerWStr);
-            free(bypassWStr);
-            return;
-        }
-        lpRasEntryName[0].dwSize = sizeof(RASENTRYNAME);
-
-        dwRet = RasEnumEntries(nullptr, nullptr, lpRasEntryName, &dwCb, &dwEntries);
-
-        if (ERROR_SUCCESS == dwRet)
-        {
-            for (DWORD i = 0; i < dwEntries; i++)
-            {
-                optionList.pszConnection = lpRasEntryName[i].szEntryName;
-                InternetSetOption(nullptr, INTERNET_OPTION_PER_CONNECTION_OPTION, &optionList, optionListSize);
-            }
-        }
-
-        HeapFree(GetProcessHeap(), 0, lpRasEntryName);
-    }
-
-    free(proxyServerWStr);
-    free(bypassWStr);
-#endif
-}
-
-void Utils::setSystemProxy(int port)
-{
-    SetProxyForAllConnections(
-        "127.0.0.1:" + QString::number(port),
-        "localhost;127.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;<local>"
-    );
-}
-
-void Utils::clearSystemProxy()
-{
-    SetProxyForAllConnections("", "");
-}
-
 QString Utils::getIpv4Address(const QString &interfaceName)
 {
     auto interfaces = QNetworkInterface::allInterfaces();
@@ -203,4 +116,139 @@ QString Utils::getIpv4Address(const QString &interfaceName)
     }
 
     return "";
+}
+
+QString macOSAppBundlePath()
+{
+#ifdef Q_OS_MAC
+    QDir dir = QDir(QCoreApplication::applicationDirPath());
+    dir.cdUp();
+    dir.cdUp();
+    QString absolutePath = dir.absolutePath();
+    // absolutePath will contain a "/" at the end,
+    // but we want the clean path to the .app bundle
+    if (absolutePath.length() > 0 && absolutePath.right(1) == "/")
+    {
+        absolutePath.chop(1);
+    }
+    return absolutePath;
+#else
+    return "";
+#endif
+}
+
+QString macOSAppBundleName()
+{
+#ifdef Q_OS_MAC
+    QString bundlePath = macOSAppBundlePath();
+    QFileInfo fileInfo(bundlePath);
+    return fileInfo.baseName();
+#else
+    return "";
+#endif
+}
+
+QString nativeAppPath()
+{
+    return QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+}
+
+void Utils::setAutoStart(bool enable)
+{
+#if defined(Q_OS_WINDOWS)
+    QSettings autoStartSettings(R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run)",
+                                QSettings::NativeFormat);
+    if (enable)
+    {
+        autoStartSettings.setValue(
+            QApplication::applicationName(),
+            nativeAppPath()
+        );
+    }
+    else
+    {
+        autoStartSettings.remove(QApplication::applicationName());
+    }
+    autoStartSettings.sync();
+#elif defined(Q_OS_MACOS)
+    {
+        QStringList args;
+        args << "-e tell application \"System Events\" to delete login item\"" + macOSAppBundleName() + "\"";
+
+        // int result = QProcess::execute("osascript", args);
+        QProcess process;
+        process.start("osascript", args);
+        process.waitForFinished();
+        if (!enable && process.error() != QProcess::UnknownError)
+        {
+            QMessageBox::critical(nullptr, "取消开机自启动失败", "无法删除登录项：" + process.errorString());
+            return;
+        }
+        if (!enable && process.exitCode() != 0)
+        {
+            QMessageBox::critical(nullptr, "取消开机自启动失败", "无法删除登录项：" + process.readAllStandardError());
+            return;
+        }
+    }
+    if (enable)
+    {
+        QStringList args;
+        args << "-e tell application \"System Events\" to make login item at end with properties {path:\"" +
+                    macOSAppBundlePath() + "\", hidden:false}";
+
+        QProcess process;
+        process.start("osascript", args);
+        process.waitForFinished();
+        if (process.error() != QProcess::UnknownError)
+        {
+            QMessageBox::critical(nullptr, "设置开机自启动失败", "无法创建登录项：" + process.errorString());
+            return;
+        }
+        if (process.exitCode() != 0)
+        {
+            QMessageBox::critical(nullptr, "设置开机自启动失败", "无法创建登录项：" + process.readAllStandardError());
+            return;
+        }
+    }
+#elif defined(Q_OS_LINUX)
+    QString autostartPath = QDir::homePath() + "/.config/autostart/";
+    QDir dir(autostartPath);
+    QString desktopFilePath = autostartPath + QApplication::applicationName() + ".desktop";
+    QFile desktopFile(desktopFilePath);
+
+    if (dir.exists() && desktopFile.exists())
+    {
+        if (!desktopFile.remove())
+        {
+            QMessageBox::critical(nullptr, "取消开机自启动失败", "无法删除 .desktop 文件：" + desktopFilePath);
+            return;
+        }
+    }
+
+    if (enable)
+    {
+        if (!dir.exists())
+        {
+            if (!dir.mkpath("."))
+            {
+                QMessageBox::critical(nullptr, "设置开机自启动失败", "无法创建 autostart 目录：" + autostartPath);
+                return;
+            }
+        }
+
+        if (!desktopFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::critical(nullptr, "设置开机自启动失败", "无法创建 .desktop 文件：" + desktopFilePath);
+            return;
+        }
+
+        QTextStream out(&desktopFile);
+        out << "[Desktop Entry]\n";
+        out << "Type=Application\n";
+        out << "Name=" << QApplication::applicationName() << "\n";
+        out << "Exec=" << nativeAppPath() << "\n";
+        out << "X-GNOME-Autostart-enabled=true\n";
+        desktopFile.close();
+    }
+#endif
 }

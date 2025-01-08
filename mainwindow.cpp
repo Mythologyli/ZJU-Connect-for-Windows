@@ -263,33 +263,7 @@ void MainWindow::checkUpdate()
 void MainWindow::upgradeSettings()
 {
     int configVersion = settings->value("Common/ConfigVersion", 1).toInt();
-    if (configVersion > 2)
-    {
-        addLog("警告：配置文件版本高于 2。请运行新版本！");
-    }
-    else if (configVersion == 2)
-    {
-        if (settings->contains("Common/AutoStart"))
-        {
-            if (settings->value("Common/AutoStart").toBool())
-            {
-                QSettings autoStartSettings(
-                    R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run)",
-                    QSettings::NativeFormat
-                );
-                autoStartSettings.setValue(
-                    QApplication::applicationName(),
-                    QCoreApplication::applicationFilePath().replace('/', '\\')
-                );
-
-                // 删除旧版自启动项
-                autoStartSettings.remove("HITszConnectForWindows");
-            }
-        }
-
-        return;
-    }
-    settings->sync();
+    // 备用
 }
 
 void MainWindow::showNotification(const QString &title, const QString &content, QSystemTrayIcon::MessageIcon icon)

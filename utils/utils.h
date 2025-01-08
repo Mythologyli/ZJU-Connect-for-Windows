@@ -1,6 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <QString>
+#include <QByteArray>
+#include <QWidget>
+
 namespace Utils
 {
     const inline QString REPO_NAME("chenx-dust/HITsz-Connect-for-Windows");
@@ -11,13 +15,15 @@ namespace Utils
 
     void showAboutMessageBox(QWidget *parent = nullptr);
 
-    void SetProxyForAllConnections(const QString &proxyServer, const QString &bypass);
+    bool isSystemProxySet();
 
     void setSystemProxy(int port);
 
     void clearSystemProxy();
 
     QString getIpv4Address(const QString &interfaceName);
+
+    void setAutoStart(bool enable);
 }
 
 #endif //UTILS_H
