@@ -1,6 +1,9 @@
 # HITsz Connect for Windows
 
-![Github Action](https://github.com/chenx-dust/HITsz-Connect-for-Windows/actions/workflows/build.yml/badge.svg)
+![Action](https://github.com/chenx-dust/HITsz-Connect-for-Windows/actions/workflows/build.yml/badge.svg)
+![Release](https://img.shields.io/github/v/release/chenx-dust/HITsz-Connect-for-Windows)
+![Downloads](https://img.shields.io/github/downloads/chenx-dust/HITsz-Connect-for-Windows/total)
+![License](https://img.shields.io/github/license/chenx-dust/HITsz-Connect-for-Windows)
 
 针对哈工大深圳的修改版 ZJU-Connect-for-Windows
 
