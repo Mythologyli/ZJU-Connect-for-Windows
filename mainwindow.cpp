@@ -7,11 +7,6 @@
 #include <QClipboard>
 #include <QDesktopServices>
 
-#ifdef WIN32
-#include <windows.h>
-#include <shellapi.h>
-#endif
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
