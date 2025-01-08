@@ -53,11 +53,7 @@ private:
         QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon::Information
     );
 
-    void setModeToL2tp();
-
-    void setModeToWebLogin();
-
-    void setModeToZjuConnect();
+    void initZjuConnect();
 
     Ui::MainWindow *ui;
     QSystemTrayIcon *trayIcon;

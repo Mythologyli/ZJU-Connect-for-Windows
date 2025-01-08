@@ -5,7 +5,7 @@
 #include "loginwindow/loginwindow.h"
 #include "utils/utils.h"
 
-void MainWindow::setModeToZjuConnect()
+void MainWindow::initZjuConnect()
 {
     clearLog();
 
@@ -124,10 +124,20 @@ void MainWindow::setModeToZjuConnect()
                         {
                             program_filename = "zju-connect";
                         }
+                        QString program_path = QCoreApplication::applicationDirPath() + "/" + program_filename;
 						QString bind_prefix = settings->value("ZJUConnect/OutsideAccess", false).toBool() ? "0.0.0.0:" : "127.0.0.1:";
-                        
+
+                        isZjuConnectLinked = true;
+                        ui->pushButton1->setText("断开服务器");
+                        ui->pushButton2->show();
+
+                        if (settings->value("ZJUConnect/AutoSetProxy", true).toBool())
+                        {
+                            ui->pushButton2->click();
+                        }
+
                         zjuConnectController->start(
-                            QCoreApplication::applicationDirPath() + "/" + program_filename,
+                            program_path,
                             username,
                             password,
                             settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString(),
@@ -147,15 +157,6 @@ void MainWindow::setModeToZjuConnect()
                             settings->value("ZJUConnect/TcpPortForwarding", "").toString(),
                             settings->value("ZJUConnect/UdpPortForwarding", "").toString()
                         );
-
-                        isZjuConnectLinked = true;
-                        ui->pushButton1->setText("断开服务器");
-                        ui->pushButton2->show();
-
-                        if (settings->value("ZJUConnect/AutoSetProxy", true).toBool())
-                        {
-                            ui->pushButton2->click();
-                        }
                 	};
 
                     if (username_.isEmpty() || password_.isEmpty())

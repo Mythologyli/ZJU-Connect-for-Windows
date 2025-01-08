@@ -235,7 +235,7 @@ MainWindow::MainWindow(QWidget *parent) :
         );
     }
     
-    setModeToZjuConnect();
+    initZjuConnect();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
