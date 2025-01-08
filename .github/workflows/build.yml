@@ -284,11 +284,14 @@ jobs:
     env:
       ARCHIVE_PREFIX: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ env.ARCHIVE_PREFIX }}-*
+          merge-multiple: true
+
       - name: Upload to release
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-windows-x64.zip
-          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-windows-arm64.zip
-          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-macos-x64.dmg
-          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-macos-arm64.dmg
+          gh release upload ${{ github.event.release.tag_name }} ${{ env.ARCHIVE_PREFIX }}-*
