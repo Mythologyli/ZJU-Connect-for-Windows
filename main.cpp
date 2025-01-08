@@ -16,6 +16,12 @@ int main(int argc, char *argv[])
     QApplication::setApplicationDisplayName(Utils::APP_NAME);
     QApplication::setApplicationVersion(PROJ_VER);
 
+    QTranslator qtTranslator;
+    if (qtTranslator.load(QLocale::Chinese, QString("qtbase"), QString("_"), QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
+    {
+        app.installTranslator(&qtTranslator);
+    }
+
     MainWindow mainWindow;
 
     QObject::connect(&app, &SingleApplication::aboutToQuit, &mainWindow, &MainWindow::cleanUpWhenQuit);
