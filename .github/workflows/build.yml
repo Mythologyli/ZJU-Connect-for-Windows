@@ -201,7 +201,7 @@ jobs:
             --background ../resource/dmg-background.png \
             --window-size 430 480 \
             --app-drop-link 200 0 \
-            --add-file ${{ env.DISPLAY_NAME }}.app ./${{ env.TARGET_NAME }}.app 0 0 \
+            --add-file "${{ env.DISPLAY_NAME }}.app" "./${{ env.TARGET_NAME }}.app" 0 0 \
             --add-file 修复脚本.command ./resource/macos-fix.sh 100 200 \
             --filesystem APFS \
             ${{ env.ARCHIVE_NAME }}.dmg dmg-build
@@ -262,7 +262,7 @@ jobs:
             --background ../resource/dmg-background.png \
             --window-size 430 480 \
             --app-drop-link 200 0 \
-            --add-file ${{ env.DISPLAY_NAME }}.app ./${{ env.TARGET_NAME }}.app 0 0 \
+            --add-file "${{ env.DISPLAY_NAME }}.app" "./${{ env.TARGET_NAME }}.app" 0 0 \
             --add-file 修复脚本.command ./resource/macos-fix.sh 100 200 \
             --filesystem APFS \
             ${{ env.ARCHIVE_NAME }}.dmg dmg-build
