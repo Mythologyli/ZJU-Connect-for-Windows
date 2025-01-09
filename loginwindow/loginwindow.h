@@ -14,6 +14,8 @@ public:
 
 	void setDetail(const QString& username, const QString& password);
 
+	void keyPressEvent(QKeyEvent *event) override;
+
 signals:
 	void login(const QString& username, const QString& password, bool saveDetail);
 

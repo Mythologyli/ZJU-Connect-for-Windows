@@ -336,7 +336,6 @@ jobs:
         run: |
           echo '${GITHUB_WORKSPACE}/openssl-bin/lib64' | sudo tee /etc/ld.so.conf.d/openssl.conf > /dev/null
           sudo ldconfig
-          ${GITHUB_WORKSPACE}/openssl-bin/bin/openssl version
 
           sudo apt install -y libxcb-cursor0 fuse
 

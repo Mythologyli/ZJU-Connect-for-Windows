@@ -4,6 +4,7 @@
 
 #include <QMessageBox>
 #include <QPushButton>
+#include <QKeyEvent>
 
 LoginWindow::LoginWindow(QWidget *parent)
 	: QDialog(parent),
@@ -42,3 +43,14 @@ void LoginWindow::setDetail(const QString& username, const QString& password)
 	ui->usernameLineEdit->setText(username);
 	ui->passwordLineEdit->setText(password);
 }
+
+void LoginWindow::keyPressEvent(QKeyEvent *event)
+{
+	if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+		ui->buttonBox->button(QDialogButtonBox::Ok)->click();
+	else if (event->key() == Qt::Key_Escape)
+		reject();
+	else
+		QDialog::keyPressEvent(event);
+}
+
