@@ -53,8 +53,17 @@
 
 - [X] 简化更名流程
 - [X] 支持 macOS 系统
-- [ ] 支持 Linux 系统
-- [ ] 支持手动设置 Proxy Bypass
+- [X] 支持 Linux 系统
+- [X] 支持手动设置 Proxy Bypass
+- [ ] 上传 AUR 包
+
+## 相关项目
+
+以下均为 EasyConnect 客户端的桌面友好替代品，可按需使用：
+
+- [kowyo/hitsz-connect-verge](https://github.com/kowyo/hitsz-connect-verge): 轻量级的 ZJU-Connect 客户端，基于 PyQt ，支持 Windows 和 macOS ，面向 HITSZ 用户
+- [Mythologyli/ZJU-Connect-for-Windows](https://github.com/Mythologyli/ZJU-Connect-for-Windows): 基于 Qt 的 ZJU-Connect 客户端，本项目的前身，支持 Windows ，面向 ZJU 用户
+- [docker-easyconnect/docker-easyconnect](https://github.com/docker-easyconnect/docker-easyconnect): 利用 Docker 隔离的 EasyConnect 客户端
 
 ## 致谢
 
