@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           host: 'windows'
@@ -86,7 +86,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install host Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           host: 'windows'
@@ -97,7 +97,7 @@ jobs:
           cache-key-prefix: 'install-qt-action'
 
       - name: Install target Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           host: 'windows'
@@ -159,7 +159,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           host: 'mac'
@@ -222,7 +222,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           host: 'mac'
@@ -285,7 +285,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           host: 'linux'
@@ -314,7 +314,7 @@ jobs:
 
       - name: Download and copy files
         run: |
-          sudo apt install -y libxcb-cursor0
+          sudo apt install -y libxcb-cursor0 fuse
 
           wget -O linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-x86_64.AppImage
           wget -O linuxdeploy-plugin-qt https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-plugin-qt-x86_64.AppImage
