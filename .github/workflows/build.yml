@@ -318,7 +318,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: openssl-${{ env.LINUX_OPENSSL_VERSION }}
-          key: ${{ runner.name }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          key: ${{ runner.os }}-${{ runner.arch }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
 
       - name: Build openssl
         if: steps.cache-openssl.outputs.cache-hit != 'true'
@@ -327,20 +327,19 @@ jobs:
           wget -O openssl.tar.gz https://www.openssl.org/source/openssl-${{ env.LINUX_OPENSSL_VERSION }}.tar.gz
           tar -zxf openssl.tar.gz
           cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
-          ./config --prefix=/usr/local/openssl
+          ./config
           make -j$(nproc)
       
       - name: Save cached openssl
         uses: actions/cache@v4
         with:
           path: openssl-${{ env.LINUX_OPENSSL_VERSION }}
-          key: ${{ runner.name }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          key: ${{ runner.os }}-${{ runner.arch }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
 
       - name: Download and copy files
         run: |
           cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
           sudo make install
-          echo '/usr/local/openssl/lib64' | sudo tee /etc/ld.so.conf.d/openssl.conf > /dev/null
           openssl version
           cd ..
 
