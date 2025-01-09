@@ -69,6 +69,11 @@ else()
     add_executable(${PROJECT_NAME}
         ${SOURCE_FILES}
     )
+
+    install(
+        TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION bin
+    )
 endif()
 
 set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
@@ -84,9 +89,4 @@ target_link_libraries(${PROJECT_NAME}
         Qt::Core5Compat
         SingleApplication::SingleApplication
         ${PLATFORM_LIBS}
-)
-
-install(
-    TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION bin
 )
