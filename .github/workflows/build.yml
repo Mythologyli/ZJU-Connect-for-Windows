@@ -336,7 +336,7 @@ jobs:
         run: |
           cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
           sudo make install
-          sudo echo '/usr/local/openssl/lib64' > /etc/ld.so.conf.d/openssl.conf
+          echo '/usr/local/openssl/lib64' | sudo tee /etc/ld.so.conf.d/openssl.conf > /dev/null
           openssl version
           cd ..
 
