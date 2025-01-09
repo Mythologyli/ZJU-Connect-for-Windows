@@ -315,7 +315,7 @@ jobs:
 
       - name: Restore cached openssl
         id: cache-openssl
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
           path: openssl
           key: ${{ runner.os }}-${{ runner.arch }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
