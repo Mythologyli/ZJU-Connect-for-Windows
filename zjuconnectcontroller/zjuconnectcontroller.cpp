@@ -19,10 +19,6 @@ ZjuConnectController::ZjuConnectController()
         {
             emit error(ZJU_ERROR::LISTEN_FAILED);
         }
-        else if (output.contains("client setup error"))
-        {
-            emit error(ZJU_ERROR::CLIENT_FAILED);
-        }
         else if (output.contains("Invalid username or password!"))
         {
             emit error(ZJU_ERROR::INVALID_DETAIL);
@@ -34,6 +30,10 @@ ZjuConnectController::ZjuConnectController()
         else if (output.contains("Login failed") || output.contains("too many login failures"))
         {
             emit error(ZJU_ERROR::OTHER_LOGIN_FAILED);
+        }
+        else if (output.contains("client setup error"))
+        {
+            emit error(ZJU_ERROR::CLIENT_FAILED);
         }
         else if (output.contains("panic"))
         {
