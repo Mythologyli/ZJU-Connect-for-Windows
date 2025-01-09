@@ -278,7 +278,7 @@ jobs:
           path: ${{ env.ARCHIVE_NAME }}.dmg
 
   build-linux-x64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}-linux-x64
     steps:
@@ -314,6 +314,17 @@ jobs:
 
       - name: Download and copy files
         run: |
+          # For package in Ubuntu 20.04, we have to install openssl 3.
+          wget -O openssl.tar.gz https://www.openssl.org/source/openssl-3.0.15.tar.gz
+          tar -zxf openssl.tar.gz
+          cd openssl/
+          ./config --prefix=/usr/local/openssl
+          make -j4
+          sudo make install
+          sudo ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
+          sudo echo '/usr/local/openssl/lib64' > /etc/ld.so.conf.d/openssl.conf
+          openssl version
+
           sudo apt install -y libxcb-cursor0 fuse
 
           wget -O linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-x86_64.AppImage
