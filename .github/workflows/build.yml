@@ -46,7 +46,7 @@ jobs:
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
-          if ( [bool]"${{ env.NIGHTLY_BUILD }}" ) {
+          if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
             cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
@@ -119,7 +119,7 @@ jobs:
           EXTRA_CMAKE_ARGS: -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/windows-arm64.cmake
         run: |
           mkdir build
-          if ( [bool]"${{ env.NIGHTLY_BUILD }}" ) {
+          if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
             cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
@@ -166,6 +166,8 @@ jobs:
           target: 'desktop'
           arch: 'clang_64'
           modules: 'qt5compat'
+          cache: 'true'
+          cache-key-prefix: 'install-qt-action'
 
       - name: Configure
         env:
@@ -173,7 +175,7 @@ jobs:
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
-          if [ ${{ env.NIGHTLY_BUILD }} ]; then
+          if ${{ env.NIGHTLY_BUILD }} ; then
             cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_OSX_ARCHITECTURES="x86_64" -S . -B build
           else
             VER=${{ env.RELEASE_VERSION }}
@@ -227,6 +229,8 @@ jobs:
           target: 'desktop'
           arch: 'clang_64'
           modules: 'qt5compat'
+          cache: 'true'
+          cache-key-prefix: 'install-qt-action'
 
       - name: Configure
         env:
@@ -234,7 +238,7 @@ jobs:
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
         run: |
           mkdir build
-          if [ ${{ env.NIGHTLY_BUILD }} ]; then
+          if ${{ env.NIGHTLY_BUILD }} ; then
             cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_OSX_ARCHITECTURES="arm64" -S . -B build
           else
             VER=${{ env.RELEASE_VERSION }}
@@ -272,6 +276,76 @@ jobs:
         with:
           name: ${{ env.ARCHIVE_NAME }}
           path: ${{ env.ARCHIVE_NAME }}.dmg
+
+  build-linux-x64:
+    runs-on: ubuntu-20.04
+    env:
+      ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}-linux-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'linux'
+          target: 'desktop'
+          arch: 'linux_gcc_64'
+          modules: 'qt5compat'
+          cache: 'true'
+          cache-key-prefix: 'install-qt-action'
+
+      - name: Configure
+        env:
+          NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
+          RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
+        run: |
+          mkdir build
+          if ${{ env.NIGHTLY_BUILD }} ; then
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+          else
+            VER=${{ env.RELEASE_VERSION }}
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -S . -B build
+          fi
+
+      - name: Build
+        run: |
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+
+      - name: Download and copy files
+        run: |
+          wget -O linuxdeploy.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-x86_64.AppImage
+          chmod a+x linuxdeploy.AppImage
+
+          mkdir "AppDir"
+          cd "AppDir"
+          mkdir -p ./usr/bin ./usr/lib ./usr/share/applications ./usr/share/icons/hicolor/scalable/apps
+
+          cp ../build/${{ env.TARGET_NAME }} ./usr/bin/
+          wget -O zju-connect-linux-amd64.zip https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-linux-amd64.zip
+          tar -xf zju-connect-linux-amd64.zip
+          rm zju-connect-linux-amd64.zip
+          cp zju-connect ./usr/bin/
+          cp ../resource/icon.png "./usr/share/icons/hicolor/scalable/apps/${{ env.TARGET_NAME }}.png"
+
+          cat <<EOF > ./usr/share/applications/${{ env.TARGET_NAME }}.desktop
+          [Desktop Entry]
+          Name=${{ env.DISPLAY_NAME }}
+          Exec=${{ env.TARGET_NAME }}
+          Icon=${{ env.TARGET_NAME }}
+          Type=Application
+          Categories=Network;Security;
+          EOF
+
+          ../linuxdeploy.AppImage --appdir AppDir --output appimage
+          mv *.AppImage ../${{ env.ARCHIVE_NAME }}.AppImage
+
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARCHIVE_NAME }}
+          path: ${{ env.ARCHIVE_NAME }}.AppImage
 
   release:
     runs-on: ubuntu-latest

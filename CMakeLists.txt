@@ -85,3 +85,8 @@ target_link_libraries(${PROJECT_NAME}
         SingleApplication::SingleApplication
         ${PLATFORM_LIBS}
 )
+
+install(
+    TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+)
