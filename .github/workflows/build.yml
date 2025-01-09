@@ -335,9 +335,8 @@ jobs:
           Categories=Network;Security;
           EOF
 
-          ./linuxdeploy --appdir AppDir --output appimage
+          ./linuxdeploy --appdir AppDir --output appimage --plugin qt
           mv *.AppImage ${{ env.ARCHIVE_NAME }}.AppImage
-
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -353,6 +352,7 @@ jobs:
       - build-windows-arm64
       - build-macos-x64
       - build-macos-arm64
+      - build-linux-x64
     env:
       ARCHIVE_PREFIX: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
