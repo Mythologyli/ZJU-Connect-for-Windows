@@ -314,21 +314,19 @@ jobs:
 
       - name: Download and copy files
         run: |
-          wget -O linuxdeploy.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-x86_64.AppImage
-          chmod a+x linuxdeploy.AppImage
+          wget -O linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-x86_64.AppImage
+          chmod a+x linuxdeploy
 
-          mkdir "AppDir"
-          cd "AppDir"
-          mkdir -p ./usr/bin ./usr/lib ./usr/share/applications ./usr/share/icons/hicolor/scalable/apps
+          mkdir AppDir
+          mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/scalable/apps
 
-          cp ../build/${{ env.TARGET_NAME }} ./usr/bin/
+          cp build/${{ env.TARGET_NAME }} AppDir/usr/bin/
           wget -O zju-connect-linux-amd64.zip https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-linux-amd64.zip
-          tar -xf zju-connect-linux-amd64.zip
-          rm zju-connect-linux-amd64.zip
-          cp zju-connect ./usr/bin/
-          cp ../resource/icon.png "./usr/share/icons/hicolor/scalable/apps/${{ env.TARGET_NAME }}.png"
+          unzip zju-connect-linux-amd64.zip
+          cp zju-connect AppDir/usr/bin/
+          cp resource/icon.png AppDir/usr/share/icons/hicolor/scalable/apps/${{ env.TARGET_NAME }}.png
 
-          cat <<EOF > ./usr/share/applications/${{ env.TARGET_NAME }}.desktop
+          cat <<EOF > AppDir/usr/share/applications/${{ env.TARGET_NAME }}.desktop
           [Desktop Entry]
           Name=${{ env.DISPLAY_NAME }}
           Exec=${{ env.TARGET_NAME }}
@@ -337,8 +335,8 @@ jobs:
           Categories=Network;Security;
           EOF
 
-          ../linuxdeploy.AppImage --appdir AppDir --output appimage
-          mv *.AppImage ../${{ env.ARCHIVE_NAME }}.AppImage
+          ./linuxdeploy --appdir AppDir --output appimage
+          mv *.AppImage ${{ env.ARCHIVE_NAME }}.AppImage
 
 
       - name: Upload artifact
