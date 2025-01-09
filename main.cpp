@@ -17,10 +17,11 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion(PROJ_VER);
 
     QTranslator qtTranslator;
-    if (qtTranslator.load(QLocale::system(), QString("qtbase"), QString("_"), QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
-    {
+    if (qtTranslator.load(QLocale(QLocale::Chinese, QLocale::SimplifiedChineseScript, QLocale::China),
+                          QString("qtbase"), QString("_"), QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
         app.installTranslator(&qtTranslator);
-    }
+    else
+        qDebug() << "Failed to load qtbase_zh_CN.qm";
 
     MainWindow mainWindow;
 
