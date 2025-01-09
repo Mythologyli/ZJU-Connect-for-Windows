@@ -278,7 +278,7 @@ jobs:
           path: ${{ env.ARCHIVE_NAME }}.dmg
 
   build-linux-x64:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}-linux-x64
     steps:
@@ -323,7 +323,6 @@ jobs:
           mkdir AppDir
           mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/scalable/apps
 
-          cp /usr/lib/x86_64-linux-gnu/libssl.so.1.1 AppDir/usr/lib/
           cp build/${{ env.TARGET_NAME }} AppDir/usr/bin/
           wget -O zju-connect-linux-amd64.zip https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-linux-amd64.zip
           unzip zju-connect-linux-amd64.zip
