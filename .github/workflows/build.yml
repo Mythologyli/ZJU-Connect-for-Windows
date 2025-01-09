@@ -317,7 +317,7 @@ jobs:
         id: cache-openssl
         uses: actions/cache@v4
         with:
-          path: openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          path: /usr/local/openssl
           key: ${{ runner.os }}-${{ runner.arch }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
 
       - name: Build openssl
@@ -327,21 +327,21 @@ jobs:
           wget -O openssl.tar.gz https://www.openssl.org/source/openssl-${{ env.LINUX_OPENSSL_VERSION }}.tar.gz
           tar -zxf openssl.tar.gz
           cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
-          ./config
+          ./config --prefix=/usr/local/openssl
           make -j$(nproc)
+          sudo make install
+          openssl version
       
       - name: Save cached openssl
         uses: actions/cache@v4
         with:
-          path: openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          path: /usr/local/openssl
           key: ${{ runner.os }}-${{ runner.arch }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
 
       - name: Download and copy files
         run: |
-          cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
-          sudo make install
-          openssl version
-          cd ..
+          echo '/usr/local/openssl/lib64' | sudo tee /etc/ld.so.conf.d/openssl.conf > /dev/null
+          sudo ldconfig
 
           sudo apt install -y libxcb-cursor0 fuse
 
