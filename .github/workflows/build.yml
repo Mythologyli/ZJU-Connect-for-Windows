@@ -313,7 +313,17 @@ jobs:
         run: |
           cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
-      - name: Download and copy files
+      - name: Cache openssl
+        id: cache-openssl
+        uses: actions/cache@v4
+        with:
+          path: openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          key: ${{ runner.os }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
+
+      - name: Build openssl
+        if: steps.cache-openssl.outputs.cache-hit != 'true'
         run: |
           # For package in Ubuntu 20.04, we have to install openssl 3.
           wget -O openssl.tar.gz https://www.openssl.org/source/openssl-${{ env.LINUX_OPENSSL_VERSION }}.tar.gz
@@ -321,8 +331,11 @@ jobs:
           cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
           ./config --prefix=/usr/local/openssl
           make -j$(nproc)
+
+      - name: Download and copy files
+        run: |
+          cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
           sudo make install
-          sudo ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
           sudo echo '/usr/local/openssl/lib64' > /etc/ld.so.conf.d/openssl.conf
           openssl version
           cd ..
