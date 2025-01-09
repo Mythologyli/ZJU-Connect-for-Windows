@@ -317,7 +317,7 @@ jobs:
         id: cache-openssl
         uses: actions/cache/restore@v4
         with:
-          path: /usr/local/openssl
+          path: openssl-bin
           key: ${{ runner.os }}-${{ runner.arch }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
 
       - name: Build openssl
@@ -327,15 +327,16 @@ jobs:
           wget -O openssl.tar.gz https://www.openssl.org/source/openssl-${{ env.LINUX_OPENSSL_VERSION }}.tar.gz
           tar -zxf openssl.tar.gz
           cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
-          ./config --prefix=/usr/local/openssl
+          ./config --prefix=${GITHUB_WORKSPACE}/openssl-bin
           make -j$(nproc)
           sudo make install
           openssl version
 
       - name: Download and copy files
         run: |
-          echo '/usr/local/openssl/lib64' | sudo tee /etc/ld.so.conf.d/openssl.conf > /dev/null
+          echo '${GITHUB_WORKSPACE}/openssl-bin/lib64' | sudo tee /etc/ld.so.conf.d/openssl.conf > /dev/null
           sudo ldconfig
+          ${GITHUB_WORKSPACE}/openssl-bin/bin/openssl version
 
           sudo apt install -y libxcb-cursor0 fuse
 
@@ -361,8 +362,8 @@ jobs:
           Categories=Network;Security;
           EOF
 
-          cp /usr/local/openssl/lib64/libssl.so.3 AppDir/usr/lib/
-          cp /usr/local/openssl/lib64/libcrypto.so.3 AppDir/usr/lib/
+          cp ${GITHUB_WORKSPACE}/openssl-bin/lib64/libssl.so.3 AppDir/usr/lib/
+          cp ${GITHUB_WORKSPACE}/openssl-bin/lib64/libcrypto.so.3 AppDir/usr/lib/
 
           ./linuxdeploy --appdir AppDir --output appimage --plugin qt
           mv *.AppImage ${{ env.ARCHIVE_NAME }}.AppImage
