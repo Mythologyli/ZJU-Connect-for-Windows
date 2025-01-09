@@ -313,14 +313,12 @@ jobs:
         run: |
           cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
-      - name: Cache openssl
+      - name: Restore cached openssl
         id: cache-openssl
         uses: actions/cache@v4
         with:
           path: openssl-${{ env.LINUX_OPENSSL_VERSION }}
-          key: ${{ runner.os }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
-          restore-keys: |
-            ${{ runner.os }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          key: ${{ runner.name }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
 
       - name: Build openssl
         if: steps.cache-openssl.outputs.cache-hit != 'true'
@@ -331,6 +329,12 @@ jobs:
           cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
           ./config --prefix=/usr/local/openssl
           make -j$(nproc)
+      
+      - name: Save cached openssl
+        uses: actions/cache@v4
+        with:
+          path: openssl-${{ env.LINUX_OPENSSL_VERSION }}
+          key: ${{ runner.name }}-openssl-${{ env.LINUX_OPENSSL_VERSION }}
 
       - name: Download and copy files
         run: |
