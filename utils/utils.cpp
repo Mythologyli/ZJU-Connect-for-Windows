@@ -180,8 +180,9 @@ void Utils::setAutoStart(bool enable)
         QProcess process;
         process.start("osascript", args);
         process.waitForFinished();
+        QString error = process.readAllStandardError();
         qDebug() << process.readAllStandardOutput();
-        qDebug() << process.readAllStandardError();
+        qDebug() << error;
         if (!enable && process.error() != QProcess::UnknownError)
         {
             QMessageBox::critical(nullptr, "取消开机自启动失败", "无法删除登录项：" + process.errorString());
@@ -189,7 +190,7 @@ void Utils::setAutoStart(bool enable)
         }
         if (!enable && process.exitCode() != 0)
         {
-            QMessageBox::critical(nullptr, "取消开机自启动失败", "无法删除登录项：" + process.readAllStandardError());
+            QMessageBox::critical(nullptr, "取消开机自启动失败", "无法删除登录项：" + error);
             return;
         }
     }

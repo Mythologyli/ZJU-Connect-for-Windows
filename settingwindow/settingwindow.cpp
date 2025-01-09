@@ -38,6 +38,9 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
 
     auto applySettings = [&]()
         {
+            if (settings->value("Common/AutoStart").toBool() != (ui->autoStartComboBox->currentText() == "是"))
+                Utils::setAutoStart(ui->autoStartComboBox->currentText() == "是");
+
             settings->setValue("Common/Username", ui->usernameLineEdit->text());
             settings->setValue("Common/Password", QString(ui->passwordLineEdit->text().toUtf8().toBase64()));
             settings->setValue("Common/AutoStart", ui->autoStartComboBox->currentText() == "是");
@@ -66,8 +69,6 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             settings->setValue("ZJUConnect/OutsideAccess", ui->outsideAccessCheckBox->isChecked());
 
             settings->sync();
-
-            Utils::setAutoStart(settings->value("Common/AutoStart").toBool());
         };
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, applySettings);
@@ -106,32 +107,12 @@ void SettingWindow::loadSettings()
         QByteArray::fromBase64(settings->value("Common/Password", "").toString().toUtf8())
     );
 
-    if (settings->value("Common/AutoStart", false).toBool())
-    {
-        ui->autoStartComboBox->setCurrentText("是");
-    }
-    else
-    {
-        ui->autoStartComboBox->setCurrentText("否");
-    }
-
-    if (settings->value("Common/ConnectAfterStart", false).toBool())
-    {
-        ui->connectAfterStartComboBox->setCurrentText("是");
-    }
-    else
-    {
-        ui->connectAfterStartComboBox->setCurrentText("否");
-    }
-
-    if (settings->value("Common/checkUpdateAfterStart", true).toBool())
-    {
-        ui->checkUpdateAfterStartComboBox->setCurrentText("是");
-    }
-    else
-    {
-        ui->checkUpdateAfterStartComboBox->setCurrentText("否");
-    }
+    ui->autoStartComboBox->setCurrentText(
+        settings->value("Common/AutoStart", false).toBool() ? "是" : "否");
+    ui->connectAfterStartComboBox->setCurrentText(
+        settings->value("Common/ConnectAfterStart", false).toBool() ? "是" : "否");
+    ui->checkUpdateAfterStartComboBox->setCurrentText(
+        settings->value("Common/checkUpdateAfterStart", true).toBool() ? "是" : "否");
 
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
