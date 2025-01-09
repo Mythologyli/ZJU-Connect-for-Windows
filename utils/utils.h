@@ -26,6 +26,8 @@ namespace Utils
     QString getIpv4Address(const QString &interfaceName);
 
     void setAutoStart(bool enable);
+
+    bool credentialCheck(const QString &username, const QString &password);
 }
 
 #endif //UTILS_H

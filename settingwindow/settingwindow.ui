@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>486</width>
-    <height>396</height>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,134 +30,12 @@
        <string>通用</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>启动时</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="1" column="0">
-           <widget class="QLabel" name="commonTabLable5">
-            <property name="text">
-             <string>启动后自动连接</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="commonTabLable4">
-            <property name="text">
-             <string>开机自启动</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="autoStartComboBox">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maxVisibleItems">
-             <number>12</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>否</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>是</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QComboBox" name="connectAfterStartComboBox">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>否</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>是</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="1" rowspan="3">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>221</width>
-              <height>72</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="commonTabLable6">
-            <property name="text">
-             <string>启动后检查更新</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QComboBox" name="checkUpdateAfterStartComboBox">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>否</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>是</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
-        <spacer name="commonTabVerticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>444</width>
-           <height>108</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>保存的信息</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="2">
-           <widget class="QLineEdit" name="usernameLineEdit"/>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="commonTabLable2">
             <property name="text">
@@ -165,10 +43,17 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="passwordLineEdit">
-            <property name="echoMode">
-             <enum>QLineEdit::Password</enum>
+          <item row="0" column="2" colspan="2">
+           <widget class="QLineEdit" name="usernameLineEdit">
+            <property name="placeholderText">
+             <string>VPN 账号（一般为学号）</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QCheckBox" name="passwordVisibleCheckBox">
+            <property name="text">
+             <string>显示密码</string>
             </property>
            </widget>
           </item>
@@ -179,13 +64,23 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="passwordLineEdit">
+            <property name="echoMode">
+             <enum>QLineEdit::EchoMode::Password</enum>
+            </property>
+            <property name="placeholderText">
+             <string>VPN 密码（一般为统一认证密码）</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1" rowspan="2">
            <spacer name="horizontalSpacer_2">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
+             <enum>QSizePolicy::Policy::Preferred</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -197,6 +92,83 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>启动时</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="2" column="0">
+           <widget class="QLabel" name="commonTabLable6">
+            <property name="text">
+             <string>启动后检查更新</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="commonTabLable4">
+            <property name="text">
+             <string>开机自启动</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="3">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>221</width>
+              <height>72</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="commonTabLable5">
+            <property name="text">
+             <string>启动后自动连接</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QCheckBox" name="checkUpdateAfterStartCheckBox">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QCheckBox" name="connectAfterStartCheckBox">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QCheckBox" name="autoStartCheckBox">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <spacer name="commonTabVerticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>444</width>
+           <height>108</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -229,7 +201,7 @@
        <item row="8" column="0" colspan="4">
         <widget class="Line" name="line">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -423,7 +395,7 @@
        <item row="13" column="0" colspan="4">
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -467,7 +439,7 @@
    <item row="1" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok|QDialogButtonBox::StandardButton::RestoreDefaults</set>
      </property>
     </widget>
    </item>
@@ -477,9 +449,6 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>usernameLineEdit</tabstop>
   <tabstop>passwordLineEdit</tabstop>
-  <tabstop>autoStartComboBox</tabstop>
-  <tabstop>connectAfterStartComboBox</tabstop>
-  <tabstop>checkUpdateAfterStartComboBox</tabstop>
   <tabstop>serverAddressLineEdit</tabstop>
   <tabstop>serverPortSpinBox</tabstop>
   <tabstop>dnsLineEdit</tabstop>
@@ -507,22 +476,6 @@
    <signal>rejected()</signal>
    <receiver>SettingWindow</receiver>
    <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>239</x>
-     <y>374</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>242</x>
-     <y>197</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>SettingWindow</receiver>
-   <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>239</x>

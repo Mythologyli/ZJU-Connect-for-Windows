@@ -1,6 +1,9 @@
 #include "loginwindow.h"
 
+#include "../utils/utils.h"
+
 #include <QMessageBox>
+#include <QPushButton>
 
 LoginWindow::LoginWindow(QWidget *parent)
 	: QDialog(parent),
@@ -11,21 +14,20 @@ LoginWindow::LoginWindow(QWidget *parent)
 	setWindowModality(Qt::WindowModal);
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	connect(ui->buttonBox, &QDialogButtonBox::accepted,
+	connect(ui->buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked,
 		[&]()
 		{
-			if (ui->usernameLineEdit->text().isEmpty())
-			{
-				QMessageBox::warning(this, "警告", "账号不应为空！");
+			if (!Utils::credentialCheck(ui->usernameLineEdit->text(), ui->passwordLineEdit->text()))
 				return;
-			}
-			else if (ui->passwordLineEdit->text().isEmpty())
-			{
-				QMessageBox::warning(this, "警告", "密码不应为空！");
-				return;
-			}
 			emit login(ui->usernameLineEdit->text(), ui->passwordLineEdit->text(), ui->saveLoginDetailCheckBox->isChecked());
 			emit accept();
+		}
+	);
+
+	connect(ui->passwordVisibleCheckBox, &QCheckBox::checkStateChanged,
+		[&](Qt::CheckState state)
+		{
+			ui->passwordLineEdit->setEchoMode(state == Qt::Checked ? QLineEdit::Normal : QLineEdit::Password);
 		}
 	);
 }

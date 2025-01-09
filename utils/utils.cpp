@@ -70,7 +70,7 @@ void Utils::showAboutMessageBox(QWidget *parent)
     messageBox.setWindowTitle("关于");
     messageBox.setTextFormat(Qt::RichText);
     QString aboutText = QApplication::applicationDisplayName() + " " + QApplication::applicationVersion() +
-                        "<br>针对哈工大深圳的修改版 ZJU-Connect-for-Windows" +
+                        "<br>专注于 ZJU-Connect 的 ZJU-Connect-for-Windows （HITsz 版）" +
                         "<br>作者：<a href='https://github.com/chenx-dust'>Chenx Dust</a>" +
                         "<br>项目主页：<a href='https://github.com/" + REPO_NAME + "'>https://github.com/" + REPO_NAME + "</a>" +
                         "<br><br>ZJU-Connect-for-Windows" +
@@ -258,4 +258,38 @@ void Utils::setAutoStart(bool enable)
         desktopFile.close();
     }
 #endif
+}
+
+bool Utils::credentialCheck(const QString &username, const QString &password)
+{
+    if (username.isEmpty() || password.isEmpty())
+    {
+        int status = QMessageBox::warning(nullptr, "警告", "账号或密码为空！\n\n是否继续？", QMessageBox::Ok, QMessageBox::Cancel);
+        return status == QMessageBox::Ok;
+    }
+
+    bool asciiOnly = true;
+    for (QChar c: username)
+    {
+        if (c.unicode() > 127)
+        {
+            asciiOnly = false;
+            break;
+        }
+    }
+    for (QChar c: password)
+    {
+        if (c.unicode() > 127)
+        {
+            asciiOnly = false;
+            break;
+        }
+    }
+    if (!asciiOnly)
+    {
+        int status = QMessageBox::warning(nullptr, "警告", "账号或密码存在非 ASCII 字符！\n建议检查输入法设置。\n\n是否继续？", QMessageBox::Ok, QMessageBox::Cancel);
+        return status == QMessageBox::Ok;
+    }
+
+    return true;
 }

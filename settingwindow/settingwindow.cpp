@@ -38,14 +38,14 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
 
     auto applySettings = [&]()
         {
-            if (settings->value("Common/AutoStart").toBool() != (ui->autoStartComboBox->currentText() == "是"))
-                Utils::setAutoStart(ui->autoStartComboBox->currentText() == "是");
+            if (settings->value("Common/AutoStart").toBool() != ui->autoStartCheckBox->isChecked())
+                Utils::setAutoStart(ui->autoStartCheckBox->isChecked());
 
             settings->setValue("Common/Username", ui->usernameLineEdit->text());
             settings->setValue("Common/Password", QString(ui->passwordLineEdit->text().toUtf8().toBase64()));
-            settings->setValue("Common/AutoStart", ui->autoStartComboBox->currentText() == "是");
-            settings->setValue("Common/ConnectAfterStart", ui->connectAfterStartComboBox->currentText() == "是");
-            settings->setValue("Common/checkUpdateAfterStart", ui->checkUpdateAfterStartComboBox->currentText() == "是");
+            settings->setValue("Common/AutoStart", ui->autoStartCheckBox->isChecked());
+            settings->setValue("Common/ConnectAfterStart", ui->connectAfterStartCheckBox->isChecked());
+            settings->setValue("Common/checkUpdateAfterStart", ui->checkUpdateAfterStartCheckBox->isChecked());
 
             settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
             settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
@@ -71,9 +71,18 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             settings->sync();
         };
 
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, applySettings);
+    connect(ui->buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, [&, applySettings](){
+        if (!Utils::credentialCheck(ui->usernameLineEdit->text(), ui->passwordLineEdit->text()))
+            return;
+        applySettings();
+        accept();
+    });
 
-    connect(ui->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, applySettings);
+    connect(ui->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, [&, applySettings](){
+        if (!Utils::credentialCheck(ui->usernameLineEdit->text(), ui->passwordLineEdit->text()))
+            return;
+        applySettings();
+    });
 
     connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked,
         [&]()
@@ -93,6 +102,12 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             ui->routeCheckBox->setEnabled(checked);
             ui->dnsHijackCheckBox->setEnabled(checked);
         });
+
+    connect(ui->passwordVisibleCheckBox, &QCheckBox::checkStateChanged,
+        [&](Qt::CheckState state)
+        {
+            ui->passwordLineEdit->setEchoMode(state == Qt::Checked ? QLineEdit::Normal : QLineEdit::Password);
+        });
 }
 
 SettingWindow::~SettingWindow()
@@ -107,12 +122,9 @@ void SettingWindow::loadSettings()
         QByteArray::fromBase64(settings->value("Common/Password", "").toString().toUtf8())
     );
 
-    ui->autoStartComboBox->setCurrentText(
-        settings->value("Common/AutoStart", false).toBool() ? "是" : "否");
-    ui->connectAfterStartComboBox->setCurrentText(
-        settings->value("Common/ConnectAfterStart", false).toBool() ? "是" : "否");
-    ui->checkUpdateAfterStartComboBox->setCurrentText(
-        settings->value("Common/checkUpdateAfterStart", true).toBool() ? "是" : "否");
+    ui->autoStartCheckBox->setChecked(settings->value("Common/AutoStart", false).toBool());
+    ui->connectAfterStartCheckBox->setChecked(settings->value("Common/ConnectAfterStart", false).toBool());
+    ui->checkUpdateAfterStartCheckBox->setChecked(settings->value("Common/checkUpdateAfterStart", true).toBool());
 
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
