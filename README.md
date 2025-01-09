@@ -11,7 +11,15 @@
 
 ## 使用方式
 
-1. 在本项目的 [Releases](https://github.com/chenx-dust/HITsz-Connect-for-Windows/releases) 页面下载最新版本，将所有文件解压至同一目录下，运行 `HITszConnectForWindows.exe` ；
+1. 在本项目的 [Releases](https://github.com/chenx-dust/HITsz-Connect-for-Windows/releases) 页面下载最新版本：
+
+- **Windows 用户**：下载 `HITsz-Connect-for-Windows-vX.X.X-windows-ARCH.zip` ，解压至同一目录下，双击运行 `HITszConnectForWindows.exe` ；
+- **macOS 用户**：下载 `HITsz-Connect-for-Windows-vX.X.X-macOS-ARCH.dmg` ，按照镜像内部指示安装，并运行修复脚本；
+  - 如果你遇到“Apple 无法检查 App 是否包含恶意软件”等报错，请参考： [Apple 支持](https://support.apple.com/zh-cn/guide/mac-help/mchleab3a043/mac)
+- **Linux 用户**：下载 `HITsz-Connect-for-Windows-vX.X.X-linux-ARCH.AppImage` ，赋予执行权限，运行即可；
+  - AppImage 仅支持系统 `glibc >= 2.31` 的发行版，Ubuntu 20.04 及以上版本可以正常运行；
+  - Arch Linux 用户请等待 AUR 包的提交；
+  - 如果遇到因依赖问题无法运行的情况，请自行编译运行。
 
 <div align="center">
 <img src="docs/main.png" width="600px">

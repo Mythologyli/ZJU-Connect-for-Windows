@@ -19,7 +19,7 @@ namespace Utils
 
     bool isSystemProxySet();
 
-    void setSystemProxy(int http_port, int socks_port);
+    void setSystemProxy(int http_port, int socks_port, const QString &bypass);
 
     void clearSystemProxy();
 

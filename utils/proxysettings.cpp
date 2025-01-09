@@ -4,6 +4,7 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QSettings>
+#include <QStandardPaths>
 #include "utils.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -255,6 +256,168 @@ void macOSSetProxyBypass(const QString &networkService, const QString &bypass)
     }
 }
 
+using ProcessArgument = QPair<QString, QStringList>;
+
+void linuxSetSystemProxy(const QString &proxyServer, int httpPort, int socksPort, const QString &bypass)
+{
+    QList<ProcessArgument> actions;
+    actions << ProcessArgument{"gsettings", {"set", "org.gnome.system.proxy", "mode", "manual"}};
+    //
+    bool isKDE = qEnvironmentVariable("XDG_SESSION_DESKTOP") == "KDE" ||
+                 qEnvironmentVariable("XDG_SESSION_DESKTOP") == "plasma";
+    const auto configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+
+    //
+    // Configure HTTP Proxies for HTTP, FTP and HTTPS
+    // if (hasHTTP)
+    {
+        // iterate over protocols...
+        for (const auto &protocol : QStringList{"http", "ftp", "https"})
+        {
+            // for GNOME:
+            {
+                actions << ProcessArgument{"gsettings",
+                                           {"set", "org.gnome.system.proxy." + protocol, "host", proxyServer}};
+                actions << ProcessArgument{"gsettings",
+                                           {"set", "org.gnome.system.proxy." + protocol, "port", QString::number(httpPort)}};
+            }
+
+            // for KDE:
+            if (isKDE)
+            {
+                actions << ProcessArgument{"kwriteconfig5",
+                                           {"--file", configPath + "/kioslaverc", //
+                                            "--group", "Proxy Settings",          //
+                                            "--key", protocol + "Proxy",          //
+                                            "http://" + proxyServer + " " + QString::number(httpPort)}};
+            }
+        }
+    }
+
+    // Configure SOCKS5 Proxies
+    // if (hasSOCKS)
+    {
+        // for GNOME:
+        {
+            actions << ProcessArgument{"gsettings", {"set", "org.gnome.system.proxy.socks", "host", proxyServer}};
+            actions << ProcessArgument{"gsettings",
+                                       {"set", "org.gnome.system.proxy.socks", "port", QString::number(socksPort)}};
+
+            // for KDE:
+            if (isKDE)
+            {
+                actions << ProcessArgument{"kwriteconfig5",
+                                           {"--file", configPath + "/kioslaverc", //
+                                            "--group", "Proxy Settings",          //
+                                            "--key", "socksProxy",                //
+                                            "socks://" + proxyServer + " " + QString::number(socksPort)}};
+            }
+        }
+    }
+    // Setting Proxy Mode to Manual
+    {
+        // for GNOME:
+        {
+            actions << ProcessArgument{"gsettings", {"set", "org.gnome.system.proxy", "mode", "manual"}};
+            QStringList bypassList = bypass.split(";");
+            QString ignoreHosts = "[\"" + bypassList.join("\",\"") + "\"]";
+            actions << ProcessArgument{"gsettings", {"set", "org.gnome.system.proxy", "ignore-hosts", ignoreHosts}};
+        }
+
+        // for KDE:
+        if (isKDE)
+        {
+            actions << ProcessArgument{"kwriteconfig5",
+                                       {"--file", configPath + "/kioslaverc", //
+                                        "--group", "Proxy Settings",          //
+                                        "--key", "ProxyType", "1"}};
+            actions << ProcessArgument{"kwriteconfig5",
+                                       {"--file", configPath + "/kioslaverc", //
+                                        "--group", "Proxy Settings",          //
+                                        "--key", "NoProxyFor", bypass}};
+        }
+    }
+
+    // Notify kioslaves to reload system proxy configuration.
+    if (isKDE)
+    {
+        actions << ProcessArgument{"dbus-send",
+                                   {"--type=signal", "/KIO/Scheduler",                 //
+                                    "org.kde.KIO.Scheduler.reparseSlaveConfiguration", //
+                                    "string:''"}};
+    }
+    // Execute them all!
+    //
+    // note: do not use std::all_of / any_of / none_of,
+    // because those are short-circuit and cannot guarantee atomicity.
+    QList<bool> results;
+    for (const auto &action : actions)
+    {
+        // execute and get the code
+        const auto returnCode = QProcess::execute(action.first, action.second);
+        // print out the commands and result codes
+        qDebug() << QStringLiteral("[%1] Program: %2, Args: %3").arg(returnCode).arg(action.first).arg(action.second.join(";"));
+        // give the code back
+        results << (returnCode == QProcess::NormalExit);
+    }
+
+    if (results.count(true) != actions.size())
+    {
+        QMessageBox::critical(nullptr, "设置系统代理失败", "存在失败的命令");
+    }
+}
+
+void linuxClearSystemProxy()
+{
+    QList<ProcessArgument> actions;
+    const bool isKDE = qEnvironmentVariable("XDG_SESSION_DESKTOP") == "KDE" ||
+                       qEnvironmentVariable("XDG_SESSION_DESKTOP") == "plasma";
+    const auto configRoot = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+
+    // Setting System Proxy Mode to: None
+    {
+        // for GNOME:
+        {
+            actions << ProcessArgument{"gsettings", {"set", "org.gnome.system.proxy", "mode", "none"}};
+        }
+
+        // for KDE:
+        if (isKDE)
+        {
+            actions << ProcessArgument{"kwriteconfig5",
+                                       {"--file", configRoot + "/kioslaverc", //
+                                        "--group", "Proxy Settings",          //
+                                        "--key", "ProxyType", "0"}};
+        }
+    }
+
+    // Notify kioslaves to reload system proxy configuration.
+    if (isKDE)
+    {
+        actions << ProcessArgument{"dbus-send",
+                                   {"--type=signal", "/KIO/Scheduler",                 //
+                                    "org.kde.KIO.Scheduler.reparseSlaveConfiguration", //
+                                    "string:''"}};
+    }
+
+    // Execute the Actions
+    for (const auto &action : actions)
+    {
+        // execute and get the code
+        const auto returnCode = QProcess::execute(action.first, action.second);
+        // print out the commands and result codes
+        qDebug() << QStringLiteral("[%1] Program: %2, Args: %3").arg(returnCode).arg(action.first).arg(action.second.join(";"));
+    }
+}
+
+bool linuxIsSystemProxySet()
+{
+    QProcess process;
+    process.start("gsettings", {"get", "org.gnome.system.proxy", "mode"});
+    process.waitForFinished();
+    return process.readAllStandardOutput().contains("manual");
+}
+
 bool Utils::isSystemProxySet()
 {
 #if defined(Q_OS_WINDOWS)
@@ -274,31 +437,28 @@ bool Utils::isSystemProxySet()
     }
     return false;
 #elif defined(Q_OS_LINUX)
-    return false;
+    return linuxIsSystemProxySet();
 #endif
 }
 
-void Utils::setSystemProxy(int http_port, int socks_port)
+void Utils::setSystemProxy(int http_port, int socks_port, const QString &bypass)
 {
 #if defined(Q_OS_WINDOWS)
     windowsSetProxyForAllConnections(
         "127.0.0.1:" + QString::number(http_port),
-        "localhost;127.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;"
-        "172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;<local>");
+        bypass);
 #elif defined(Q_OS_MACOS)
     QStringList activeServices = macOSGetActiveNetworkServices();
     for (const QString &service : activeServices)
     {
         macOSSetSystemProxy(macOSProxyType::WebProxy, service, "127.0.0.1", http_port);
         macOSSetSystemProxy(macOSProxyType::SecureWebProxy, service, "127.0.0.1", http_port);
-        // macOSSetSystemProxy(macOSProxyType::SOCKSFirewallProxy, service, "127.0.0.1", socks_port);
-        macOSDisableSystemProxy(macOSProxyType::SOCKSFirewallProxy, service);
-        macOSSetProxyBypass(service, "localhost;127.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;"
-                              "172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;<local>");
-        // 实测 SOCKS5 有 Bug，暂停使用
+        macOSSetSystemProxy(macOSProxyType::SOCKSFirewallProxy, service, "127.0.0.1", socks_port);
+        // macOSDisableSystemProxy(macOSProxyType::SOCKSFirewallProxy, service);
+        macOSSetProxyBypass(service, bypass);
     }
 #elif defined(Q_OS_LINUX)
-    return;
+    linuxSetSystemProxy("127.0.0.1", http_port, socks_port, bypass);
 #endif
 }
 
@@ -315,7 +475,7 @@ void Utils::clearSystemProxy()
         macOSDisableSystemProxy(macOSProxyType::SOCKSFirewallProxy, service);
     }
 #elif defined(Q_OS_LINUX)
-    return;
+    linuxClearSystemProxy();
 #endif
 }
 

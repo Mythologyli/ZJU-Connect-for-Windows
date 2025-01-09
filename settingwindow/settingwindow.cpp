@@ -63,6 +63,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             settings->setValue("ZJUConnect/Route", ui->routeCheckBox->isChecked());
             settings->setValue("ZJUConnect/SecondaryDNS", ui->secondaryDnsLineEdit->text());
             settings->setValue("ZJUConnect/ShadowsocksUrl", ui->shadowsocksUrlLineEdit->text());
+            settings->setValue("ZJUConnect/SystemProxyBypass", ui->systemProxyBypassLineEdit->text());
             settings->setValue("ZJUConnect/KeepAlive", ui->keepAliveCheckBox->isChecked());
             settings->setValue("ZJUConnect/TunMode", ui->tunCheckBox->isChecked());
             settings->setValue("ZJUConnect/DNSHijack", ui->dnsHijackCheckBox->isChecked());
@@ -142,6 +143,7 @@ void SettingWindow::loadSettings()
     ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", false).toBool());
     ui->secondaryDnsLineEdit->setText(settings->value("ZJUConnect/SecondaryDNS", "").toString());
     ui->shadowsocksUrlLineEdit->setText(settings->value("ZJUConnect/ShadowsocksUrl", "").toString());
+    ui->systemProxyBypassLineEdit->setText(settings->value("ZJUConnect/SystemProxyBypass", "localhost;127.*;::1").toString());
     ui->keepAliveCheckBox->setChecked(settings->value("ZJUConnect/KeepAlive", true).toBool());
     ui->tunCheckBox->setChecked(settings->value("ZJUConnect/TunMode", false).toBool());
     ui->dnsHijackCheckBox->setChecked(settings->value("ZJUConnect/DNSHijack", false).toBool());
