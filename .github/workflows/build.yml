@@ -17,7 +17,8 @@ on:
         description: "Version to build (e.g. v0.0.0)"
 
 env:
-  QT_VERSION: '6.8.*'
+  QT_VERSION: '6.8.1'
+  LINUX_OPENSSL_VERSION: '3.0.15'
   TARGET_NAME: 'HITszConnectForWindows'
   DISPLAY_NAME: 'HITsz Connect for Windows'
 
@@ -55,7 +56,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
       - name: Download and copy files
         env:
@@ -128,7 +129,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
       - name: Download and copy files
         env:
@@ -184,7 +185,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
       - name: Download and copy files
         run: |
@@ -247,7 +248,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
       - name: Download and copy files
         run: |
@@ -310,20 +311,21 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel 4
+          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
       - name: Download and copy files
         run: |
           # For package in Ubuntu 20.04, we have to install openssl 3.
-          wget -O openssl.tar.gz https://www.openssl.org/source/openssl-3.0.15.tar.gz
+          wget -O openssl.tar.gz https://www.openssl.org/source/openssl-${{ env.LINUX_OPENSSL_VERSION }}.tar.gz
           tar -zxf openssl.tar.gz
-          cd openssl/
+          cd openssl-${{ env.LINUX_OPENSSL_VERSION }}/
           ./config --prefix=/usr/local/openssl
-          make -j4
+          make -j$(nproc)
           sudo make install
           sudo ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
           sudo echo '/usr/local/openssl/lib64' > /etc/ld.so.conf.d/openssl.conf
           openssl version
+          cd ..
 
           sudo apt install -y libxcb-cursor0 fuse
 
