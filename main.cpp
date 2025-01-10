@@ -15,13 +15,14 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName(Utils::APP_NAME);
     QApplication::setApplicationDisplayName(Utils::APP_NAME);
     QApplication::setApplicationVersion(PROJ_VER);
+    QLocale::setDefault(QLocale(QLocale::Chinese, QLocale::SimplifiedChineseScript, QLocale::China));
 
     QTranslator qtTranslator;
     if (qtTranslator.load(QLocale(QLocale::Chinese, QLocale::SimplifiedChineseScript, QLocale::China),
-                          QString("qtbase"), QString("_"), QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
+                          QString("qt"), QString("_"), QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
         app.installTranslator(&qtTranslator);
     else
-        qDebug() << "Failed to load qtbase_zh_CN.qm";
+        qDebug() << "Failed to load qt_zh_CN.qm";
 
     MainWindow mainWindow;
 
