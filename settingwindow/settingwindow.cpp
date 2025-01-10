@@ -143,7 +143,7 @@ void SettingWindow::loadSettings()
     ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", false).toBool());
     ui->secondaryDnsLineEdit->setText(settings->value("ZJUConnect/SecondaryDNS", "").toString());
     ui->shadowsocksUrlLineEdit->setText(settings->value("ZJUConnect/ShadowsocksUrl", "").toString());
-    ui->systemProxyBypassLineEdit->setText(settings->value("ZJUConnect/SystemProxyBypass", "localhost;127.*;::1").toString());
+    ui->systemProxyBypassLineEdit->setText(settings->value("ZJUConnect/SystemProxyBypass", "localhost").toString());
     ui->keepAliveCheckBox->setChecked(settings->value("ZJUConnect/KeepAlive", true).toBool());
     ui->tunCheckBox->setChecked(settings->value("ZJUConnect/TunMode", false).toBool());
     ui->dnsHijackCheckBox->setChecked(settings->value("ZJUConnect/DNSHijack", false).toBool());

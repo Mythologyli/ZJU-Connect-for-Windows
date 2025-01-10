@@ -24,15 +24,7 @@ void windowsSetProxyForAllConnections(const QString &proxyServer, const QString 
     unsigned long optionListSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
 
     optionsArr[1].dwOption = INTERNET_PER_CONN_FLAGS;
-    optionsArr[1].Value.dwValue = 0;
-    if (proxyServer != "")
-    {
-        optionsArr[1].Value.dwValue = PROXY_TYPE_DIRECT | PROXY_TYPE_PROXY;
-    }
-    else
-    {
-        optionsArr[1].Value.dwValue = PROXY_TYPE_DIRECT;
-    }
+    optionsArr[1].Value.dwValue = PROXY_TYPE_DIRECT | PROXY_TYPE_PROXY;
 
     optionsArr[0].dwOption = INTERNET_PER_CONN_PROXY_SERVER;
     auto *proxyServerWStr = (wchar_t *)calloc(sizeof(wchar_t), proxyServer.length() + 1);
@@ -86,6 +78,54 @@ void windowsSetProxyForAllConnections(const QString &proxyServer, const QString 
 
     free(proxyServerWStr);
     free(bypassWStr);
+#endif
+}
+
+void windowsClearProxyForAllConnections()
+{
+#if defined(Q_OS_WINDOWS)
+    INTERNET_PER_CONN_OPTION_LIST optionList;
+    INTERNET_PER_CONN_OPTION optionsArr[1];
+    unsigned long optionListSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
+
+    optionsArr[0].dwOption = INTERNET_PER_CONN_FLAGS;
+    optionsArr[0].Value.dwValue = PROXY_TYPE_DIRECT;
+
+    optionList.dwSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
+    optionList.pszConnection = nullptr;
+    optionList.dwOptionCount = 1;
+    optionList.dwOptionError = 0;
+    optionList.pOptions = optionsArr;
+
+    InternetSetOption(nullptr, INTERNET_OPTION_PER_CONNECTION_OPTION, &optionList, optionListSize);
+
+    DWORD dwCb = 0;
+    DWORD dwRet = ERROR_SUCCESS;
+    DWORD dwEntries = 0;
+    LPRASENTRYNAME lpRasEntryName = nullptr;
+
+    dwRet = RasEnumEntries(nullptr, nullptr, lpRasEntryName, &dwCb, &dwEntries);
+
+    if (dwRet == ERROR_BUFFER_TOO_SMALL)
+    {
+        lpRasEntryName = (LPRASENTRYNAME)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwCb);
+        if (lpRasEntryName == nullptr)
+            return;
+        lpRasEntryName[0].dwSize = sizeof(RASENTRYNAME);
+
+        dwRet = RasEnumEntries(nullptr, nullptr, lpRasEntryName, &dwCb, &dwEntries);
+
+        if (ERROR_SUCCESS == dwRet)
+        {
+            for (DWORD i = 0; i < dwEntries; i++)
+            {
+                optionList.pszConnection = lpRasEntryName[i].szEntryName;
+                InternetSetOption(nullptr, INTERNET_OPTION_PER_CONNECTION_OPTION, &optionList, optionListSize);
+            }
+        }
+
+        HeapFree(GetProcessHeap(), 0, lpRasEntryName);
+    }
 #endif
 }
 
@@ -465,7 +505,7 @@ void Utils::setSystemProxy(int http_port, int socks_port, const QString &bypass)
 void Utils::clearSystemProxy()
 {
 #if defined(Q_OS_WINDOWS)
-    windowsSetProxyForAllConnections("", "");
+    windowsClearProxyForAllConnections();
 #elif defined(Q_OS_MACOS)
     QStringList activeServices = macOSGetActiveNetworkServices();
     for (const QString &service : activeServices)
