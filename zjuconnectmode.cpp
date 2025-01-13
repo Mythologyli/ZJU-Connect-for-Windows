@@ -36,7 +36,7 @@ void MainWindow::setModeToZjuConnect()
     addLog("工作模式设置为：RVPN");
 
     // 连接服务器
-    connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString &output)
+    connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString& output)
     {
         ui->logPlainTextEdit->appendPlainText(output);
     });
@@ -58,7 +58,7 @@ void MainWindow::setModeToZjuConnect()
             !isZjuConnectAccessDenied &&
             settings->value("ZJUConnect/AutoReconnect", false).toBool() &&
             isZjuConnectLinked
-            )
+        )
         {
             QTimer::singleShot(settings->value("ZJUConnect/ReconnectTime", 1).toInt() * 1000, this, [&]()
             {
@@ -79,6 +79,11 @@ void MainWindow::setModeToZjuConnect()
         isZjuConnectLinked = false;
         ui->pushButton1->setText("连接服务器");
         ui->modeComboBox->setEnabled(true);
+
+        if (isSystemProxySet)
+        {
+            ui->pushButton2->click();
+        }
 
         if (isZjuConnectLoginError)
         {
@@ -144,18 +149,7 @@ void MainWindow::setModeToZjuConnect()
                 }
                 else
                 {
-                    isZjuConnectLinked = false;
-
                     zjuConnectController->stop();
-
-                    if (isSystemProxySet)
-                    {
-                        ui->pushButton2->click();
-                    }
-
-                    ui->pushButton1->setText("连接服务器");
-                    ui->pushButton2->hide();
-                    ui->modeComboBox->setEnabled(true);
                 }
             });
 
@@ -165,7 +159,12 @@ void MainWindow::setModeToZjuConnect()
             {
                 if (!isSystemProxySet)
                 {
-                    if (networkDetectResult.isProxyEnabled)
+                    QSettings proxySettings(
+                        R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings)",
+                        QSettings::NativeFormat
+                    );
+
+                    if (proxySettings.value("ProxyEnable", 0).toInt() == 1)
                     {
                         QMessageBox messageBox(this);
                         messageBox.setWindowTitle("警告");
