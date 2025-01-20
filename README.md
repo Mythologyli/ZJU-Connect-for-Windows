@@ -18,7 +18,8 @@
 - **macOS 用户**：下载 `HITsz-Connect-for-Windows-vX.X.X-macOS-ARCH.dmg` ，按照镜像内部指示安装，并运行修复脚本；
   - 如果你遇到“Apple 无法检查 App 是否包含恶意软件”等报错，请参考： [Apple 支持](https://support.apple.com/zh-cn/guide/mac-help/mchleab3a043/mac)
 - **Linux 用户**：下载 `HITsz-Connect-for-Windows-vX.X.X-linux-ARCH.AppImage` ，赋予执行权限，运行即可；
-  - AppImage 仅支持系统 `glibc >= 2.31` 的发行版，Ubuntu 20.04 及以上版本可以正常运行；
+  - AppImage x64 仅支持系统 `glibc >= 2.31` 的发行版，Ubuntu 20.04 及以上版本可以正常运行（受限于 GitHub Actions Runner）；
+  - AppImage arm64 仅支持系统 `glibc >= 2.38` 的发行版，Ubuntu 24.04 及以上版本可以正常运行（受限于 Qt 官方：[参考](https://doc.qt.io/qt-6/supported-platforms.html)）；
   - Arch Linux 用户请等待 AUR 包的提交；
   - 如果遇到因依赖问题无法运行的情况，请自行编译运行。
 
