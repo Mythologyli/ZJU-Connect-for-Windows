@@ -135,7 +135,7 @@ jobs:
           mkdir "${{ env.DISPLAY_NAME }}"
           cd "${{ env.DISPLAY_NAME }}"
           cp ../build/Release/${{ env.TARGET_NAME }}.exe .
-          windeployqt.exe --qtpaths "$QT_DIR\bin\qtpaths.bat" ${{ env.TARGET_NAME }}.exe
+          $QT_DIR\bin\windeployqt.exe --qtpaths "$QT_DIR\bin\qtpaths.bat" ${{ env.TARGET_NAME }}.exe
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-arm64.zip
           tar -xf zju-connect-windows-arm64.zip
           rm zju-connect-windows-arm64.zip
