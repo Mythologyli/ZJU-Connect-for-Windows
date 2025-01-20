@@ -109,11 +109,6 @@ jobs:
           cache-key-prefix: 'install-qt-action'
           set-env: 'false'
 
-      - name: Set up cross-compilation environment
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: amd64_arm64
-
       - name: Configure
         env:
           NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
