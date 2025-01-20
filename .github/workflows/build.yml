@@ -381,7 +381,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jdpurcell/install-qt-action@arm64-hosts
+        uses: jdpurcell/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
           host: 'linux_arm64'
