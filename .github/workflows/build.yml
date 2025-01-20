@@ -109,11 +109,6 @@ jobs:
           cache-key-prefix: 'install-qt-action'
           set-env: 'false'
 
-      - name: Set up cross-compilation environment
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: amd64_arm64
-
       - name: Configure
         env:
           NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
@@ -123,15 +118,15 @@ jobs:
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
+            qt-cmake.bat -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
+            qt-cmake.bat -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
           }
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
+          qt-cmake.bat --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
       - name: Download and copy files
         env:
