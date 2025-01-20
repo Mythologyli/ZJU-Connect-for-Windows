@@ -48,15 +48,15 @@ jobs:
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -DCMAKE_BUILD_TYPE=Release -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -S . -B build
+            cmake -DNIGHTLY_BUILD=OFF -DREL_VER=$VER -DCMAKE_BUILD_TYPE=Release -S . -B build
           }
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
+          cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
 
       - name: Download and copy files
         env:
@@ -109,6 +109,11 @@ jobs:
           cache-key-prefix: 'install-qt-action'
           set-env: 'false'
 
+      - name: Set up cross-compilation environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_arm64
+
       - name: Configure
         env:
           NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
@@ -118,15 +123,19 @@ jobs:
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            qt-cmake.bat -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -DCMAKE_BUILD_TYPE=Release \
+              -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -A ARM64 \
+              -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
-            qt-cmake.bat -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
+            cmake -DNIGHTLY_BUILD=OFF -DREL_VER=$VER -DCMAKE_BUILD_TYPE=Release \
+              -DQT_HOST_PATH="${{ env.QT_HOST_PATH }}" -A ARM64 \
+              -S . -B build
           }
 
       - name: Build
         run: |
-          qt-cmake.bat --build build --target ${{ env.TARGET_NAME }} --config Release
+          cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
 
       - name: Download and copy files
         env:
@@ -174,15 +183,15 @@ jobs:
         run: |
           mkdir build
           if ${{ env.NIGHTLY_BUILD }} ; then
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_OSX_ARCHITECTURES="x86_64" -S . -B build
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -DCMAKE_OSX_ARCHITECTURES="x86_64" -S . -B build
           else
             VER=${{ env.RELEASE_VERSION }}
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -D CMAKE_OSX_ARCHITECTURES="x86_64" -S . -B build
+            cmake -DNIGHTLY_BUILD=OFF -DREL_VER=${VER#v} -DCMAKE_OSX_ARCHITECTURES="x86_64" -S . -B build
           fi
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
+          cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
 
       - name: Download and copy files
         run: |
@@ -237,15 +246,15 @@ jobs:
         run: |
           mkdir build
           if ${{ env.NIGHTLY_BUILD }} ; then
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_OSX_ARCHITECTURES="arm64" -S . -B build
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -DCMAKE_OSX_ARCHITECTURES="arm64" -S . -B build
           else
             VER=${{ env.RELEASE_VERSION }}
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -D CMAKE_OSX_ARCHITECTURES="arm64" -S . -B build
+            cmake -DNIGHTLY_BUILD=OFF -DREL_VER=${VER#v} -DCMAKE_OSX_ARCHITECTURES="arm64" -S . -B build
           fi
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
+          cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
 
       - name: Download and copy files
         run: |
@@ -300,15 +309,15 @@ jobs:
         run: |
           mkdir build
           if ${{ env.NIGHTLY_BUILD }} ; then
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           else
             VER=${{ env.RELEASE_VERSION }}
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=${VER#v} -S . -B build
+            cmake -DNIGHTLY_BUILD=OFF -DREL_VER=${VER#v} -S . -B build
           fi
 
       - name: Build
         run: |
-          cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
+          cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
 
       - name: Restore cached openssl
         id: cache-openssl
