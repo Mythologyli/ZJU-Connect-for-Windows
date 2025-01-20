@@ -381,10 +381,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jdpurcell/install-qt-action@arm64-hosts
         with:
           version: ${{ env.QT_VERSION }}
-          host: 'linux'
+          host: 'linux_arm64'
           target: 'desktop'
           arch: 'linux_gcc_arm64'
           modules: 'qt5compat'
