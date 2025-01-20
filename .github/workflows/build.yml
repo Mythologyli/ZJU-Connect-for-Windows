@@ -117,14 +117,13 @@ jobs:
         env:
           NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
-          EXTRA_CMAKE_ARGS: -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/windows-arm64.cmake
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) ${{ env.EXTRA_CMAKE_ARGS }} -S . -B build
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_TOOLCHAIN_FILE=..\cmake\toolchains\windows-arm64.cmake -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER ${{ env.EXTRA_CMAKE_ARGS }} -S . -B build
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -D CMAKE_TOOLCHAIN_FILE=..\cmake\toolchains\windows-arm64.cmake -S . -B build
           }
 
       - name: Build
