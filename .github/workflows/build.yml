@@ -141,6 +141,7 @@ jobs:
           tar -xf zju-connect-windows-arm64.zip
           rm zju-connect-windows-arm64.zip
           cp ../libs/wintun/bin/arm64/wintun.dll .
+          rm vc_redist.arm64.exe
           cd ..
           Compress-Archive -Path "${{ env.DISPLAY_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
 
@@ -412,7 +413,7 @@ jobs:
           sudo apt install -y libxcb-cursor0 fuse
 
           wget -O linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-aarch64.AppImage
-          wget -O linuxdeploy-plugin-qt https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-plugin-qt-aarch64.AppImage
+          wget -O linuxdeploy-plugin-qt https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-plugin-qt-arm64.AppImage
           chmod a+x linuxdeploy linuxdeploy-plugin-qt
 
           mkdir AppDir
