@@ -45,7 +45,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             settings->setValue("Common/Password", QString(ui->passwordLineEdit->text().toUtf8().toBase64()));
             settings->setValue("Common/AutoStart", ui->autoStartCheckBox->isChecked());
             settings->setValue("Common/ConnectAfterStart", ui->connectAfterStartCheckBox->isChecked());
-            settings->setValue("Common/checkUpdateAfterStart", ui->checkUpdateAfterStartCheckBox->isChecked());
+            settings->setValue("Common/CheckUpdateAfterStart", ui->checkUpdateAfterStartCheckBox->isChecked());
 
             settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
             settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
@@ -68,6 +68,8 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             settings->setValue("ZJUConnect/TunMode", ui->tunCheckBox->isChecked());
             settings->setValue("ZJUConnect/DNSHijack", ui->dnsHijackCheckBox->isChecked());
             settings->setValue("ZJUConnect/OutsideAccess", ui->outsideAccessCheckBox->isChecked());
+
+            settings->setValue("Common/ConfigVersion", Utils::CONFIG_VERSION);
 
             settings->sync();
         };
@@ -125,26 +127,26 @@ void SettingWindow::loadSettings()
 
     ui->autoStartCheckBox->setChecked(settings->value("Common/AutoStart", false).toBool());
     ui->connectAfterStartCheckBox->setChecked(settings->value("Common/ConnectAfterStart", false).toBool());
-    ui->checkUpdateAfterStartCheckBox->setChecked(settings->value("Common/checkUpdateAfterStart", true).toBool());
+    ui->checkUpdateAfterStartCheckBox->setChecked(settings->value("Common/CheckUpdateAfterStart", true).toBool());
 
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
     ui->dnsLineEdit->setText(settings->value("ZJUConnect/DNS", "10.248.98.30").toString());
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 11080).toInt());
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 11081).toInt());
-    ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", true).toBool());
+    ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", false).toBool());
     ui->proxyAllCheckBox->setChecked(settings->value("ZJUConnect/ProxyAll", false).toBool());
     ui->debugCheckBox->setChecked(settings->value("ZJUConnect/Debug", false).toBool());
     tcpPortForwarding = settings->value("ZJUConnect/TcpPortForwarding", "").toString();
     udpPortForwarding = settings->value("ZJUConnect/UdpPortForwarding", "").toString();
     ui->autoReconnectCheckBox->setChecked(settings->value("ZJUConnect/AutoReconnect", false).toBool());
     ui->reconnectTimeSpinBox->setValue(settings->value("ZJUConnect/ReconnectTime", 1).toInt());
-    ui->autoSetProxyCheckBox->setChecked(settings->value("ZJUConnect/AutoSetProxy", true).toBool());
+    ui->autoSetProxyCheckBox->setChecked(settings->value("ZJUConnect/AutoSetProxy", false).toBool());
     ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", false).toBool());
     ui->secondaryDnsLineEdit->setText(settings->value("ZJUConnect/SecondaryDNS", "").toString());
     ui->shadowsocksUrlLineEdit->setText(settings->value("ZJUConnect/ShadowsocksUrl", "").toString());
     ui->systemProxyBypassLineEdit->setText(settings->value("ZJUConnect/SystemProxyBypass", "localhost").toString());
-    ui->keepAliveCheckBox->setChecked(settings->value("ZJUConnect/KeepAlive", true).toBool());
+    ui->keepAliveCheckBox->setChecked(settings->value("ZJUConnect/KeepAlive", false).toBool());
     ui->tunCheckBox->setChecked(settings->value("ZJUConnect/TunMode", false).toBool());
     ui->dnsHijackCheckBox->setChecked(settings->value("ZJUConnect/DNSHijack", false).toBool());
     ui->outsideAccessCheckBox->setChecked(settings->value("ZJUConnect/OutsideAccess", false).toBool());

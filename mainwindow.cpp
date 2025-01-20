@@ -8,6 +8,9 @@
 #include <QDesktopServices>
 
 #include "mainwindow.h"
+
+#include <set>
+
 #include "ui_mainwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
 #include "utils/utils.h"
@@ -219,7 +222,7 @@ MainWindow::MainWindow(QWidget *parent) :
             }
         });
 
-    if (settings->value("Common/checkUpdateAfterStart", true).toBool())
+    if (settings->value("Common/CheckUpdateAfterStart", true).toBool())
     {
         checkUpdate();
     }
@@ -262,8 +265,25 @@ void MainWindow::checkUpdate()
 
 void MainWindow::upgradeSettings()
 {
-    int configVersion = settings->value("Common/ConfigVersion", 1).toInt();
-    // 备用
+    int configVersion = settings->value("Common/ConfigVersion", Utils::CONFIG_VERSION).toInt();
+
+    if (configVersion < Utils::CONFIG_VERSION)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("存在配置更新");
+        msgBox.setInformativeText("建议恢复默认设置，以使用优化的配置。\n\n是否恢复默认设置？");
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+
+        if (msgBox.exec() == QMessageBox::Ok)
+        {
+            settings->clear();
+            QMessageBox::information(this, "完成", "已恢复默认设置。");
+        }
+    }
+
+    settings->setValue("Common/ConfigVersion", Utils::CONFIG_VERSION);
+    settings->sync();
 }
 
 void MainWindow::showNotification(const QString &title, const QString &content, QSystemTrayIcon::MessageIcon icon)
@@ -288,11 +308,11 @@ void MainWindow::showNotification(const QString &title, const QString &content, 
 void MainWindow::cleanUpWhenQuit()
 {
     // 保存配置
-    if (settings->value("Common/ConfigVersion", "1").toInt() <= 2)
+    if (settings->value("Common/ConfigVersion", 0).toInt() <= Utils::CONFIG_VERSION)
     {
-        settings->setValue("Common/ConfigVersion", 2);
-        settings->sync();
+        settings->setValue("Common/ConfigVersion", Utils::CONFIG_VERSION);
     }
+    settings->sync();
 
     // 清除系统代理
     if (isSystemProxySet)

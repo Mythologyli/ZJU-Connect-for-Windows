@@ -11,6 +11,8 @@ namespace Utils
 
     const inline QString APP_NAME("HITsz Connect for Windows");
 
+    constexpr inline int CONFIG_VERSION = 3;
+
     QString ConsoleOutputToQString(const QByteArray &byteArray);
 
     void setWidgetFixedWhenHidden(QWidget *widget);

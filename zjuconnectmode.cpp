@@ -131,7 +131,7 @@ void MainWindow::initZjuConnect()
                         ui->pushButton1->setText("断开服务器");
                         ui->pushButton2->show();
 
-                        if (settings->value("ZJUConnect/AutoSetProxy", true).toBool())
+                        if (settings->value("ZJUConnect/AutoSetProxy", false).toBool())
                         {
                             ui->pushButton2->click();
                         }
@@ -144,8 +144,8 @@ void MainWindow::initZjuConnect()
                             settings->value("ZJUConnect/ServerPort", 443).toInt(),
                             settings->value("ZJUConnect/DNS").toString(),
                             settings->value("ZJUConnect/SecondaryDNS", "").toString(),
-                            !settings->value("ZJUConnect/MultiLine", true).toBool(),
-                            !settings->value("ZJUConnect/KeepAlive", true).toBool(),
+                            !settings->value("ZJUConnect/MultiLine", false).toBool(),
+                            !settings->value("ZJUConnect/KeepAlive", false).toBool(),
                             settings->value("ZJUConnect/ProxyAll", false).toBool(),
                             bind_prefix + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
                             bind_prefix + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
