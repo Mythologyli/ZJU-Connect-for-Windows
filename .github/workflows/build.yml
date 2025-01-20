@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -DCMAKE_BUILD_TYPE=Release -S . -B build
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH="$(git rev-parse --short=7 HEAD)" -DCMAKE_BUILD_TYPE=Release -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
             cmake -DNIGHTLY_BUILD=OFF -DREL_VER=$VER -DCMAKE_BUILD_TYPE=Release -S . -B build
@@ -119,7 +119,7 @@ jobs:
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -DCMAKE_BUILD_TYPE=Release -DQT_HOST_PATH="${{ env.QT_HOST_PATH }}" -A ARM64 -S . -B build
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH="$(git rev-parse --short=7 HEAD)" -DCMAKE_BUILD_TYPE=Release -DQT_HOST_PATH="${{ env.QT_HOST_PATH }}" -A ARM64 -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
             cmake -DNIGHTLY_BUILD=OFF -DREL_VER=$VER -DCMAKE_BUILD_TYPE=Release -DQT_HOST_PATH="${{ env.QT_HOST_PATH }}" -A ARM64 -S . -B build
