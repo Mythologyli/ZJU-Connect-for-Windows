@@ -118,14 +118,15 @@ jobs:
         env:
           NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
           RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
-          QT_HOST_PATH: ${{ github.workspace }}\Qt\${{ env.QT_VERSION }}\msvc2022_64
+          QT_HOST_PATH: ${{ github.workspace }}\..\Qt\${{ env.QT_VERSION }}\msvc2022_64
+          EXTRA_CMAKE_ARGS: 
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -S . -B build
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -D QT_HOST_PATH="${{ env.QT_HOST_PATH }}" -S . -B build
           }
 
       - name: Build
@@ -139,7 +140,7 @@ jobs:
           mkdir "${{ env.DISPLAY_NAME }}"
           cd "${{ env.DISPLAY_NAME }}"
           cp ../build/Release/${{ env.TARGET_NAME }}.exe .
-          windeployqt.exe ${{ env.TARGET_NAME }}.exe
+          windeployqt.exe --qtpaths "$QT_DIR\bin\qtpaths.bat" ${{ env.TARGET_NAME }}.exe
           curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-arm64.zip
           tar -xf zju-connect-windows-arm64.zip
           rm zju-connect-windows-arm64.zip
