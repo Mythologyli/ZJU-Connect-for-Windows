@@ -86,16 +86,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install host Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: ${{ env.QT_VERSION }}
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_msvc2022_64'
-          modules: 'qt5compat'
-          cache: 'true'
-          cache-key-prefix: 'install-qt-action'
+      # - name: Install host Qt
+      #   uses: jurplel/install-qt-action@v3
+      #   with:
+      #     version: ${{ env.QT_VERSION }}
+      #     host: 'windows'
+      #     target: 'desktop'
+      #     arch: 'win64_msvc2022_64'
+      #     modules: 'qt5compat'
+      #     cache: 'true'
+      #     cache-key-prefix: 'install-qt-action'
 
       - name: Install target Qt
         uses: jurplel/install-qt-action@v3
@@ -120,10 +120,10 @@ jobs:
         run: |
           mkdir build
           if ( [bool]::Parse("${{ env.NIGHTLY_BUILD }}") ) {
-            cmake -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -D CMAKE_TOOLCHAIN_FILE=..\cmake\toolchains\windows-arm64.cmake -S . -B build
+            Tools/ -D NIGHTLY_BUILD=ON -D GIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
           } else {
             $VER = "${{ env.RELEASE_VERSION }}".substring(1)
-            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -D CMAKE_TOOLCHAIN_FILE=..\cmake\toolchains\windows-arm64.cmake -S . -B build
+            cmake -D NIGHTLY_BUILD=OFF -D REL_VER=$VER -S . -B build
           }
 
       - name: Build
