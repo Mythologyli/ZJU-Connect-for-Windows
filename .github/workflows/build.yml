@@ -70,6 +70,7 @@ jobs:
           tar -xf zju-connect-windows-amd64.zip
           rm zju-connect-windows-amd64.zip
           cp ../libs/wintun/bin/amd64/wintun.dll .
+          rm vc_redist.x64.exe
           cd ..
           Compress-Archive -Path "${{ env.DISPLAY_NAME }}" -DestinationPath ${{ env.ARCHIVE_NAME }}.zip
 
@@ -371,6 +372,76 @@ jobs:
           name: ${{ env.ARCHIVE_NAME }}
           path: ${{ env.ARCHIVE_NAME }}.AppImage
 
+  build-linux-arm64:
+    runs-on: ubuntu-22.04-arm
+    env:
+      ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}-linux-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'linux_arm64'
+          target: 'desktop'
+          arch: 'linux_gcc_arm64'
+          modules: 'qt5compat'
+          cache: 'true'
+          cache-key-prefix: 'install-qt-action'
+
+      - name: Configure
+        env:
+          NIGHTLY_BUILD: ${{ inputs.nightly || github.event_name != 'release' }}
+          RELEASE_VERSION: ${{ inputs.version || github.event.release.tag_name }}
+        run: |
+          mkdir build
+          if ${{ env.NIGHTLY_BUILD }} ; then
+            cmake -DNIGHTLY_BUILD=ON -DGIT_HASH=$(git rev-parse --short=7 HEAD) -S . -B build
+          else
+            VER=${{ env.RELEASE_VERSION }}
+            cmake -DNIGHTLY_BUILD=OFF -DREL_VER=${VER#v} -S . -B build
+          fi
+
+      - name: Build
+        run: |
+          cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
+
+      - name: Download and copy files
+        run: |
+          sudo apt install -y libxcb-cursor0 fuse
+
+          wget -O linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-aarch64.AppImage
+          wget -O linuxdeploy-plugin-qt https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-plugin-qt-aarch64.AppImage
+          chmod a+x linuxdeploy linuxdeploy-plugin-qt
+
+          mkdir AppDir
+          mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/scalable/apps
+
+          cp build/${{ env.TARGET_NAME }} AppDir/usr/bin/
+          wget -O zju-connect-linux-arm64.zip https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-linux-arm64.zip
+          unzip zju-connect-linux-arm64.zip
+          cp zju-connect AppDir/usr/bin/
+          cp resource/icon.png AppDir/usr/share/icons/hicolor/scalable/apps/${{ env.TARGET_NAME }}.png
+
+          cat <<EOF > AppDir/usr/share/applications/${{ env.TARGET_NAME }}.desktop
+          [Desktop Entry]
+          Name=${{ env.DISPLAY_NAME }}
+          Exec=${{ env.TARGET_NAME }}
+          Icon=${{ env.TARGET_NAME }}
+          Type=Application
+          Categories=Network;Security;
+          EOF
+
+          ./linuxdeploy --appdir AppDir --output appimage --plugin qt
+          mv *.AppImage ${{ env.ARCHIVE_NAME }}.AppImage
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARCHIVE_NAME }}
+          path: ${{ env.ARCHIVE_NAME }}.AppImage
+
   release:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
@@ -380,6 +451,7 @@ jobs:
       - build-macos-x64
       - build-macos-arm64
       - build-linux-x64
+      - build-linux-arm64
     env:
       ARCHIVE_PREFIX: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
