@@ -126,7 +126,7 @@ jobs:
 
       - name: Build
         run: |
-          qt-cmake.bat --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
+          qt-cmake.bat --build build --target ${{ env.TARGET_NAME }} --config Release
 
       - name: Download and copy files
         env:
