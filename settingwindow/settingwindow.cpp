@@ -180,7 +180,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                     );
                     autoStartSettings.setValue(
                         "ZjuConnectForWindows",
-                        QCoreApplication::applicationFilePath().replace('/', '\\')
+                        "\"" + QCoreApplication::applicationFilePath().replace('/', '\\') + "\" -s"
                     );
                 }
                 else
