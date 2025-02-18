@@ -1,7 +1,9 @@
 #include <QFileInfo>
+#include <QFileDialog>
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QHostAddress>
+#include <QStandardPaths>
 
 #include "settingwindow.h"
 #include "ui_settingwindow.h"
@@ -87,7 +89,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
         applySettings();
     });
 
-    connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked,
+    connect(ui->resetDefaultPushButton, &QPushButton::clicked,
         [&]()
         {
             int status = QMessageBox::warning(this, "警告", "将会重置所有设置，是否继续？", QMessageBox::Ok, QMessageBox::Cancel);
@@ -98,6 +100,41 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                 loadSettings();
             }
         });
+
+    connect(ui->importPushButton, &QPushButton::clicked,
+            [&]()
+            {
+                QString filename = QFileDialog::getOpenFileName(this, "选择配置文件",
+                    QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
+                    "Config Ini(*.ini);;All Files(*.*)");
+                if (filename.isEmpty()) {
+                    QMessageBox::critical(this, "错误", "未选择配置文件，不会带来任何更改。");
+                    return;
+                }
+                QSettings newSettings(filename, QSettings::IniFormat);
+                for (const auto& key : newSettings.allKeys()) {
+                    settings->setValue(key, newSettings.value(key));
+                }
+                settings->sync();
+                loadSettings();
+            });
+
+    connect(ui->exportPushButton, &QPushButton::clicked,
+            [&]()
+            {
+                QString filename = QFileDialog::getSaveFileName(this, "选择保存位置",
+                    QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
+                    "Config Ini(*.ini);;All Files(*.*)");
+                if (filename.isEmpty())
+                {
+                    QMessageBox::critical(this, "错误", "未选择配置文件保存位置。");
+                    return;
+                }
+                settings->sync();
+                if (QFile::exists(filename))
+                    QFile::remove(filename);
+                QFile::copy(settings->fileName(), filename);
+            });
 
     connect(ui->tunCheckBox, &QCheckBox::toggled,
         [&](bool checked)

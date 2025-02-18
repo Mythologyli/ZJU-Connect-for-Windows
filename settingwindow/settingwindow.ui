@@ -31,7 +31,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="credentialGroup">
          <property name="title">
           <string>保存的信息</string>
          </property>
@@ -46,7 +46,7 @@
           <item row="0" column="2" colspan="2">
            <widget class="QLineEdit" name="usernameLineEdit">
             <property name="placeholderText">
-             <string>VPN 账号（一般为学号）</string>
+             <string>VPN 账号</string>
             </property>
            </widget>
           </item>
@@ -70,7 +70,7 @@
              <enum>QLineEdit::EchoMode::Password</enum>
             </property>
             <property name="placeholderText">
-             <string>VPN 密码（一般为统一认证密码）</string>
+             <string>VPN 密码</string>
             </property>
            </widget>
           </item>
@@ -94,7 +94,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="onStartUpGroup">
          <property name="title">
           <string>启动时</string>
          </property>
@@ -169,6 +169,36 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="3" column="0" rowspan="2">
+        <widget class="QGroupBox" name="profileGroup">
+         <property name="title">
+          <string>配置文件</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="2">
+           <widget class="QPushButton" name="resetDefaultPushButton">
+            <property name="text">
+             <string>恢复默认</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="importPushButton">
+            <property name="text">
+             <string>导入</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="exportPushButton">
+            <property name="text">
+             <string>导出</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -453,7 +483,7 @@
    <item row="1" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok|QDialogButtonBox::StandardButton::RestoreDefaults</set>
+      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
