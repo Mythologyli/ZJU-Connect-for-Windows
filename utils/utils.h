@@ -7,9 +7,9 @@
 
 namespace Utils
 {
-    const inline QString REPO_NAME("chenx-dust/HITsz-Connect-for-Windows");
+    const inline QString REPO_NAME("PageChen04/HITsz-Connect-for-Windows");
 
-    const inline QString APP_NAME("HITsz Connect for Windows");
+    const inline QString APP_NAME("EZ4Connect");
 
     constexpr inline int CONFIG_VERSION = 3;
 

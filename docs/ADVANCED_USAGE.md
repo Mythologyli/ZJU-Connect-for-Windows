@@ -9,7 +9,7 @@
 ```yaml
 # 代理服务器
 proxies:
-  - name: "🖥 HITsz Connect"
+  - name: 🖥 EZ4Connect
     type: socks5
     server: 127.0.0.1
     port: 11080
@@ -24,7 +24,7 @@ proxy-groups:
     type: select
     proxies:
       - DIRECT
-      - 🖥 HITsz Connect
+      - 🖥 EZ4Connect
 ```
 
 并在规则中加入：
@@ -37,7 +37,7 @@ rules:
   # 可在此添加其它你需要代理的 ip 段，如课程中心
 ```
 
-这样即可通过简单的切换实现在校外使用本项目时选择 HITsz Connect 代理，在校内使用 DIRECT 直连。
+这样即可通过简单的切换实现在校外使用本项目时选择 EZ4Connect 代理，在校内使用 DIRECT 直连。
 
 ![proxy_group.png](/docs/proxy_group.png)
 

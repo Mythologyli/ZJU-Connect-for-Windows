@@ -19,8 +19,8 @@ on:
 env:
   QT_VERSION: '6.8.1'
   LINUX_OPENSSL_VERSION: '3.0.15'
-  TARGET_NAME: 'HITszConnectForWindows'
-  DISPLAY_NAME: 'HITsz Connect for Windows'
+  TARGET_NAME: 'EZ4Connect'
+  DISPLAY_NAME: 'EZ4Connect'
 
 jobs:
   build-windows-x64:
