@@ -4,6 +4,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QWidget>
+#include <QSettings>
 
 namespace Utils
 {
@@ -30,6 +31,8 @@ namespace Utils
     void setAutoStart(bool enable);
 
     bool credentialCheck(const QString &username, const QString &password);
+
+	void resetDefaultSettings(QSettings &settings);
 }
 
 #endif //UTILS_H

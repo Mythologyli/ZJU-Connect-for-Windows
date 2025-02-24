@@ -290,3 +290,56 @@ bool Utils::credentialCheck(const QString &username, const QString &password)
 
     return true;
 }
+
+void Utils::resetDefaultSettings(QSettings& settings)
+{
+    settings.setValue("Credential/Username", "");
+    settings.setValue("Credential/Password", "");
+    settings.setValue("Credential/TOTPSecret", "");
+
+    settings.setValue("Common/AutoStart", false);
+    settings.setValue("Common/ConnectAfterStart", false);
+    settings.setValue("Common/CheckUpdateAfterStart", false);
+    settings.setValue("Common/AutoSetProxy", false);
+    settings.setValue("Common/ReconnectTime", 1);
+    settings.setValue("Common/AutoReconnect", false);
+    settings.setValue("Common/SystemProxyBypass", "");
+
+
+    settings.setValue("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn");
+    settings.setValue("ZJUConnect/ServerPort", 443);
+    settings.setValue("ZJUConnect/DNS", "");
+    settings.setValue("ZJUConnect/DNSAuto", true);
+    settings.setValue("ZJUConnect/SecondaryDNS", "");
+    settings.setValue("ZJUConnect/DNSTTL", 3600);
+    settings.setValue("ZJUConnect/Socks5Port", 11080);
+    settings.setValue("ZJUConnect/HttpPort", 11081);
+    settings.setValue("ZJUConnect/ShadowsocksURL", "");
+    settings.setValue("ZJUConnect/DialDirectProxy", "");
+
+
+    settings.setValue("ZJUConnect/MultiLine", false);
+    settings.setValue("ZJUConnect/KeepAlive", false);
+    settings.setValue("ZJUConnect/OutsideAccess", false);
+
+    settings.setValue("ZJUConnect/SkipDomainResource", true);
+    settings.setValue("ZJUConnect/DisableServerConfig", false);
+    settings.setValue("ZJUConnect/ProxyAll", false);
+
+    settings.setValue("ZJUConnect/DisableZJUDNS", false);
+    settings.setValue("ZJUConnect/ZJUDefault", false);
+    settings.setValue("ZJUConnect/Debug", false);
+
+    settings.setValue("ZJUConnect/TunMode", false);
+    settings.setValue("ZJUConnect/AddRoute", false);
+    settings.setValue("ZJUConnect/DNSHijack", false);
+
+
+    settings.setValue("ZJUConnect/TcpPortForwarding", "");
+    settings.setValue("ZJUConnect/UdpPortForwarding", "");
+    settings.setValue("ZJUConnect/CustomDNS", "");
+    settings.setValue("ZJUConnect/CustomProxyDomain", "");
+    settings.setValue("ZJUConnect/ExtraArguments", "");
+
+    settings.setValue("Common/ConfigVersion", Utils::CONFIG_VERSION);
+}

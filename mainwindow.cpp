@@ -278,6 +278,7 @@ void MainWindow::upgradeSettings()
         if (msgBox.exec() == QMessageBox::Ok)
         {
             settings->clear();
+			Utils::resetDefaultSettings(*settings);
             QMessageBox::information(this, "完成", "已恢复默认设置。");
         }
     }
