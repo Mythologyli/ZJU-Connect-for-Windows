@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>486</width>
-    <height>433</height>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,13 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="locale">
@@ -207,66 +214,8 @@
        <string>高级</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="6" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel7">
-         <property name="text">
-          <string>自动重连时间（秒）</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="3">
-        <widget class="QLineEdit" name="secondaryDnsLineEdit">
-         <property name="placeholderText">
-          <string>不填则采用系统 DNS ，使用 DNS 劫持必须填写</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel8">
-         <property name="text">
-          <string>DNS 服务器</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="4">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0" colspan="4">
+       <item row="12" column="0" colspan="4">
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="autoSetProxyCheckBox">
-           <property name="toolTip">
-            <string>连接服务器后自动设置代理</string>
-           </property>
-           <property name="text">
-            <string>自动设置系统代理</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="multiLineCheckBox">
-           <property name="text">
-            <string>自动选择线路</string>
-           </property>
-           <property name="autoExclusive">
-            <bool>false</bool>
-           </property>
-           <property name="tristate">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="proxyAllCheckBox">
-           <property name="text">
-            <string>代理全部流量</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="1">
           <widget class="QCheckBox" name="keepAliveCheckBox">
            <property name="toolTip">
@@ -287,30 +236,40 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="multiLineCheckBox">
+           <property name="text">
+            <string>自动选择线路</string>
+           </property>
+           <property name="autoExclusive">
+            <bool>false</bool>
+           </property>
+           <property name="tristate">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="skipDomainResourceCheckBox">
+           <property name="text">
+            <string>忽略域名资源</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QCheckBox" name="autoSetProxyCheckBox">
+           <property name="toolTip">
+            <string>连接服务器后自动设置代理</string>
+           </property>
+           <property name="text">
+            <string>自动设置系统代理</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="2">
-          <widget class="QCheckBox" name="debugCheckBox">
+          <widget class="QCheckBox" name="proxyAllCheckBox">
            <property name="text">
-            <string>核心调试模式</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QCheckBox" name="dnsHijackCheckBox">
-           <property name="toolTip">
-            <string>TUN 模式下有效</string>
-           </property>
-           <property name="text">
-            <string>DNS 劫持（TUN）</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="routeCheckBox">
-           <property name="toolTip">
-            <string>TUN 模式下有效</string>
-           </property>
-           <property name="text">
-            <string>设置路由（TUN）</string>
+            <string>代理全部流量</string>
            </property>
           </widget>
          </item>
@@ -324,26 +283,43 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="routeCheckBox">
+           <property name="toolTip">
+            <string>TUN 模式下有效</string>
+           </property>
+           <property name="text">
+            <string>设置路由（TUN）</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QCheckBox" name="dnsHijackCheckBox">
+           <property name="toolTip">
+            <string>TUN 模式下有效</string>
+           </property>
+           <property name="text">
+            <string>DNS 劫持（TUN）</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" colspan="3">
+          <widget class="QCheckBox" name="debugCheckBox">
+           <property name="text">
+            <string>核心调试模式（谨慎开启，日志量过大会导致 UI 崩溃）</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel6">
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="serverAddressLineEdit">
          <property name="text">
-          <string>HTTP 代理端口</string>
+          <string>vpn.hitsz.edu.cn</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1" colspan="2">
-        <widget class="QSpinBox" name="reconnectTimeSpinBox">
-         <property name="maximum">
-          <number>86400</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="3">
+       <item row="6" column="1" colspan="3">
         <widget class="QSpinBox" name="httpPortSpinBox">
          <property name="maximum">
           <number>65535</number>
@@ -353,10 +329,65 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="3">
-        <widget class="QLineEdit" name="dnsLineEdit">
+       <item row="11" column="0" colspan="4">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel8">
          <property name="text">
-          <string>10.248.98.30</string>
+          <string>DNS 服务器</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" colspan="2">
+        <widget class="QCheckBox" name="dnsAutoCheckBox">
+         <property name="text">
+          <string>自动</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel9">
+         <property name="text">
+          <string>备用 DNS</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel11">
+         <property name="text">
+          <string>系统代理排除</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0" colspan="4">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel10">
+         <property name="text">
+          <string>Shadowsocks 服务器</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel5">
+         <property name="text">
+          <string>SOCKS5 代理端口</string>
          </property>
         </widget>
        </item>
@@ -370,42 +401,17 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel1">
-         <property name="text">
-          <string>服务器地址</string>
+       <item row="8" column="1">
+        <widget class="QSpinBox" name="reconnectTimeSpinBox">
+         <property name="maximum">
+          <number>86400</number>
+         </property>
+         <property name="value">
+          <number>1</number>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel5">
-         <property name="text">
-          <string>SOCKS5 代理端口</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="serverAddressLineEdit">
-         <property name="text">
-          <string>vpn.hitsz.edu.cn</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel9">
-         <property name="text">
-          <string>备用 DNS</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0" colspan="4">
-        <widget class="QPushButton" name="portForwardingPushButton">
-         <property name="text">
-          <string>设置端口转发</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="3">
+       <item row="5" column="1" colspan="3">
         <widget class="QSpinBox" name="socks5PortSpinBox">
          <property name="maximum">
           <number>65535</number>
@@ -415,27 +421,21 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>:</string>
+       <item row="9" column="1" colspan="3">
+        <widget class="QLineEdit" name="systemProxyBypassLineEdit">
+         <property name="placeholderText">
+          <string>与操作系统有关，一般用半角分号;进行分隔</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0" colspan="4">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
+       <item row="0" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel1">
+         <property name="text">
+          <string>服务器地址</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
-       <item row="6" column="3">
+       <item row="8" column="2" colspan="2">
         <widget class="QCheckBox" name="autoReconnectCheckBox">
          <property name="toolTip">
           <string>断线自动重连</string>
@@ -448,43 +448,57 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel10">
+       <item row="6" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel6">
          <property name="text">
-          <string>Shadowsocks 服务器</string>
+          <string>HTTP 代理端口</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1" colspan="3">
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="dnsLineEdit">
+         <property name="placeholderText">
+          <string>勾选自动，否则不应留空</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0" colspan="4">
+        <widget class="QPushButton" name="portForwardingPushButton">
+         <property name="text">
+          <string>设置端口转发</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel7">
+         <property name="text">
+          <string>自动重连时间（秒）</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1" colspan="3">
         <widget class="QLineEdit" name="shadowsocksUrlLineEdit">
          <property name="placeholderText">
           <string>不填则不启用，格式：ss://chiper:password@server:port</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel11">
-         <property name="text">
-          <string>系统代理排除</string>
+       <item row="4" column="1" colspan="3">
+        <widget class="QLineEdit" name="secondaryDnsLineEdit">
+         <property name="placeholderText">
+          <string>不填则采用系统 DNS ，使用 DNS 劫持必须填写</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1" colspan="3">
-        <widget class="QLineEdit" name="systemProxyBypassLineEdit">
-         <property name="placeholderText">
-          <string>用半角分号;进行分隔</string>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>:</string>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
-     </property>
     </widget>
    </item>
   </layout>
@@ -505,12 +519,6 @@
   <tabstop>multiLineCheckBox</tabstop>
   <tabstop>keepAliveCheckBox</tabstop>
   <tabstop>outsideAccessCheckBox</tabstop>
-  <tabstop>autoSetProxyCheckBox</tabstop>
-  <tabstop>proxyAllCheckBox</tabstop>
-  <tabstop>debugCheckBox</tabstop>
-  <tabstop>tunCheckBox</tabstop>
-  <tabstop>routeCheckBox</tabstop>
-  <tabstop>dnsHijackCheckBox</tabstop>
   <tabstop>portForwardingPushButton</tabstop>
  </tabstops>
  <resources/>

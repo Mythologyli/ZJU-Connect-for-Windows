@@ -103,6 +103,7 @@ void ZjuConnectController::start(
     const QString& server,
     int port,
     const QString& dns,
+    bool dnsAuto,
     const QString& secondaryDns,
     bool disableMultiLine,
     bool disableKeepAlive,
@@ -113,6 +114,7 @@ void ZjuConnectController::start(
     bool tunMode,
     bool addRoute,
     bool dnsHijack,
+    bool skipDomainResource,
     bool debugDump,
     const QString& tcpPortForwarding,
     const QString& udpPortForwarding
@@ -132,10 +134,17 @@ void ZjuConnectController::start(
         args.append(QString::number(port));
     }
 
-    if (!dns.isEmpty())
+    if (!dns.isEmpty() || dnsAuto)
     {
         args.append("-zju-dns-server");
-        args.append(dns);
+		if (dnsAuto)
+		{
+			args.append("auto");
+		}
+		else
+		{
+			args.append(dns);
+		}
     }
 
     if (!secondaryDns.isEmpty())
@@ -208,6 +217,11 @@ void ZjuConnectController::start(
         args.append("-udp-port-forwarding");
         args.append(udpPortForwarding);
     }
+
+	if (skipDomainResource)
+	{
+		args.append("-skip-domain-resource");
+	}
 
     QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     emit outputRead(timeString + " VPN 启动！参数：" + args.join(' '));

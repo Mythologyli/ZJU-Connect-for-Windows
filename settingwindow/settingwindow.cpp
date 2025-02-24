@@ -52,6 +52,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
             settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
             settings->setValue("ZJUConnect/DNS", ui->dnsLineEdit->text());
+            settings->setValue("ZJUConnect/DNSAuto", ui->dnsAutoCheckBox->isChecked());
             settings->setValue("ZJUConnect/Socks5Port", ui->socks5PortSpinBox->value());
             settings->setValue("ZJUConnect/HttpPort", ui->httpPortSpinBox->value());
             settings->setValue("ZJUConnect/MultiLine", ui->multiLineCheckBox->isChecked());
@@ -70,6 +71,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             settings->setValue("ZJUConnect/TunMode", ui->tunCheckBox->isChecked());
             settings->setValue("ZJUConnect/DNSHijack", ui->dnsHijackCheckBox->isChecked());
             settings->setValue("ZJUConnect/OutsideAccess", ui->outsideAccessCheckBox->isChecked());
+			settings->setValue("ZJUConnect/SkipDomainResource", ui->skipDomainResourceCheckBox->isChecked());
 
             settings->setValue("Common/ConfigVersion", Utils::CONFIG_VERSION);
 
@@ -143,6 +145,12 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
             ui->dnsHijackCheckBox->setEnabled(checked);
         });
 
+    connect(ui->dnsAutoCheckBox, &QCheckBox::toggled,
+        [&](bool checked)
+        {
+            ui->dnsLineEdit->setEnabled(!checked);
+        });
+
     connect(ui->passwordVisibleCheckBox, &QCheckBox::checkStateChanged,
         [&](Qt::CheckState state)
         {
@@ -168,7 +176,8 @@ void SettingWindow::loadSettings()
 
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "vpn.hitsz.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
-    ui->dnsLineEdit->setText(settings->value("ZJUConnect/DNS", "10.248.98.30").toString());
+    ui->dnsLineEdit->setText(settings->value("ZJUConnect/DNS").toString());
+    ui->dnsAutoCheckBox->setChecked(settings->value("ZJUConnect/DNSAuto", true).toBool());
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 11080).toInt());
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 11081).toInt());
     ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", false).toBool());
@@ -187,7 +196,10 @@ void SettingWindow::loadSettings()
     ui->tunCheckBox->setChecked(settings->value("ZJUConnect/TunMode", false).toBool());
     ui->dnsHijackCheckBox->setChecked(settings->value("ZJUConnect/DNSHijack", false).toBool());
     ui->outsideAccessCheckBox->setChecked(settings->value("ZJUConnect/OutsideAccess", false).toBool());
+    ui->skipDomainResourceCheckBox->setChecked(settings->value("ZJUConnect/SkipDomainResource", true).toBool());
 
     ui->routeCheckBox->setEnabled(ui->tunCheckBox->isChecked());
     ui->dnsHijackCheckBox->setEnabled(ui->tunCheckBox->isChecked());
+
+	ui->dnsLineEdit->setEnabled(!ui->dnsAutoCheckBox->isChecked());
 }

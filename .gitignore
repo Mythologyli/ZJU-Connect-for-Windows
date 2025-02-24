@@ -44,4 +44,6 @@
 CMakePresets.json
 CMakeUserPresets.json
 
+/.vscode
+
 !wintun.dll

@@ -11,7 +11,7 @@ namespace Utils
 
     const inline QString APP_NAME("EZ4Connect");
 
-    constexpr inline int CONFIG_VERSION = 3;
+    constexpr inline int CONFIG_VERSION = 4;
 
     QString ConsoleOutputToQString(const QByteArray &byteArray);
 
