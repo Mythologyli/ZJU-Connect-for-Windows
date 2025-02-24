@@ -12,36 +12,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="8" column="1">
-     <widget class="QPushButton" name="pushButton1">
-      <property name="text">
-       <string>连接服务器</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="3">
-     <widget class="QPushButton" name="pushButton2">
-      <property name="text">
-       <string>设置系统代理</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="2">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Policy::Fixed</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="0" column="1" colspan="3">
      <widget class="QLabel" name="applicationNameLabel">
       <property name="sizePolicy">
@@ -59,26 +29,10 @@
        <string>关注  OSA 谢谢喵！n(*≧▽≦*)n</string>
       </property>
       <property name="text">
-       <string>Application Name</string>
+       <string>EZ4Connect</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QPushButton" name="copyLogPushButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip">
-       <string>复制日志到剪贴板</string>
-      </property>
-      <property name="text">
-       <string>复制日志</string>
       </property>
      </widget>
     </item>
@@ -100,13 +54,53 @@ Line 2
       </property>
      </widget>
     </item>
-    <item row="0" column="0" rowspan="8">
+    <item row="4" column="0">
+     <widget class="QPushButton" name="copyLogPushButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>复制日志到剪贴板</string>
+      </property>
+      <property name="text">
+       <string>复制日志</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Policy::Minimum</enum>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="pushButton1">
+      <property name="text">
+       <string>连接服务器</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="4">
      <widget class="QPlainTextEdit" name="logPlainTextEdit">
       <property name="readOnly">
        <bool>true</bool>
       </property>
       <property name="maximumBlockCount">
        <number>1000</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="3">
+     <widget class="QPushButton" name="pushButton2">
+      <property name="text">
+       <string>设置系统代理</string>
       </property>
      </widget>
     </item>
@@ -122,6 +116,22 @@ Line 2
       </property>
      </widget>
     </item>
+    <item row="3" column="1" colspan="3">
+     <spacer name="horizontalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Policy::Preferred</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>220</width>
+        <height>0</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -129,7 +139,7 @@ Line 2
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
+     <width>600</width>
      <height>33</height>
     </rect>
    </property>
@@ -196,9 +206,6 @@ Line 2
   </action>
  </widget>
  <tabstops>
-  <tabstop>pushButton1</tabstop>
-  <tabstop>pushButton2</tabstop>
-  <tabstop>copyLogPushButton</tabstop>
   <tabstop>logPlainTextEdit</tabstop>
  </tabstops>
  <resources/>
