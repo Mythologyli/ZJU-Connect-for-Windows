@@ -5,76 +5,52 @@ ZjuConnectController::ZjuConnectController()
 {
     zjuConnectProcess = new QProcess(this);
 
-    connect(zjuConnectProcess, &QProcess::readyReadStandardOutput, this, [&]()
+    auto outputProcess = [&](const QString& output)
+        {
+            emit outputRead(output);
+
+            if (output.contains("Access is denied."))
+            {
+                emit error(ZJU_ERROR::ACCESS_DENIED);
+            }
+            else if (output.contains("listen failed"))
+            {
+                emit error(ZJU_ERROR::LISTEN_FAILED);
+            }
+            else if (output.contains("Invalid username or password!"))
+            {
+                emit error(ZJU_ERROR::INVALID_DETAIL);
+            }
+            else if (output.contains("You are trying brute-force login on this IP address."))
+            {
+                emit error(ZJU_ERROR::BRUTE_FORCE);
+            }
+            else if (output.contains("Login failed") || output.contains("too many login failures"))
+            {
+                emit error(ZJU_ERROR::OTHER_LOGIN_FAILED);
+            }
+            else if (output.contains("client setup error"))
+            {
+                emit error(ZJU_ERROR::CLIENT_FAILED);
+            }
+            else if (output.contains("panic"))
+            {
+                emit error(ZJU_ERROR::OTHER);
+            }
+        };
+
+    connect(zjuConnectProcess, &QProcess::readyReadStandardOutput, this, [&, outputProcess]()
     {
         QString output = Utils::ConsoleOutputToQString(zjuConnectProcess->readAllStandardOutput());
 
-        emit outputRead(output);
-
-        if (output.contains("Access is denied."))
-        {
-            emit error(ZJU_ERROR::ACCESS_DENIED);
-        }
-        else if (output.contains("listen failed"))
-        {
-            emit error(ZJU_ERROR::LISTEN_FAILED);
-        }
-        else if (output.contains("Invalid username or password!"))
-        {
-            emit error(ZJU_ERROR::INVALID_DETAIL);
-        }
-        else if (output.contains("You are trying brute-force login on this IP address."))
-        {
-            emit error(ZJU_ERROR::BRUTE_FORCE);
-        }
-        else if (output.contains("Login failed") || output.contains("too many login failures"))
-        {
-            emit error(ZJU_ERROR::OTHER_LOGIN_FAILED);
-        }
-        else if (output.contains("client setup error"))
-        {
-            emit error(ZJU_ERROR::CLIENT_FAILED);
-        }
-        else if (output.contains("panic"))
-        {
-            emit error(ZJU_ERROR::OTHER);
-        }
+		outputProcess(output);
     });
 
-    connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
+    connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&, outputProcess]()
     {
         QString output = Utils::ConsoleOutputToQString(zjuConnectProcess->readAllStandardError());
 
-        emit outputRead(output);
-
-        if (output.contains("Access is denied."))
-        {
-            emit error(ZJU_ERROR::ACCESS_DENIED);
-        }
-        else if (output.contains("listen failed"))
-        {
-            emit error(ZJU_ERROR::LISTEN_FAILED);
-        }
-        else if (output.contains("client setup error"))
-        {
-            emit error(ZJU_ERROR::CLIENT_FAILED);
-        }
-    	else if (output.contains("Invalid username or password!"))
-        {
-            emit error(ZJU_ERROR::INVALID_DETAIL);
-        }
-        else if (output.contains("You are trying brute-force login on this IP address."))
-        {
-            emit error(ZJU_ERROR::BRUTE_FORCE);
-        }
-        else if (output.contains("Login failed") || output.contains("too many login failures"))
-        {
-            emit error(ZJU_ERROR::OTHER_LOGIN_FAILED);
-        }
-        else if (output.contains("panic"))
-        {
-            emit error(ZJU_ERROR::OTHER);
-        }
+		outputProcess(output);
     });
 
     connect(zjuConnectProcess, &QProcess::errorOccurred, this, [&](QProcess::ProcessError err)
@@ -100,24 +76,33 @@ void ZjuConnectController::start(
     const QString& program,
     const QString& username,
     const QString& password,
+    const QString& totpSecret,
     const QString& server,
     int port,
     const QString& dns,
     bool dnsAuto,
     const QString& secondaryDns,
-    bool disableMultiLine,
-    bool disableKeepAlive,
-    bool proxyAll,
+    int dnsTtl,
     const QString& socksBind,
     const QString& httpBind,
     const QString& shadowsocksUrl,
+    const QString& dialDirectProxy,
+    bool disableMultiLine,
+    bool disableKeepAlive,
+    bool skipDomainResource,
+    bool disableServerConfig,
+    bool proxyAll,
+    bool disableZjuDns,
+    bool disableZjuConfig,
+    bool debugDump,
     bool tunMode,
     bool addRoute,
     bool dnsHijack,
-    bool skipDomainResource,
-    bool debugDump,
     const QString& tcpPortForwarding,
-    const QString& udpPortForwarding
+    const QString& udpPortForwarding,
+    const QString& customDNS,
+    const QString& customProxyDomain,
+    const QString& extraArguments
 )
 {
     QStringList args;
@@ -147,6 +132,12 @@ void ZjuConnectController::start(
 		}
     }
 
+    if (dnsTtl != 3600)
+    {
+        args.append("-dns-ttl");
+        args.append(QString::number(dnsTtl));
+    }
+
     if (!secondaryDns.isEmpty())
     {
         args.append("-secondary-dns-server");
@@ -163,9 +154,29 @@ void ZjuConnectController::start(
         args.append("-disable-keep-alive");
     }
 
+    if (disableZjuConfig)
+    {
+        args.append("-disable-zju-config");
+    }
+
+    if (disableZjuDns)
+    {
+        args.append("-disable-zju-dns");
+    }
+
+    if (disableServerConfig)
+    {
+        args.append("-disable-server-config");
+    }
+
     if (proxyAll)
     {
         args.append("-proxy-all");
+    }
+
+    if (skipDomainResource)
+    {
+        args.append("-skip-domain-resource");
     }
 
     if (tunMode)
@@ -206,6 +217,12 @@ void ZjuConnectController::start(
         args.append(shadowsocksUrl);
     }
 
+    if (!dialDirectProxy.isEmpty())
+    {
+        args.append("-dial-direct-proxy");
+        args.append(dialDirectProxy);
+    }
+
     if (!tcpPortForwarding.isEmpty())
     {
         args.append("-tcp-port-forwarding");
@@ -218,15 +235,39 @@ void ZjuConnectController::start(
         args.append(udpPortForwarding);
     }
 
-	if (skipDomainResource)
-	{
-		args.append("-skip-domain-resource");
-	}
+    if (!customDNS.isEmpty())
+    {
+        args.append("-custom-dns");
+        args.append(customDNS);
+    }
+
+    if (!customProxyDomain.isEmpty())
+    {
+        args.append("-custom-proxy-domain");
+        args.append(customProxyDomain);
+    }
+
+    if (!extraArguments.isEmpty())
+    {
+        args.append(extraArguments.split(" "));
+    }
 
     QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     emit outputRead(timeString + " VPN 启动！参数：" + args.join(' '));
 
-    zjuConnectProcess->start(program, QStringList({ "-username", username, "-password", password }) + args);
+    QStringList credentialList({
+            "-username", username,
+            "-password", password,
+        });
+
+    if (!totpSecret.isEmpty())
+    {
+        emit outputRead(timeString + " 使用了 TOTP");
+        credentialList.append("-totp-secret");
+        credentialList.append(totpSecret);
+    }
+
+    zjuConnectProcess->start(program, credentialList + args);
     zjuConnectProcess->waitForStarted();
     if (zjuConnectProcess->state() == QProcess::NotRunning)
     {

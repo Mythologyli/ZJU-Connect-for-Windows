@@ -9,7 +9,7 @@
 #include <QSettings>
 
 #include "loginwindow/loginwindow.h"
-#include "portforwardingwindow/portforwardingwindow.h"
+#include "extrasettingwindow/extrasettingwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
 #include "settingwindow/settingwindow.h"
 

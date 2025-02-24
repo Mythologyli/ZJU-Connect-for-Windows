@@ -34,7 +34,7 @@ set(SOURCE_FILES
     mainwindow.cpp
     zjuconnectmode.cpp
     zjuconnectcontroller/zjuconnectcontroller.cpp
-    portforwardingwindow/portforwardingwindow.cpp
+    extrasettingwindow/extrasettingwindow.cpp
     settingwindow/settingwindow.cpp
     loginwindow/loginwindow.cpp
     utils/utils.cpp

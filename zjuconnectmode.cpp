@@ -38,11 +38,11 @@ void MainWindow::initZjuConnect()
         if (
             zjuConnectError != ZJU_ERROR::NONE &&
             zjuConnectError != ZJU_ERROR::OTHER &&
-            settings->value("ZJUConnect/AutoReconnect", false).toBool() &&
+            settings->value("Common/AutoReconnect", false).toBool() &&
             isZjuConnectLinked
             )
         {
-            QTimer::singleShot(settings->value("ZJUConnect/ReconnectTime", 1).toInt() * 1000, this, [&]()
+            QTimer::singleShot(settings->value("Common/ReconnectTime", 1).toInt() * 1000, this, [&]()
             {
                 if (isZjuConnectLinked)
                 {
@@ -111,8 +111,8 @@ void MainWindow::initZjuConnect()
                         return;
                     }
 
-                    QString username_ = settings->value("Common/Username", "").toString();
-                    QString password_ = QByteArray::fromBase64(settings->value("Common/Password", "").toString().toUtf8());
+                    QString username_ = settings->value("Credential/Username", "").toString();
+                    QString password_ = QByteArray::fromBase64(settings->value("Credential/Password", "").toString().toUtf8());
 
                     auto startZjuConnect = [this](const QString &username, const QString &password) {
                         QString program_filename;
@@ -125,13 +125,13 @@ void MainWindow::initZjuConnect()
                             program_filename = "zju-connect";
                         }
                         QString program_path = QCoreApplication::applicationDirPath() + "/" + program_filename;
-						QString bind_prefix = settings->value("ZJUConnect/OutsideAccess", false).toBool() ? "0.0.0.0:" : "127.0.0.1:";
+						QString bind_prefix = settings->value("ZJUConnect/OutsideAccess", false).toBool() ? "[::]:" : "[::1]:";
 
                         isZjuConnectLinked = true;
                         ui->pushButton1->setText("断开服务器");
                         ui->pushButton2->show();
 
-                        if (settings->value("ZJUConnect/AutoSetProxy", false).toBool())
+                        if (settings->value("Common/AutoSetProxy", false).toBool())
                         {
                             ui->pushButton2->click();
                         }
@@ -140,24 +140,33 @@ void MainWindow::initZjuConnect()
                             program_path,
                             username,
                             password,
+                            settings->value("Credential/TOTPSecret").toString(),
                             settings->value("ZJUConnect/ServerAddress").toString(),
                             settings->value("ZJUConnect/ServerPort").toInt(),
                             settings->value("ZJUConnect/DNS").toString(),
 							settings->value("ZJUConnect/DNSAuto").toBool(),
                             settings->value("ZJUConnect/SecondaryDNS").toString(),
-                            !settings->value("ZJUConnect/MultiLine").toBool(),
-                            !settings->value("ZJUConnect/KeepAlive").toBool(),
-                            settings->value("ZJUConnect/ProxyAll").toBool(),
+                            settings->value("ZJUConnect/DNSTTL").toInt(),
                             bind_prefix + QString::number(settings->value("ZJUConnect/Socks5Port").toInt()),
                             bind_prefix + QString::number(settings->value("ZJUConnect/HttpPort").toInt()),
-                            settings->value("ZJUConnect/ShadowsocksUrl").toString(),
-                            settings->value("ZJUConnect/TunMode").toBool(),
-                            settings->value("ZJUConnect/Route").toBool(),
-                            settings->value("ZJUConnect/DNSHijack").toBool(),
-							settings->value("ZJUConnect/SkipDomainResource").toBool(),
+                            settings->value("ZJUConnect/ShadowsocksURL").toString(),
+                            settings->value("ZJUConnect/DialDirectProxy").toString(),
+                            !settings->value("ZJUConnect/MultiLine").toBool(),
+                            !settings->value("ZJUConnect/KeepAlive").toBool(),
+                            settings->value("ZJUConnect/SkipDomainResource").toBool(),
+                            settings->value("ZJUConnect/DisableServerConfig").toBool(),
+                            settings->value("ZJUConnect/ProxyAll").toBool(),
+                            settings->value("ZJUConnect/DisableZJUDNS").toBool(),
+                            !settings->value("ZJUConnect/ZJUDefault").toBool(),
                             settings->value("ZJUConnect/Debug").toBool(),
+                            settings->value("ZJUConnect/TunMode").toBool(),
+                            settings->value("ZJUConnect/AddRoute").toBool(),
+                            settings->value("ZJUConnect/DNSHijack").toBool(),
                             settings->value("ZJUConnect/TcpPortForwarding").toString(),
-                            settings->value("ZJUConnect/UdpPortForwarding").toString()
+                            settings->value("ZJUConnect/UdpPortForwarding").toString(),
+                            settings->value("ZJUConnect/CustomDNS", "").toString(),
+	                        settings->value("ZJUConnect/CustomProxyDomain", "").toString(),
+	                        settings->value("ZJUConnect/ExtraArguments", "").toString()
                         );
                 	};
 
@@ -171,8 +180,8 @@ void MainWindow::initZjuConnect()
                             {
                                 if (saveDetail)
                                 {
-                                    settings->setValue("Common/Username", username);
-                                    settings->setValue("Common/Password", QString(password.toUtf8().toBase64()));
+                                    settings->setValue("Credential/Username", username);
+                                    settings->setValue("Credential/Password", QString(password.toUtf8().toBase64()));
                                     settings->sync();
                                 }
                                 startZjuConnect(username, password);
@@ -221,7 +230,7 @@ void MainWindow::initZjuConnect()
 
                     Utils::setSystemProxy(settings->value("ZJUConnect/HttpPort", 11081).toInt(),
                                           settings->value("ZJUConnect/Socks5Port", 11080).toInt(),
-                                          settings->value("ZJUConnect/SystemProxyBypass", "localhost").toString());
+                                          settings->value("Common/SystemProxyBypass", "localhost").toString());
                     ui->pushButton2->setText("清除系统代理");
                     isSystemProxySet = true;
                 }

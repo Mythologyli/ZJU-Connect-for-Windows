@@ -1,9 +1,9 @@
-#include "portforwardingwindow.h"
-#include "ui_portforwardingwindow.h"
+#include "extrasettingwindow.h"
+#include "ui_extrasettingwindow.h"
 
-PortForwardingWindow::PortForwardingWindow(QDialog *parent) :
+ExtraSettingWindow::ExtraSettingWindow(QDialog *parent) :
     QDialog(parent),
-    ui(new Ui::PortForwardingWindow)
+    ui(new Ui::ExtraSettingWindow)
 {
     ui->setupUi(this);
 
@@ -20,7 +20,7 @@ PortForwardingWindow::PortForwardingWindow(QDialog *parent) :
                 QStringList tcpPortForwardingList;
                 QStringList udpPortForwardingList;
 
-                QStringList portForwardingList = ui->textEdit->toPlainText().split("\n");
+                QStringList portForwardingList = ui->forwardTextEdit->toPlainText().split("\n");
 
                 for (const auto &forwarding: portForwardingList)
                 {
@@ -43,17 +43,38 @@ PortForwardingWindow::PortForwardingWindow(QDialog *parent) :
                     }
                 }
 
-                emit applied(tcpPortForwardingList.join(","), udpPortForwardingList.join(","));
+				QStringList customDnsList;
+
+				for (const auto& hosts : ui->hostsTextEdit->toPlainText().split("\n"))
+				{
+					QStringList hostsItem = hosts.split(" ");
+					if (hostsItem.size() == 2)
+					{
+						customDnsList.append(
+							hostsItem[1].simplified() + ":" + hostsItem[0].simplified()
+						);
+					}
+				}
+
+				QStringList customProxyDomainsList = ui->proxyTextEdit->toPlainText().split("\n");
+
+                emit applied(
+                    tcpPortForwardingList.join(","),
+                    udpPortForwardingList.join(","),
+                    customDnsList.join(","),
+                    customProxyDomainsList.join(","),
+                    ui->extraArgTextEdit->toPlainText().replace("\n", " ")
+                );
             });
 
 }
 
-PortForwardingWindow::~PortForwardingWindow()
+ExtraSettingWindow::~ExtraSettingWindow()
 {
     delete ui;
 }
 
-void PortForwardingWindow::setPortForwarding(const QString &tcpPortForwarding, const QString &udpPortForwarding)
+void ExtraSettingWindow::setup(const QString& tcpPortForwarding, const QString& udpPortForwarding, const QString& customDns, const QString& customProxyDomains, const QString& extraArguments)
 {
     QStringList tcpPortForwardingList = tcpPortForwarding.split(",");
 
@@ -63,7 +84,7 @@ void PortForwardingWindow::setPortForwarding(const QString &tcpPortForwarding, c
 
         if (tcpPortForwardingItem.size() == 2)
         {
-            ui->textEdit->append(
+            ui->forwardTextEdit->append(
                 "TCP," + tcpPortForwardingItem[0].simplified() + "," + tcpPortForwardingItem[1].simplified()
             );
         }
@@ -77,9 +98,32 @@ void PortForwardingWindow::setPortForwarding(const QString &tcpPortForwarding, c
 
         if (udpPortForwardingItem.size() == 2)
         {
-            ui->textEdit->append(
+            ui->forwardTextEdit->append(
                 "UDP," + udpPortForwardingItem[0].simplified() + "," + udpPortForwardingItem[1].simplified()
             );
         }
     }
+
+    QStringList customDnsList = customDns.split(",");
+
+	for (const auto& hosts : customDnsList)
+	{
+		QStringList hostsItem = hosts.split(":");
+
+		if (hostsItem.size() == 2)
+		{
+			ui->hostsTextEdit->append(
+				hostsItem[1].simplified() + " " + hostsItem[0].simplified()
+			);
+		}
+	}
+
+	QStringList customProxyDomainsList = customProxyDomains.split(",");
+
+	for (const auto& domain : customProxyDomainsList)
+	{
+		ui->proxyTextEdit->append(domain.trimmed());
+	}
+
+	ui->extraArgTextEdit->setPlainText(extraArguments);
 }

@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QSettings>
 #include "ui_settingwindow.h"
-#include "../portforwardingwindow/portforwardingwindow.h"
+#include "../extrasettingwindow/extrasettingwindow.h"
 
 namespace Ui
 {
@@ -22,15 +22,19 @@ public:
 
 private:
     void loadSettings();
+    void applySettings();
 
     Ui::SettingWindow *ui;
 
     QSettings *settings;
 
-    PortForwardingWindow *portForwardingWindow;
+    ExtraSettingWindow *extraSettingWindow;
 
     QString tcpPortForwarding;
     QString udpPortForwarding;
+    QString customDNS;
+    QString customProxyDomain;
+    QString extraArguments;
 };
 
 #endif //SETTINGWINDOW_H
