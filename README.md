@@ -22,7 +22,7 @@
 - **Linux 用户**：下载 `EZ4Connect-vX.X.X-linux-ARCH.AppImage` ，赋予执行权限，运行即可；
   - AppImage x64 仅支持系统 `glibc >= 2.31` 的发行版，Ubuntu 20.04 及以上版本可以正常运行（受限于 GitHub Actions Runner）；
   - AppImage arm64 仅支持系统 `glibc >= 2.38` 的发行版，Ubuntu 24.04 及以上版本可以正常运行（受限于 Qt 官方：[参考](https://doc.qt.io/qt-6/supported-platforms.html)）；
-  - Arch Linux 用户请等待 AUR 包的提交（欢迎热心用户自行上传）；
+  - Arch Linux 用户推荐使用 [AUR](https://aur.archlinux.org/packages/ez4connect) 安装；
   - 如果遇到因依赖问题无法运行的情况，请自行编译运行。
 
 <div align="center">
@@ -35,9 +35,7 @@
 <img src="docs/config.png" width="400px">
 </div>
 
-3. 在主界面中点击“连接服务器”。在默认配置下，若连接正常，软件中日志会显示 `KeepAlive: OK` ；
-
-4. 如果只需进行校园网页浏览，则选择“设置系统代理”后即可使用。
+3. 在主界面中点击“连接服务器”。如果只需进行校园网页浏览，则选择“设置系统代理”后即可使用。
 
 如果需要配合 Clash / Mihomo 进行高级的分流操作，可以参见： [高级使用方式](docs/ADVANCED_USAGE.md)
 
