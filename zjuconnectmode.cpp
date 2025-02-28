@@ -228,9 +228,9 @@ void MainWindow::initZjuConnect()
                         }
                     }
 
-                    Utils::setSystemProxy(settings->value("ZJUConnect/HttpPort", 11081).toInt(),
-                                          settings->value("ZJUConnect/Socks5Port", 11080).toInt(),
-                                          settings->value("Common/SystemProxyBypass", "localhost").toString());
+                    Utils::setSystemProxy(settings->value("ZJUConnect/HttpPort").toInt(),
+                                          settings->value("ZJUConnect/Socks5Port").toInt(),
+                                          settings->value("Common/SystemProxyBypass").toString());
                     ui->pushButton2->setText("清除系统代理");
                     isSystemProxySet = true;
                 }

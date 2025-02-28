@@ -265,9 +265,13 @@ void MainWindow::checkUpdate()
 
 void MainWindow::upgradeSettings()
 {
-    int configVersion = settings->value("Common/ConfigVersion", Utils::CONFIG_VERSION).toInt();
+    int configVersion = settings->value("Common/ConfigVersion", -1).toInt();
 
-    if (configVersion < Utils::CONFIG_VERSION)
+    if (configVersion == -1)
+    {
+        Utils::resetDefaultSettings(*settings);
+    }
+    else if (configVersion < Utils::CONFIG_VERSION)
     {
         QMessageBox msgBox;
         msgBox.setText("存在配置更新");
