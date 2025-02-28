@@ -307,6 +307,9 @@ void linuxSetSystemProxy(const QString &proxyServer, int httpPort, int socksPort
                  qEnvironmentVariable("XDG_SESSION_DESKTOP") == "plasma";
     const auto configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
 
+    QString KDEver = qEnvironmentVariable("KDE_SESSION_VERSION");
+    QString kwriteconfigName = "kwriteconfig" + KDEver;
+
     //
     // Configure HTTP Proxies for HTTP, FTP and HTTPS
     // if (hasHTTP)
@@ -325,7 +328,7 @@ void linuxSetSystemProxy(const QString &proxyServer, int httpPort, int socksPort
             // for KDE:
             if (isKDE)
             {
-                actions << ProcessArgument{"kwriteconfig5",
+                actions << ProcessArgument{kwriteconfigName,
                                            {"--file", configPath + "/kioslaverc", //
                                             "--group", "Proxy Settings",          //
                                             "--key", protocol + "Proxy",          //
@@ -346,7 +349,7 @@ void linuxSetSystemProxy(const QString &proxyServer, int httpPort, int socksPort
             // for KDE:
             if (isKDE)
             {
-                actions << ProcessArgument{"kwriteconfig5",
+                actions << ProcessArgument{kwriteconfigName,
                                            {"--file", configPath + "/kioslaverc", //
                                             "--group", "Proxy Settings",          //
                                             "--key", "socksProxy",                //
@@ -367,11 +370,11 @@ void linuxSetSystemProxy(const QString &proxyServer, int httpPort, int socksPort
         // for KDE:
         if (isKDE)
         {
-            actions << ProcessArgument{"kwriteconfig5",
+            actions << ProcessArgument{kwriteconfigName,
                                        {"--file", configPath + "/kioslaverc", //
                                         "--group", "Proxy Settings",          //
                                         "--key", "ProxyType", "1"}};
-            actions << ProcessArgument{"kwriteconfig5",
+            actions << ProcessArgument{kwriteconfigName,
                                        {"--file", configPath + "/kioslaverc", //
                                         "--group", "Proxy Settings",          //
                                         "--key", "NoProxyFor", bypass}};
@@ -414,6 +417,9 @@ void linuxClearSystemProxy()
                        qEnvironmentVariable("XDG_SESSION_DESKTOP") == "plasma";
     const auto configRoot = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
 
+    QString KDEver = qEnvironmentVariable("KDE_SESSION_VERSION");
+    QString kwriteconfigName = "kwriteconfig" + KDEver;
+
     // Setting System Proxy Mode to: None
     {
         // for GNOME:
@@ -424,7 +430,7 @@ void linuxClearSystemProxy()
         // for KDE:
         if (isKDE)
         {
-            actions << ProcessArgument{"kwriteconfig5",
+            actions << ProcessArgument{kwriteconfigName,
                                        {"--file", configRoot + "/kioslaverc", //
                                         "--group", "Proxy Settings",          //
                                         "--key", "ProxyType", "0"}};
