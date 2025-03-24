@@ -789,7 +789,7 @@ void MainWindow::upgradeSettings()
                 );
                 autoStartSettings.setValue(
                     "ZjuConnectForWindows",
-                    QCoreApplication::applicationFilePath().replace('/', '\\')
+                    "\"" + QCoreApplication::applicationFilePath().replace('/', '\\') + "\" -s"
                 );
             }
         }
