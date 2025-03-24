@@ -44,20 +44,20 @@ ZjuConnectController::ZjuConnectController()
 }
 
 void ZjuConnectController::start(
-    const QString &program,
-    const QString &username,
-    const QString &password,
-    const QString &server,
+    const QString& program,
+    const QString& username,
+    const QString& password,
+    const QString& server,
     int port,
     bool disableMultiLine,
     bool proxyAll,
-    const QString &socksBind,
-    const QString &httpBind,
+    const QString& socksBind,
+    const QString& httpBind,
     bool tunMode,
     bool addRoute,
     bool debugDump,
-    const QString &tcpPortForwarding,
-    const QString &udpPortForwarding
+    const QString& tcpPortForwarding,
+    const QString& udpPortForwarding
 )
 {
     QList<QString> args = QStringList({"-username", username, "-password", password});

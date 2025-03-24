@@ -122,7 +122,8 @@ void MainWindow::setModeToL2tp()
                     disconnect(processForL2tp, &QProcess::finished, nullptr, nullptr);
                     connect(processForL2tp, &QProcess::finished, this, [&]()
                     {
-                        QString output = Utils::ConsoleOutputToQString(processForL2tp->readAllStandardOutput()).trimmed();
+                        QString output = Utils::ConsoleOutputToQString(processForL2tp->readAllStandardOutput()).
+                            trimmed();
                         if (output.contains("命令已完成") || output.contains("Command completed successfully"))
                         {
                             isL2tpLinked = true;
@@ -162,9 +163,9 @@ void MainWindow::setModeToL2tp()
                                     processForL2tpCheck->start(
                                         "ping",
                                         QStringList()
-                                            << "-n"
-                                            << "1"
-                                            << settings->value("L2TP/CheckIp", "223.5.5.5").toString()
+                                        << "-n"
+                                        << "1"
+                                        << settings->value("L2TP/CheckIp", "223.5.5.5").toString()
                                     );
                                 });
 
@@ -178,9 +179,9 @@ void MainWindow::setModeToL2tp()
                             if (output.contains("623"))
                             {
                                 output = "请检查 VPN 名称是否设置正确\n"
-                                         "如果你没有创建过 VPN，请使用高级-创建 L2TP VPN\n"
-                                         "如果你创建过 VPN，请打开系统设置-网络-VPN，将 VPN 名称填写在本软件设置-L2TP 中\n"
-                                         "详细信息为：\n" + output;
+                                    "如果你没有创建过 VPN，请使用高级-创建 L2TP VPN\n"
+                                    "如果你创建过 VPN，请打开系统设置-网络-VPN，将 VPN 名称填写在本软件设置-L2TP 中\n"
+                                    "详细信息为：\n" + output;
                             }
                             else if (output.contains("691"))
                             {
@@ -189,8 +190,8 @@ void MainWindow::setModeToL2tp()
                             else if (output.contains("789"))
                             {
                                 output = "连接失败！这个问题通常是注册表造成的\n"
-                                         "建议删除现有 VPN，然后使用高级-创建 L2TP VPN\n"
-                                         "如果您刚刚使用本程序创建了 VPN，请重启电脑\n详细信息为：\n" + output;
+                                    "建议删除现有 VPN，然后使用高级-创建 L2TP VPN\n"
+                                    "如果您刚刚使用本程序创建了 VPN，请重启电脑\n详细信息为：\n" + output;
                             }
                             else if (output.contains("868"))
                             {
@@ -209,9 +210,9 @@ void MainWindow::setModeToL2tp()
                     processForL2tp->start(
                         "rasdial",
                         QStringList()
-                            << l2tpName
-                            << settings->value("Common/Username").toString()
-                            << QByteArray::fromBase64(settings->value("Common/Password").toString().toUtf8())
+                        << l2tpName
+                        << settings->value("Common/Username").toString()
+                        << QByteArray::fromBase64(settings->value("Common/Password").toString().toUtf8())
                     );
 
                     addLog("正在连接 L2TP VPN: " + l2tpName);

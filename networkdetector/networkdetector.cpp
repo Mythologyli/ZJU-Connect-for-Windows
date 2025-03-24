@@ -1,4 +1,6 @@
 #include <QMessageBox>
+#include <QSettings>
+
 #include "networkdetector.h"
 #include "../utils/utils.h"
 

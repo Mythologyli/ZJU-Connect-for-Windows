@@ -1,4 +1,5 @@
 #include <QMessageBox>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "utils/utils.h"
@@ -69,7 +70,8 @@ void MainWindow::setModeToWebLogin()
                     disconnect(processForWebLogin, &QProcess::finished, nullptr, nullptr);
                     connect(processForWebLogin, &QProcess::finished, this, [&]()
                     {
-                        QString output = Utils::ConsoleOutputToQString(processForWebLogin->readAllStandardOutput()).trimmed();
+                        QString output = Utils::ConsoleOutputToQString(processForWebLogin->readAllStandardOutput()).
+                            trimmed();
                         if (output.contains("[Login Successful]") || output.contains("[Already Online]"))
                         {
                             isWebLogged = true;
@@ -84,14 +86,14 @@ void MainWindow::setModeToWebLogin()
                             if (output.contains("dhcp"))
                             {
                                 output = "IP 不在 DHCP 表中！\n"
-                                         "这通常表明您正在使用不支持网页认证登录的有线网/ZJUWLAN-Secure\n"
-                                         "详细信息为：\n" + output;
+                                    "这通常表明您正在使用不支持网页认证登录的有线网/ZJUWLAN-Secure\n"
+                                    "详细信息为：\n" + output;
                             }
                             else if (output.contains("User not found") || output.contains("Password is error"))
                             {
                                 output = "登录失败！\n"
-                                         "请检查设置中的网络账号和密码是否设置正确！\n"
-                                         "详细信息为：\n" + output;
+                                    "请检查设置中的网络账号和密码是否设置正确！\n"
+                                    "详细信息为：\n" + output;
                             }
 
                             addLog(output);
@@ -129,15 +131,15 @@ void MainWindow::setModeToWebLogin()
                     processForWebLogin->start(
                         "weblogin.exe",
                         QStringList()
-                            << "login"
-                            << "-u"
-                            << settings->value("Common/Username").toString()
-                            << "-p"
-                            << QByteArray::fromBase64(settings->value("Common/Password").toString().toUtf8())
-                            << "-i"
-                            << ip
-                            << "--url"
-                            << url
+                        << "login"
+                        << "-u"
+                        << settings->value("Common/Username").toString()
+                        << "-p"
+                        << QByteArray::fromBase64(settings->value("Common/Password").toString().toUtf8())
+                        << "-i"
+                        << ip
+                        << "--url"
+                        << url
                     );
 
                     addLog("正在进行网页认证登录，接口：" + ui->interfaceComboBox->currentText());
@@ -183,13 +185,13 @@ void MainWindow::setModeToWebLogin()
                     processForWebLogin->start(
                         "weblogin.exe",
                         QStringList()
-                            << "logout"
-                            << "-u"
-                            << settings->value("Common/Username").toString()
-                            << "-i"
-                            << ip
-                            << "--url"
-                            << url
+                        << "logout"
+                        << "-u"
+                        << settings->value("Common/Username").toString()
+                        << "-i"
+                        << ip
+                        << "--url"
+                        << url
                     );
 
                     addLog("正在注销网页认证，接口：" + ui->interfaceComboBox->currentText());

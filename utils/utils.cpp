@@ -10,9 +10,9 @@
 
 #include "utils.h"
 
-QString Utils::ConsoleOutputToQString(const QByteArray &byteArray)
+QString Utils::ConsoleOutputToQString(const QByteArray& byteArray)
 {
-    QTextCodec *gbkCodec = QTextCodec::codecForName("GBK");
+    QTextCodec* gbkCodec = QTextCodec::codecForName("GBK");
     QString gbkStr = gbkCodec->toUnicode(byteArray);
     QByteArray gbkByteArrayBack = gbkCodec->fromUnicode(gbkStr);
 
@@ -21,7 +21,7 @@ QString Utils::ConsoleOutputToQString(const QByteArray &byteArray)
         return gbkStr;
     }
 
-    QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
+    QTextCodec* utf8Codec = QTextCodec::codecForName("UTF-8");
     QString utf8Str = utf8Codec->toUnicode(byteArray);
     QByteArray utf8ByteArrayBack = utf8Codec->fromUnicode(utf8Str);
 
@@ -33,34 +33,36 @@ QString Utils::ConsoleOutputToQString(const QByteArray &byteArray)
     return QString::fromLocal8Bit(byteArray);
 }
 
-void Utils::setWidgetFixedWhenHidden(QWidget *widget)
+void Utils::setWidgetFixedWhenHidden(QWidget* widget)
 {
     QSizePolicy originPolicy = widget->sizePolicy();
     originPolicy.setRetainSizeWhenHidden(true);
     widget->setSizePolicy(originPolicy);
 }
 
-void Utils::showAboutMessageBox(QWidget *parent)
+void Utils::showAboutMessageBox(QWidget* parent)
 {
     QMessageBox messageBox(parent);
     messageBox.setWindowTitle("关于本软件");
     messageBox.setTextFormat(Qt::RichText);
     QString aboutText = QApplication::applicationName() + " v" + QApplication::applicationVersion() +
-                        "<br>基于 Qt 编写的 ZJUConnect 图形界面" +
-                        "<br>作者: <a href='https://myth.cx'>Myth</a>" +
-                        "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect-for-Windows'>https://github.com/Mythologyli/ZJU-Connect-for-Windows</a>" +
-                        "<br><br>zju-connect" +
-                        "<br>ZJU RVPN 客户端的 Go 语言实现，基于 EasierConnect" +
-                        "<br>作者: <a href='https://myth.cx'>Myth</a>" +
-                        "<br>项目主页: <a href='https://github.com/Mythologyli/zju-connect'>https://github.com/Mythologyli/zju-connect</a>" +
-                        "<br><br>EasierConnect" +
-                        "<br>EasyConnect 客户端的开源实现" +
-                        "<br>作者: <a href='https://github.com/lyc8503'>lyc8503</a>" +
-                        "<br>项目主页: <a href='https://github.com/lyc8503/EasierConnect'>https://github.com/lyc8503/EasierConnect</a>"
-                        "<br><br>zju-web-login" +
-                        "<br>ZJU 网页认证登录脚本" +
-                        "<br>作者: <a href='https://azuk.top'>Azuk 443</a>" +
-                        "<br>项目主页: <a href='https://github.com/Mythologyli/zju-web-login'>https://github.com/Mythologyli/zju-web-login</a>";
+        "<br>基于 Qt 编写的 ZJUConnect 图形界面" +
+        "<br>作者: <a href='https://myth.cx'>Myth</a>" +
+        "<br>项目主页: <a href='https://github.com/Mythologyli/ZJU-Connect-for-Windows'>https://github.com/Mythologyli/ZJU-Connect-for-Windows</a>"
+        +
+        "<br><br>zju-connect" +
+        "<br>ZJU RVPN 客户端的 Go 语言实现，基于 EasierConnect" +
+        "<br>作者: <a href='https://myth.cx'>Myth</a>" +
+        "<br>项目主页: <a href='https://github.com/Mythologyli/zju-connect'>https://github.com/Mythologyli/zju-connect</a>"
+        +
+        "<br><br>EasierConnect" +
+        "<br>EasyConnect 客户端的开源实现" +
+        "<br>作者: <a href='https://github.com/lyc8503'>lyc8503</a>" +
+        "<br>项目主页: <a href='https://github.com/lyc8503/EasierConnect'>https://github.com/lyc8503/EasierConnect</a>"
+        "<br><br>zju-web-login" +
+        "<br>ZJU 网页认证登录脚本" +
+        "<br>作者: <a href='https://azuk.top'>Azuk 443</a>" +
+        "<br>项目主页: <a href='https://github.com/Mythologyli/zju-web-login'>https://github.com/Mythologyli/zju-web-login</a>";
     messageBox.setText(aboutText);
     messageBox.setIconPixmap(QPixmap(":/resource/icon.png").scaled(
         100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation
@@ -68,7 +70,7 @@ void Utils::showAboutMessageBox(QWidget *parent)
     messageBox.exec();
 }
 
-void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString &bypass)
+void Utils::SetProxyForAllConnections(const QString& proxyServer, const QString& bypass)
 {
     INTERNET_PER_CONN_OPTION_LIST optionList;
     INTERNET_PER_CONN_OPTION optionsArr[3];
@@ -86,12 +88,12 @@ void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString 
     }
 
     optionsArr[0].dwOption = INTERNET_PER_CONN_PROXY_SERVER;
-    auto *proxyServerWStr = (wchar_t *) calloc(sizeof(wchar_t), proxyServer.length() + 1);
+    auto* proxyServerWStr = (wchar_t*)calloc(sizeof(wchar_t), proxyServer.length() + 1);
     proxyServer.toWCharArray(proxyServerWStr);
     optionsArr[0].Value.pszValue = proxyServerWStr;
 
     optionsArr[2].dwOption = INTERNET_PER_CONN_PROXY_BYPASS;
-    auto *bypassWStr = (wchar_t *) calloc(sizeof(wchar_t), bypass.length() + 1);
+    auto* bypassWStr = (wchar_t*)calloc(sizeof(wchar_t), bypass.length() + 1);
     bypass.toWCharArray(bypassWStr);
     optionsArr[2].Value.pszValue = bypassWStr;
 
@@ -112,7 +114,7 @@ void Utils::SetProxyForAllConnections(const QString &proxyServer, const QString 
 
     if (dwRet == ERROR_BUFFER_TOO_SMALL)
     {
-        lpRasEntryName = (LPRASENTRYNAME) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwCb);
+        lpRasEntryName = (LPRASENTRYNAME)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwCb);
         if (lpRasEntryName == nullptr)
         {
             free(proxyServerWStr);
@@ -152,16 +154,16 @@ void Utils::clearSystemProxy()
     SetProxyForAllConnections("", "");
 }
 
-QString Utils::getIpv4Address(const QString &interfaceName)
+QString Utils::getIpv4Address(const QString& interfaceName)
 {
     auto interfaces = QNetworkInterface::allInterfaces();
-    for (auto &singleInterface: interfaces)
+    for (auto& singleInterface : interfaces)
     {
         if (singleInterface.humanReadableName() == interfaceName)
         {
             auto addresses =
                 singleInterface.addressEntries();
-            for (auto &address: addresses)
+            for (auto& address : addresses)
             {
                 if (address.ip().protocol() == QAbstractSocket::IPv4Protocol)
                 {

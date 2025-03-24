@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QTimer>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"

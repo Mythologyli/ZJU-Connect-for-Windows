@@ -1,13 +1,15 @@
 #include <QStandardPaths>
 #include <QMessageBox>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QSysInfo>
-#include <windows.h>
-#include <shellapi.h>
 #include <QNetworkInterface>
 #include <QClipboard>
 #include <QDesktopServices>
+#include <QTimer>
+#include <QJsonDocument>
+#include <QJsonObject>
+
+#include <windows.h>
+#include <shellapi.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -15,7 +17,7 @@
 #include "utils/utils.h"
 
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -69,12 +71,12 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         switch (reason)
         {
-            case QSystemTrayIcon::Context:
-                trayMenu->exec(QCursor::pos());
-                break;
-            default:
-                show();
-                setWindowState(Qt::WindowState::WindowActive);
+        case QSystemTrayIcon::Context:
+            trayMenu->exec(QCursor::pos());
+            break;
+        default:
+            show();
+            setWindowState(Qt::WindowState::WindowActive);
         }
     });
     trayIcon->show();
@@ -142,7 +144,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                 SW_HIDE
                             );
 
-                            if (hInstance > (HINSTANCE) 32)
+                            if (hInstance > (HINSTANCE)32)
                             {
                                 addLog("创建 L2TP VPN 成功！");
 
@@ -178,19 +180,19 @@ MainWindow::MainWindow(QWidget *parent) :
                     process->start(
                         "powershell",
                         QStringList()
-                            << "-command"
-                            << "Add-VpnConnection"
-                            << "-Name"
-                            << '"' + settings->value("L2TP/Name", "ZJUVPN").toString() + '"'
-                            << "-ServerAddress"
-                            << "lns.zju.edu.cn"
-                            << "-TunnelType"
-                            << "L2tp"
-                            << "-EncryptionLevel"
-                            << "Optional"
-                            << "-AuthenticationMethod"
-                            << "('Chap','MSChapv2')"
-                            << "-RememberCredential"
+                        << "-command"
+                        << "Add-VpnConnection"
+                        << "-Name"
+                        << '"' + settings->value("L2TP/Name", "ZJUVPN").toString() + '"'
+                        << "-ServerAddress"
+                        << "lns.zju.edu.cn"
+                        << "-TunnelType"
+                        << "L2tp"
+                        << "-EncryptionLevel"
+                        << "Optional"
+                        << "-AuthenticationMethod"
+                        << "('Chap','MSChapv2')"
+                        << "-RememberCredential"
                     );
                 }
             });
@@ -200,7 +202,7 @@ MainWindow::MainWindow(QWidget *parent) :
             [&]()
             {
                 connect(networkDetector, &NetworkDetector::finished, this,
-                        [&](const NetworkDetectResult &result)
+                        [&](const NetworkDetectResult& result)
                         {
                             disconnect(networkDetector, &NetworkDetector::finished, this, nullptr);
                             networkDetectResult = result;
@@ -272,7 +274,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                     SW_HIDE
                                 );
 
-                                if (hInstance > (HINSTANCE) 32)
+                                if (hInstance > (HINSTANCE)32)
                                 {
                                     addLog("设置静态路由成功！");
 
@@ -340,7 +342,7 @@ MainWindow::MainWindow(QWidget *parent) :
                         SW_HIDE
                     );
 
-                    if (hInstance > (HINSTANCE) 32)
+                    if (hInstance > (HINSTANCE)32)
                     {
                         addLog("删除静态路由成功！");
 
@@ -398,7 +400,7 @@ MainWindow::MainWindow(QWidget *parent) :
             {
                 diagnosisContext = new QObject(this);
                 connect(networkDetector, &NetworkDetector::finished, diagnosisContext,
-                        [&](const NetworkDetectResult &result)
+                        [&](const NetworkDetectResult& result)
                         {
                             networkDetectResult = result;
 
@@ -480,9 +482,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
                             auto url = "https://diagnosis.myth.cx/query?" + resultString;
                             auto qrCode = qrGenerator.generateQr(url);
-                            auto *dialog = new QDialog(this);
-                            auto *layout = new QVBoxLayout();
-                            auto *textLabel = new QLabel(dialog);
+                            auto* dialog = new QDialog(this);
+                            auto* layout = new QVBoxLayout();
+                            auto* textLabel = new QLabel(dialog);
                             textLabel->setWordWrap(true);
                             textLabel->setText(
                                 "请使用手机扫描下方二维码。如当前电脑有网络，也可<a href=\"" + url + "\">点此</a>进行诊断"
@@ -490,7 +492,7 @@ MainWindow::MainWindow(QWidget *parent) :
                             textLabel->setTextFormat(Qt::RichText);
                             textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
                             textLabel->setOpenExternalLinks(true);
-                            auto *imageLabel = new QLabel(dialog);
+                            auto* imageLabel = new QLabel(dialog);
                             imageLabel->setAlignment(Qt::AlignCenter);
                             imageLabel->setPixmap(QPixmap::fromImage(qrCode));
                             layout->addWidget(textLabel);
@@ -531,7 +533,7 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(networkAccessManager, &QNetworkAccessManager::finished,
-            [&](QNetworkReply *reply)
+            [&](QNetworkReply* reply)
             {
                 if (reply->error() == QNetworkReply::NoError)
                 {
@@ -544,8 +546,8 @@ MainWindow::MainWindow(QWidget *parent) :
                     if (version != QApplication::applicationVersion())
                     {
                         QString text = "有新版本可用：v" + version +
-                                       "<br>更新内容：" + description +
-                                       "<br>点击<a href='" + url + "'>此处</a>下载";
+                            "<br>更新内容：" + description +
+                            "<br>点击<a href='" + url + "'>此处</a>下载";
 
                         ui->statusLabel->setText(text);
 
@@ -579,10 +581,10 @@ MainWindow::MainWindow(QWidget *parent) :
                 ui->interfaceComboBox->addItem("默认");
                 auto interfaces = QNetworkInterface::allInterfaces();
                 bool notDefault = false;
-                for (auto &singleInterface: interfaces)
+                for (auto& singleInterface : interfaces)
                 {
                     if ((singleInterface.type() != QNetworkInterface::Ethernet
-                         && singleInterface.type() != QNetworkInterface::Wifi)
+                            && singleInterface.type() != QNetworkInterface::Wifi)
                         || !singleInterface.flags().testFlag(QNetworkInterface::IsRunning))
                     {
                         continue;
@@ -590,7 +592,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
                     QString ipv4Address;
                     auto addresses = singleInterface.addressEntries();
-                    for (auto &address: addresses)
+                    for (auto& address : addresses)
                     {
                         if (address.ip().protocol() == QAbstractSocket::IPv4Protocol)
                         {
@@ -624,7 +626,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 更改工作模式
     connect(ui->modeComboBox, &QComboBox::currentTextChanged,
-            [&](const QString &text)
+            [&](const QString& text)
             {
                 if (text == "有线网 L2TP")
                 {
@@ -642,7 +644,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 网络检测
     connect(networkDetector, &NetworkDetector::finished, this,
-            [&](const NetworkDetectResult &result)
+            [&](const NetworkDetectResult& result)
             {
                 networkDetectResult = result;
 
@@ -751,13 +753,13 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
     event->ignore();
     hide();
 }
 
-void MainWindow::addLog(const QString &log)
+void MainWindow::addLog(const QString& log)
 {
     QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     ui->logPlainTextEdit->appendPlainText(timeString + " " + log);
@@ -843,7 +845,7 @@ void MainWindow::upgradeSettings()
     settings->sync();
 }
 
-void MainWindow::showNotification(const QString &title, const QString &content, QSystemTrayIcon::MessageIcon icon)
+void MainWindow::showNotification(const QString& title, const QString& content, QSystemTrayIcon::MessageIcon icon)
 {
     disconnect(trayIcon, &QSystemTrayIcon::messageClicked, nullptr, nullptr);
     trayIcon->showMessage(

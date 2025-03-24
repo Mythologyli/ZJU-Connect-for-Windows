@@ -4,9 +4,8 @@
 #include <QHostAddress>
 
 #include "settingwindow.h"
-#include "ui_settingwindow.h"
 
-SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
+SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
     QWidget(parent),
     ui(new Ui::SettingWindow)
 {
@@ -102,7 +101,7 @@ SettingWindow::SettingWindow(QWidget *parent, QSettings *inputSettings) :
                 portForwardingWindow->setPortForwarding(tcpPortForwarding, udpPortForwarding);
 
                 connect(portForwardingWindow, &PortForwardingWindow::applied, this,
-                        [&](const QString &tcpForwarding, const QString &udpForwarding)
+                        [&](const QString& tcpForwarding, const QString& udpForwarding)
                         {
                             tcpPortForwarding = tcpForwarding;
                             udpPortForwarding = udpForwarding;

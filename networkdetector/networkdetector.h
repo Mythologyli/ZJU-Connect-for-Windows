@@ -1,7 +1,7 @@
 #ifndef NETWORKDETECTOR_H
 #define NETWORKDETECTOR_H
 
-#include <QtCore>
+#include <QProcess>
 
 struct NetworkDetectResult
 {
@@ -18,7 +18,7 @@ struct NetworkDetectResult
 
 class NetworkDetector : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     NetworkDetector();
@@ -35,11 +35,10 @@ private:
     void checkProxy();
 
 signals:
-
     void finished(NetworkDetectResult result);
 
 private:
-    QProcess *process;
+    QProcess* process;
     NetworkDetectResult result;
 };
 

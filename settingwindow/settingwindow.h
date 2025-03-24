@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QSettings>
+
 #include "ui_settingwindow.h"
 #include "../portforwardingwindow/portforwardingwindow.h"
 
@@ -13,19 +14,19 @@ namespace Ui
 
 class SettingWindow : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    explicit SettingWindow(QWidget *parent = nullptr, QSettings *settings = nullptr);
+    explicit SettingWindow(QWidget* parent = nullptr, QSettings* settings = nullptr);
 
     ~SettingWindow() override;
 
 private:
-    Ui::SettingWindow *ui;
+    Ui::SettingWindow* ui;
 
-    QSettings *settings;
+    QSettings* settings;
 
-    PortForwardingWindow *portForwardingWindow;
+    PortForwardingWindow* portForwardingWindow;
 
     QString tcpPortForwarding;
     QString udpPortForwarding;

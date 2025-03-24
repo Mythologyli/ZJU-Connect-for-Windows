@@ -1,11 +1,11 @@
 #ifndef ZJUCONNECTCONTROLLER_H
 #define ZJUCONNECTCONTROLLER_H
 
-#include <QtCore>
+#include <QProcess>
 
 class ZjuConnectController : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     ZjuConnectController();
@@ -13,38 +13,36 @@ public:
     ~ZjuConnectController() override;
 
     void start(
-        const QString &program,
-        const QString &username,
-        const QString &password,
-        const QString &server = "",
+        const QString& program,
+        const QString& username,
+        const QString& password,
+        const QString& server = "",
         int port = 0,
         bool disableMultiLine = false,
         bool proxyAll = false,
-        const QString &socksBind = "",
-        const QString &httpBind = "",
+        const QString& socksBind = "",
+        const QString& httpBind = "",
         bool tunMode = false,
         bool addRoute = false,
         bool debugDump = false,
-        const QString &tcpPortForwarding = "",
-        const QString &udpPortForwarding = ""
+        const QString& tcpPortForwarding = "",
+        const QString& udpPortForwarding = ""
     );
 
     void stop();
 
 
 signals:
-
     void loginFailed();
 
     void accessDenied();
 
-    void outputRead(const QString &output);
+    void outputRead(const QString& output);
 
     void finished();
 
 private:
-    QProcess *zjuConnectProcess;
-
+    QProcess* zjuConnectProcess;
 };
 
 #endif //ZJUCONNECTCONTROLLER_H

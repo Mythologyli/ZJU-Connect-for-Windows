@@ -1,7 +1,6 @@
 #include "portforwardingwindow.h"
-#include "ui_portforwardingwindow.h"
 
-PortForwardingWindow::PortForwardingWindow(QWidget *parent) :
+PortForwardingWindow::PortForwardingWindow(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::PortForwardingWindow)
 {
@@ -23,7 +22,7 @@ PortForwardingWindow::PortForwardingWindow(QWidget *parent) :
 
                 QStringList portForwardingList = ui->textEdit->toPlainText().split("\n");
 
-                for (const auto &forwarding: portForwardingList)
+                for (const auto& forwarding : portForwardingList)
                 {
                     QStringList portForwardingItem = forwarding.split(",");
 
@@ -55,11 +54,11 @@ PortForwardingWindow::~PortForwardingWindow()
     delete ui;
 }
 
-void PortForwardingWindow::setPortForwarding(const QString &tcpPortForwarding, const QString &udpPortForwarding)
+void PortForwardingWindow::setPortForwarding(const QString& tcpPortForwarding, const QString& udpPortForwarding)
 {
     QStringList tcpPortForwardingList = tcpPortForwarding.split(",");
 
-    for (const auto &forwarding: tcpPortForwardingList)
+    for (const auto& forwarding : tcpPortForwardingList)
     {
         QStringList tcpPortForwardingItem = forwarding.split("-");
 
@@ -73,7 +72,7 @@ void PortForwardingWindow::setPortForwarding(const QString &tcpPortForwarding, c
 
     QStringList udpPortForwardingList = udpPortForwarding.split(",");
 
-    for (const auto &forwarding: udpPortForwardingList)
+    for (const auto& forwarding : udpPortForwardingList)
     {
         QStringList udpPortForwardingItem = forwarding.split("-");
 

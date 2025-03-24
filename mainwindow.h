@@ -4,11 +4,8 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QCloseEvent>
-#include <QProcess>
 #include <QNetworkReply>
-#include <QSettings>
 
-#include "portforwardingwindow/portforwardingwindow.h"
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
 #include "networkdetector/networkdetector.h"
 #include "settingwindow/settingwindow.h"
@@ -21,34 +18,32 @@ namespace Ui
 
 class MainWindow : public QMainWindow
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
 
     ~MainWindow() override;
 
 public slots:
-
     void cleanUpWhenQuit();
 
 signals:
-
     void SetModeFinished();
 
 protected:
-    void closeEvent(QCloseEvent *e) override;
+    void closeEvent(QCloseEvent* e) override;
 
 private:
     void upgradeSettings();
 
     void clearLog();
 
-    void addLog(const QString &log);
+    void addLog(const QString& log);
 
     void showNotification(
-        const QString &title,
-        const QString &content,
+        const QString& title,
+        const QString& content,
         QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon::Information
     );
 
@@ -58,25 +53,25 @@ private:
 
     void setModeToZjuConnect();
 
-    Ui::MainWindow *ui;
-    QSystemTrayIcon *trayIcon;
-    QMenu *trayMenu;
-    QAction *trayShowAction;
-    QAction *trayCloseAction;
-    ZjuConnectController *zjuConnectController;
-    NetworkDetector *networkDetector;
-    QNetworkAccessManager *networkAccessManager;
-    QSettings *settings;
-    QProcess *process;
-    QProcess *processForL2tp;
-    QProcess *processForL2tpCheck;
-    QProcess *processForWebLogin;
-    QTimer *l2tpCheckTimer;
+    Ui::MainWindow* ui;
+    QSystemTrayIcon* trayIcon;
+    QMenu* trayMenu;
+    QAction* trayShowAction;
+    QAction* trayCloseAction;
+    ZjuConnectController* zjuConnectController;
+    NetworkDetector* networkDetector;
+    QNetworkAccessManager* networkAccessManager;
+    QSettings* settings;
+    QProcess* process;
+    QProcess* processForL2tp;
+    QProcess* processForL2tpCheck;
+    QProcess* processForWebLogin;
+    QTimer* l2tpCheckTimer;
     QrCodeGenerator qrGenerator;
 
-    QObject *diagnosisContext;
+    QObject* diagnosisContext;
 
-    SettingWindow *settingWindow;
+    SettingWindow* settingWindow;
 
     QString mode;
     NetworkDetectResult networkDetectResult;
