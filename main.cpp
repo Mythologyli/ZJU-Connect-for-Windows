@@ -17,6 +17,10 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion(PROJ_VER);
     QLocale::setDefault(QLocale(QLocale::Chinese, QLocale::SimplifiedChineseScript, QLocale::China));
 
+#ifdef Q_OS_WINDOWS
+    QApplication::setFont(QFont("Microsoft YaHei UI", QApplication::font().pointSize()));
+#endif
+
     QTranslator qtTranslator;
     if (qtTranslator.load(QLocale(QLocale::Chinese, QLocale::SimplifiedChineseScript, QLocale::China),
                           QString("qt"), QString("_"), QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
