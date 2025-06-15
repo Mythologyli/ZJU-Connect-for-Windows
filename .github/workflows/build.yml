@@ -37,7 +37,7 @@ jobs:
 
       - name: Download and copy files
         env:
-          VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC'
+          VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
         run: |
           mkdir "ZJU Connect for Windows"
           cd "ZJU Connect for Windows"
