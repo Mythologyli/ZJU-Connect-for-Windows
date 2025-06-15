@@ -40,6 +40,9 @@ Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.i
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+[InstallDelete]
+Type: files; Name: {app}\tls\*.dll
+
 [Files]
 Source: "LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "ZJU Connect for Windows\ZJUConnectForWindows.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -53,6 +56,7 @@ Source: "ZJU Connect for Windows\networkinformation\*"; DestDir: "{app}\networki
 Source: "ZJU Connect for Windows\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "ZJU Connect for Windows\styles\*"; DestDir: "{app}\styles"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "ZJU Connect for Windows\tls\*"; DestDir: "{app}\tls"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "ZJU Connect for Windows\translations\*"; DestDir: "{app}\translations"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "ZJU Connect for Windows\vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
