@@ -6,6 +6,7 @@
 
 int main(int argc, char* argv[])
 {
+    QApplication::setStyle("Fusion");
     SingleApplication app(argc, argv);
     QApplication::setApplicationName("ZJU Connect for Windows");
     QApplication::setApplicationVersion("1.1.3");
