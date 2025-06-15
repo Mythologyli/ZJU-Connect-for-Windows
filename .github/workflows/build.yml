@@ -1,12 +1,10 @@
 name: Build
 
 on:
-    release:
-      types: [ published ]
     push:
-      branches: [ master ]
+      branches: [ atrust-test ]
     pull_request:
-      branches: [ master ]
+      branches: [ atrust-test ]
 
 permissions: write-all
 
@@ -35,6 +33,14 @@ jobs:
           cmake -S . -B build
           cmake --build build --target ZJUConnectForWindows --config Release
 
+      - name: Download zju-connect
+        uses: actions/download-artifact@v4
+        with:
+          name: zju-connect-windows-amd64
+          github-token: ${{ github.token }}
+          repository: Mythologyli/zju-connect
+          run-id: 15652484331
+
       - name: Download and copy files
         env:
           VCINSTALLDIR: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
@@ -45,9 +51,7 @@ jobs:
           windeployqt.exe ZJUConnectForWindows.exe
           rm vc_redist.x64.exe
           curl -LO https://github.com/Mythologyli/zju-web-login/releases/latest/download/weblogin.exe          
-          curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
-          tar -xf zju-connect-windows-amd64.zip
-          rm zju-connect-windows-amd64.zip
+          cp ../zju-connect.exe .
           cp ../libs/wintun/bin/amd64/wintun.dll .
           cd ..
           Compress-Archive -Path "ZJU Connect for Windows" -DestinationPath ZJU-Connect-for-Windows.zip
