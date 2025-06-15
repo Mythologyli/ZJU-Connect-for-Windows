@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     QApplication::setStyle("Fusion");
     SingleApplication app(argc, argv);
     QApplication::setApplicationName("ZJU Connect for Windows");
-    QApplication::setApplicationVersion("1.1.3");
+    QApplication::setApplicationVersion("1.1.3-atrusttest-1");
 
     QApplication::setFont(QFont("Microsoft YaHei UI", 9));
 

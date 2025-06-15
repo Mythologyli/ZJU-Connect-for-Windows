@@ -46,6 +46,7 @@ SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
         ui->connectAfterStartComboBox->setCurrentText("否");
     }
 
+    ui->rvpnModeComboBox->setCurrentText(settings->value("ZJUConnect/Protocol", "aTrust").toString());
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "rvpn.zju.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 11080).toInt());
@@ -146,6 +147,7 @@ SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
                 settings->setValue("Common/AutoStart", ui->autoStartComboBox->currentText() == "是");
                 settings->setValue("Common/ConnectAfterStart", ui->connectAfterStartComboBox->currentText() == "是");
 
+                settings->setValue("ZJUConnect/Protocol", ui->rvpnModeComboBox->currentText());
                 settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
                 settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
                 settings->setValue("ZJUConnect/Socks5Port", ui->socks5PortSpinBox->value());

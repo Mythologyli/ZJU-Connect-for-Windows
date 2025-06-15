@@ -19,6 +19,14 @@ ZjuConnectController::ZjuConnectController()
         {
             emit accessDenied();
         }
+        else if (output.contains("Please enter the SMS verification code: "))
+        {
+            emit smsCodeRequired();
+        }
+        else if (output.contains("Please enter the graph check code JSON: "))
+        {
+            emit graphCheckCodeRequired();
+        }
     });
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()
@@ -45,6 +53,7 @@ ZjuConnectController::ZjuConnectController()
 
 void ZjuConnectController::start(
     const QString& program,
+    const QString& protocol,
     const QString& username,
     const QString& password,
     const QString& server,
@@ -57,10 +66,12 @@ void ZjuConnectController::start(
     bool addRoute,
     bool debugDump,
     const QString& tcpPortForwarding,
-    const QString& udpPortForwarding
+    const QString& udpPortForwarding,
+    const QString& clientDataFile,
+    const QString& graphCodeFile
 )
 {
-    QList<QString> args = QStringList({"-username", username, "-password", password});
+    QList<QString> args = QStringList({"-protocol", protocol, "-username", username, "-password", password});
 
     if (!server.isEmpty())
     {
@@ -124,8 +135,29 @@ void ZjuConnectController::start(
         args.append(udpPortForwarding);
     }
 
+    if (!clientDataFile.isEmpty())
+    {
+        args.append("-client-data-file");
+        args.append(clientDataFile);
+    }
+
+    if (!graphCodeFile.isEmpty())
+    {
+        args.append("-graph-code-file");
+        args.append(graphCodeFile);
+    }
+
     zjuConnectProcess->start(program, args);
     zjuConnectProcess->waitForStarted();
+}
+
+void ZjuConnectController::input(const QString& input)
+{
+    if (zjuConnectProcess->state() == QProcess::Running)
+    {
+        zjuConnectProcess->write(Utils::QStringToConsoleOutput(input));
+        zjuConnectProcess->waitForBytesWritten();
+    }
 }
 
 void ZjuConnectController::stop()
@@ -135,8 +167,9 @@ void ZjuConnectController::stop()
         return;
     }
 
+    zjuConnectProcess->terminate();
+    zjuConnectProcess->waitForFinished(1000);
     zjuConnectProcess->kill();
-    zjuConnectProcess->waitForFinished();
 }
 
 ZjuConnectController::~ZjuConnectController()

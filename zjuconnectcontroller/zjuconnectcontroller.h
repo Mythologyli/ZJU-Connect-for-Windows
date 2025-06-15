@@ -14,6 +14,7 @@ public:
 
     void start(
         const QString& program,
+        const QString& protocol,
         const QString& username,
         const QString& password,
         const QString& server = "",
@@ -26,8 +27,12 @@ public:
         bool addRoute = false,
         bool debugDump = false,
         const QString& tcpPortForwarding = "",
-        const QString& udpPortForwarding = ""
+        const QString& udpPortForwarding = "",
+        const QString& clientDataFile = "",
+        const QString& graphCodeFile = ""
     );
+
+    void input(const QString& input);
 
     void stop();
 
@@ -36,6 +41,10 @@ signals:
     void loginFailed();
 
     void accessDenied();
+
+    void smsCodeRequired();
+
+    void graphCheckCodeRequired();
 
     void outputRead(const QString& output);
 

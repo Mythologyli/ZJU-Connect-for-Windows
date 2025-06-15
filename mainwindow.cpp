@@ -542,8 +542,13 @@ MainWindow::MainWindow(QWidget* parent) :
                     QString version = jsonObject["version"].toString();
                     QString description = jsonObject["description"].toString();
                     QString url = jsonObject["url"].toString();
+                    QString currentVersion = QApplication::applicationVersion();
+                    if (currentVersion.contains("-"))
+                    {
+                        currentVersion = currentVersion.split("-").first();
+                    }
 
-                    if (version != QApplication::applicationVersion())
+                    if (version != currentVersion)
                     {
                         QString text = "有新版本可用：v" + version +
                             "<br>更新内容：" + description +
