@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir build
           cmake -S . -B build
-          cmake --build build --target ZJUConnectForWindows --config Release
+          cmake --build build --target ZJUConnectForWindows --config Release --parallel $(nproc)
 
       - name: Download zju-connect
         uses: actions/download-artifact@v4
