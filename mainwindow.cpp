@@ -540,12 +540,32 @@ MainWindow::MainWindow(QWidget* parent) :
                     QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
                     QJsonObject jsonObject = jsonDocument.object();
                     QString version = jsonObject["version"].toString();
+                    if (version == "<error>") {
+                        reply->deleteLater();
+                        return;
+                    }
                     QString description = jsonObject["description"].toString();
                     QString url = jsonObject["url"].toString();
+                    QString testVersion = jsonObject["test_version"].toString();
+                    QString testDescription = jsonObject["test_description"].toString();
+                    QString testUrl = jsonObject["test_url"].toString();
                     QString currentVersion = QApplication::applicationVersion();
+                    bool isTestVersion = false;
+                    QString currentMainVersion = currentVersion;
                     if (currentVersion.contains("-"))
                     {
-                        currentVersion = currentVersion.split("-").first();
+                        isTestVersion = true;
+                        currentMainVersion = currentVersion.split("-").first();
+                    }
+
+                    if (isTestVersion)
+                    {
+                        if (currentMainVersion == version)
+                        {
+                            version = testVersion;
+                            description = testDescription;
+                            url = testUrl;
+                        }
                     }
 
                     if (version != currentVersion)
