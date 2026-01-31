@@ -47,7 +47,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="commonTab">
       <attribute name="title">
@@ -395,161 +395,6 @@
        <string>RVPN</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel1">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>服务器地址</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QCheckBox" name="multiLineCheckBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>自动选择线路</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-         <property name="autoExclusive">
-          <bool>false</bool>
-         </property>
-         <property name="tristate">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QCheckBox" name="proxyAllCheckBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>代理全部流量</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="zjuConnectTabLabel2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>服务器端口</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QSpinBox" name="socks5PortSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>1</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="maximum">
-          <number>65535</number>
-         </property>
-         <property name="value">
-          <number>11080</number>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QSpinBox" name="httpPortSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>1</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximum">
-          <number>65535</number>
-         </property>
-         <property name="value">
-          <number>11081</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QCheckBox" name="autoReconnectCheckBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>断线自动重连</string>
-         </property>
-         <property name="text">
-          <string>自动重连</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QSpinBox" name="serverPortSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>1</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="maximum">
-          <number>65535</number>
-         </property>
-         <property name="value">
-          <number>443</number>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="4">
-        <widget class="QPushButton" name="portForwardingPushButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>设置端口转发</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel8">
          <property name="font">
@@ -562,53 +407,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="zjuConnectTabLabel7">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>自动重连时间 (s)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QSpinBox" name="reconnectTimeSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>1</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximum">
-          <number>86400</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="3">
-        <widget class="QLineEdit" name="serverAddressLineEdit">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>rvpn.zju.edu.cn</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="3">
+       <item row="0" column="1">
         <widget class="QComboBox" name="rvpnModeComboBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -637,7 +436,116 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="0" column="2">
+        <widget class="QLabel" name="zjuConnectTabLabel9">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>登录方式</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" colspan="2">
+        <widget class="QComboBox" name="authNameComboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentText">
+          <string>上网账号</string>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>上网账号</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>IDC 运维账号</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>INTL ID</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel1">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>服务器地址</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="4">
+        <widget class="QLineEdit" name="serverAddressLineEdit">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>rvpn.zju.edu.cn</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="zjuConnectTabLabel2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>服务器端口</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="serverPortSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+         <property name="value">
+          <number>443</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="2">
         <widget class="QLabel" name="zjuConnectTabLabel5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -655,6 +563,27 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="4">
+        <widget class="QSpinBox" name="socks5PortSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+         <property name="value">
+          <number>11080</number>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="0">
         <widget class="QLabel" name="zjuConnectTabLabel6">
          <property name="sizePolicy">
@@ -668,7 +597,127 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2">
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="httpPortSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+         <property name="value">
+          <number>11081</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" colspan="2">
+        <widget class="QLabel" name="zjuConnectTabLabel7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>自动重连时间 (s)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="QSpinBox" name="reconnectTimeSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximum">
+          <number>86400</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="multiLineCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>自动选择线路</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <property name="autoExclusive">
+          <bool>false</bool>
+         </property>
+         <property name="tristate">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="proxyAllCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>代理全部流量</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="autoReconnectCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>断线自动重连</string>
+         </property>
+         <property name="text">
+          <string>自动重连</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="4">
+        <widget class="QCheckBox" name="routeCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>TUN 模式下有效</string>
+         </property>
+         <property name="text">
+          <string>自动设置路由</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
         <widget class="QCheckBox" name="autoSetProxyCheckBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -684,7 +733,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
+       <item row="5" column="2">
         <widget class="QCheckBox" name="debugCheckBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -697,19 +746,16 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="3">
-        <widget class="QCheckBox" name="routeCheckBox">
+       <item row="6" column="0" colspan="5">
+        <widget class="QPushButton" name="portForwardingPushButton">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="toolTip">
-          <string>TUN 模式下有效</string>
-         </property>
          <property name="text">
-          <string>自动设置路由</string>
+          <string>设置端口转发</string>
          </property>
         </widget>
        </item>

@@ -29,7 +29,8 @@ public:
         const QString& tcpPortForwarding = "",
         const QString& udpPortForwarding = "",
         const QString& clientDataFile = "",
-        const QString& graphCodeFile = ""
+        const QString& graphCodeFile = "",
+        const QString& loginDomain = ""
     );
 
     void input(const QString& input);

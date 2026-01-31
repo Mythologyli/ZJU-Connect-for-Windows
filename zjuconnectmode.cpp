@@ -164,6 +164,17 @@ void MainWindow::setModeToZjuConnect()
                         return;
                     }
 
+                    QString authName = settings->value("ZJUConnect/AuthName", "上网账号").toString();
+                    QString loginDomain = "Radius";
+                    if (authName == "IDC 运维账号")
+                    {
+                        loginDomain = "local";
+                    }
+                    else if (authName == "INTL ID")
+                    {
+                        loginDomain = "radius93482";
+                    }
+
                     zjuConnectController->start(
                         "zju-connect.exe",
                         settings->value("ZJUConnect/Protocol", "aTrust").toString().toLower(),
@@ -181,7 +192,8 @@ void MainWindow::setModeToZjuConnect()
                         settings->value("ZJUConnect/TcpPortForwarding", "").toString(),
                         settings->value("ZJUConnect/UdpPortForwarding", "").toString(),
                         QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/client_data.json",
-                        QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/graph_code.jpg"
+                        QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/graph_code.jpg",
+                        loginDomain
                     );
 
                     isZjuConnectLinked = true;

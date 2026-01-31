@@ -68,7 +68,8 @@ void ZjuConnectController::start(
     const QString& tcpPortForwarding,
     const QString& udpPortForwarding,
     const QString& clientDataFile,
-    const QString& graphCodeFile
+    const QString& graphCodeFile,
+    const QString& loginDomain
 )
 {
     QList<QString> args = QStringList({"-protocol", protocol, "-username", username, "-password", password});
@@ -145,6 +146,12 @@ void ZjuConnectController::start(
     {
         args.append("-graph-code-file");
         args.append(graphCodeFile);
+    }
+
+    if (!loginDomain.isEmpty())
+    {
+        args.append("-login-domain");
+        args.append(loginDomain);
     }
 
     zjuConnectProcess->start(program, args);
