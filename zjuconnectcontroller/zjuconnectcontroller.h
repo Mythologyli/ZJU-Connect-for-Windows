@@ -25,6 +25,7 @@ public:
         const QString& httpBind = "",
         bool tunMode = false,
         bool addRoute = false,
+        bool hijackDns = true,
         bool debugDump = false,
         const QString& tcpPortForwarding = "",
         const QString& udpPortForwarding = "",

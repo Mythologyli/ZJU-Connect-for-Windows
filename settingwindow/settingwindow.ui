@@ -407,7 +407,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="0" column="1" colspan="2">
         <widget class="QComboBox" name="rvpnModeComboBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -436,7 +436,7 @@
          </item>
         </widget>
        </item>
-       <item row="0" column="2">
+       <item row="0" column="3">
         <widget class="QLabel" name="zjuConnectTabLabel9">
          <property name="font">
           <font>
@@ -448,7 +448,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="3" colspan="2">
+       <item row="0" column="4" colspan="2">
         <widget class="QComboBox" name="authNameComboBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -494,7 +494,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="4">
+       <item row="1" column="1" colspan="5">
         <widget class="QLineEdit" name="serverAddressLineEdit">
          <property name="font">
           <font>
@@ -524,7 +524,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="2" column="1" colspan="2">
         <widget class="QSpinBox" name="serverPortSpinBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -545,7 +545,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2" colspan="2">
+       <item row="2" column="3" colspan="2">
         <widget class="QLabel" name="zjuConnectTabLabel5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -563,7 +563,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="4">
+       <item row="2" column="5">
         <widget class="QSpinBox" name="socks5PortSpinBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -597,7 +597,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="3" column="1" colspan="2">
         <widget class="QSpinBox" name="httpPortSpinBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -613,7 +613,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2" colspan="2">
+       <item row="3" column="3" colspan="2">
         <widget class="QLabel" name="zjuConnectTabLabel7">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -631,7 +631,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="4">
+       <item row="3" column="5">
         <widget class="QSpinBox" name="reconnectTimeSpinBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -669,7 +669,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="4" column="1" colspan="2">
         <widget class="QCheckBox" name="proxyAllCheckBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -682,7 +682,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="4" column="3">
         <widget class="QCheckBox" name="autoReconnectCheckBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -701,7 +701,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="4">
+       <item row="4" column="5">
         <widget class="QCheckBox" name="routeCheckBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -746,7 +746,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="5">
+       <item row="6" column="0" colspan="6">
         <widget class="QPushButton" name="portForwardingPushButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -756,6 +756,22 @@
          </property>
          <property name="text">
           <string>设置端口转发</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="5">
+        <widget class="QCheckBox" name="hijackDnsCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>DNS 劫持 (TUN)</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

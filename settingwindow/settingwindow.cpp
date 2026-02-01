@@ -54,6 +54,7 @@ SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 11081).toInt());
     ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", true).toBool());
     ui->proxyAllCheckBox->setChecked(settings->value("ZJUConnect/ProxyAll", false).toBool());
+    ui->hijackDnsCheckBox->setChecked(settings->value("ZJUConnect/HijackDns", true).toBool());
     ui->debugCheckBox->setChecked(settings->value("ZJUConnect/Debug", false).toBool());
     tcpPortForwarding = settings->value("ZJUConnect/TcpPortForwarding", "").toString();
     udpPortForwarding = settings->value("ZJUConnect/UdpPortForwarding", "").toString();
@@ -156,6 +157,7 @@ SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
                 settings->setValue("ZJUConnect/HttpPort", ui->httpPortSpinBox->value());
                 settings->setValue("ZJUConnect/MultiLine", ui->multiLineCheckBox->isChecked());
                 settings->setValue("ZJUConnect/ProxyAll", ui->proxyAllCheckBox->isChecked());
+                settings->setValue("ZJUConnect/HijackDns", ui->hijackDnsCheckBox->isChecked());
                 settings->setValue("ZJUConnect/Debug", ui->debugCheckBox->isChecked());
                 settings->setValue("ZJUConnect/TcpPortForwarding", tcpPortForwarding);
                 settings->setValue("ZJUConnect/UdpPortForwarding", udpPortForwarding);
