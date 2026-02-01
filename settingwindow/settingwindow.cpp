@@ -61,7 +61,7 @@ SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
     ui->autoReconnectCheckBox->setChecked(settings->value("ZJUConnect/AutoReconnect", false).toBool());
     ui->reconnectTimeSpinBox->setValue(settings->value("ZJUConnect/ReconnectTime", 1).toInt());
     ui->autoSetProxyCheckBox->setChecked(settings->value("ZJUConnect/AutoSetProxy", false).toBool());
-    ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", false).toBool());
+    ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", true).toBool());
 
     ui->l2tpNameLineEdit->setText(settings->value("L2TP/Name", "ZJUVPN").toString());
 

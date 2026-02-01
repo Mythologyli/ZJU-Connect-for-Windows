@@ -187,7 +187,7 @@ void MainWindow::setModeToZjuConnect()
                         "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
                         "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
                         ui->tunCheckBox->isChecked(),
-                        settings->value("ZJUConnect/Route", false).toBool(),
+                        settings->value("ZJUConnect/Route", true).toBool(),
                         settings->value("ZJUConnect/HijackDns", true).toBool(),
                         settings->value("ZJUConnect/Debug", false).toBool(),
                         settings->value("ZJUConnect/TcpPortForwarding", "").toString(),
