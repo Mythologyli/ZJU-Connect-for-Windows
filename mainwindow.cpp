@@ -7,6 +7,11 @@
 #include <QTimer>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QFileDialog>
+#include <QFile>
+#include <QDir>
+#include <QDateTime>
+#include <QTextStream>
 
 #include <windows.h>
 #include <shellapi.h>
@@ -36,6 +41,17 @@ MainWindow::MainWindow(QWidget* parent) :
     );
     l2tpCheckTimer = nullptr;
     diagnosisContext = nullptr;
+
+    // 初始化日志文件
+    QString logDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    QDir().mkpath(logDir);
+    QString logFileName = logDir + "/log_" +
+        QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss") + ".log";
+    logFile = new QFile(logFileName, this);
+    if (!logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        logFile = nullptr;
+    }
 
     upgradeSettings();
 
@@ -512,12 +528,39 @@ MainWindow::MainWindow(QWidget* parent) :
                 Utils::showAboutMessageBox(this);
             });
 
-    // 复制日志
-    connect(ui->copyLogPushButton, &QPushButton::clicked,
+    // 导出日志
+    connect(ui->exportLogPushButton, &QPushButton::clicked,
             [&]()
             {
-                auto logText = ui->logPlainTextEdit->toPlainText();
-                QApplication::clipboard()->setText(logText);
+                if (!logFile || !logFile->isOpen())
+                {
+                    QMessageBox::warning(this, "导出日志", "日志文件不可用。");
+                    return;
+                }
+                logFile->flush();
+
+                QString defaultName = "log_" +
+                    QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss") + ".log";
+                QString savePath = QFileDialog::getSaveFileName(
+                    this,
+                    "导出日志",
+                    QDir::homePath() + "/" + defaultName,
+                    "日志文件 (*.log);;所有文件 (*)"
+                );
+                if (savePath.isEmpty())
+                    return;
+
+                if (QFile::exists(savePath))
+                    QFile::remove(savePath);
+
+                if (!QFile::copy(logFile->fileName(), savePath))
+                {
+                    QMessageBox::critical(this, "导出日志", "导出失败，请检查目标路径是否可写。");
+                }
+                else
+                {
+                    QMessageBox::information(this, "导出日志", "日志已导出到：\n" + savePath);
+                }
             }
     );
 
@@ -540,10 +583,35 @@ MainWindow::MainWindow(QWidget* parent) :
                     QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
                     QJsonObject jsonObject = jsonDocument.object();
                     QString version = jsonObject["version"].toString();
+                    if (version == "<error>") {
+                        reply->deleteLater();
+                        return;
+                    }
                     QString description = jsonObject["description"].toString();
                     QString url = jsonObject["url"].toString();
+                    QString testVersion = jsonObject["test_version"].toString();
+                    QString testDescription = jsonObject["test_description"].toString();
+                    QString testUrl = jsonObject["test_url"].toString();
+                    QString currentVersion = QApplication::applicationVersion();
+                    bool isTestVersion = false;
+                    QString currentMainVersion = currentVersion;
+                    if (currentVersion.contains("-"))
+                    {
+                        isTestVersion = true;
+                        currentMainVersion = currentVersion.split("-").first();
+                    }
 
-                    if (version != QApplication::applicationVersion())
+                    if (isTestVersion)
+                    {
+                        if (currentMainVersion == version)
+                        {
+                            version = testVersion;
+                            description = testDescription;
+                            url = testUrl;
+                        }
+                    }
+
+                    if (version != currentVersion)
                     {
                         QString text = "有新版本可用：v" + version +
                             "<br>更新内容：" + description +
@@ -723,7 +791,7 @@ MainWindow::MainWindow(QWidget* parent) :
                     resultString += "是否启用代理：否";
                 }
 
-                ui->logPlainTextEdit->appendPlainText(resultString);
+                addLog(resultString, false);
             });
 
     connect(this, &MainWindow::SetModeFinished, this, [&]()
@@ -759,17 +827,32 @@ void MainWindow::closeEvent(QCloseEvent* event)
     hide();
 }
 
-void MainWindow::addLog(const QString& log)
+void MainWindow::addLog(const QString& log, bool showTime)
 {
-    QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    ui->logPlainTextEdit->appendPlainText(timeString + " " + log);
+    QString logLine;
+    if (showTime)
+    {
+        QString timeString = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+        logLine = timeString + " " + log;
+    }
+    else
+    {
+        logLine = log;
+    }
+    ui->logPlainTextEdit->appendPlainText(logLine);
+
+    if (logFile && logFile->isOpen())
+    {
+        QTextStream stream(logFile);
+        stream << logLine << "\n";
+        logFile->flush();
+    }
 }
 
 void MainWindow::clearLog()
 {
     ui->logPlainTextEdit->clear();
-    ui->logPlainTextEdit->appendPlainText(
-        "Version: " + QApplication::applicationVersion() + "\n" + QSysInfo::prettyProductName());
+    addLog("Version: " + QApplication::applicationVersion() + "\n" + QSysInfo::prettyProductName(), false);
 }
 
 void MainWindow::upgradeSettings()
@@ -885,6 +968,11 @@ void MainWindow::cleanUpWhenQuit()
 
 MainWindow::~MainWindow()
 {
+    if (logFile && logFile->isOpen())
+    {
+        logFile->close();
+    }
+
     delete networkDetector;
 
     if (zjuConnectController != nullptr)

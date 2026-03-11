@@ -5,6 +5,8 @@ namespace Utils
 {
     QString ConsoleOutputToQString(const QByteArray& byteArray);
 
+    QByteArray QStringToConsoleOutput(const QString& str);
+
     void setWidgetFixedWhenHidden(QWidget* widget);
 
     void showAboutMessageBox(QWidget* parent = nullptr);

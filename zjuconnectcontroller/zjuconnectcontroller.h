@@ -14,6 +14,7 @@ public:
 
     void start(
         const QString& program,
+        const QString& protocol,
         const QString& username,
         const QString& password,
         const QString& server = "",
@@ -24,10 +25,16 @@ public:
         const QString& httpBind = "",
         bool tunMode = false,
         bool addRoute = false,
+        bool hijackDns = true,
         bool debugDump = false,
         const QString& tcpPortForwarding = "",
-        const QString& udpPortForwarding = ""
+        const QString& udpPortForwarding = "",
+        const QString& clientDataFile = "",
+        const QString& graphCodeFile = "",
+        const QString& loginDomain = ""
     );
+
+    void input(const QString& input);
 
     void stop();
 
@@ -36,6 +43,10 @@ signals:
     void loginFailed();
 
     void accessDenied();
+
+    void smsCodeRequired();
+
+    void graphCheckCodeRequired();
 
     void outputRead(const QString& output);
 

@@ -1,8 +1,12 @@
 #include <QMessageBox>
+#include <QInputDialog>
 #include <QTimer>
+#include <QFile>
+#include <QStandardPaths>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "captchadialog/captchadialog.h"
 #include "utils/utils.h"
 
 void MainWindow::setModeToZjuConnect()
@@ -39,7 +43,7 @@ void MainWindow::setModeToZjuConnect()
     // 连接服务器
     connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString& output)
     {
-        ui->logPlainTextEdit->appendPlainText(output);
+        addLog(output, false);
     });
 
     connect(zjuConnectController, &ZjuConnectController::loginFailed, this, [&]()
@@ -50,6 +54,45 @@ void MainWindow::setModeToZjuConnect()
     connect(zjuConnectController, &ZjuConnectController::accessDenied, this, [&]()
     {
         isZjuConnectAccessDenied = true;
+    });
+
+    connect(zjuConnectController, &ZjuConnectController::smsCodeRequired, this, [&]()
+    {
+        bool ok = false;
+        QString smsCode;
+        while (!ok)
+        {
+            smsCode = QInputDialog::getText(
+                this,
+                "短信验证码",
+                "短信验证码已发送，请输入：",
+                QLineEdit::Normal,
+                "",
+                &ok
+            );
+        }
+
+        zjuConnectController->input(smsCode + "\n");
+    });
+
+    connect(zjuConnectController, &ZjuConnectController::graphCheckCodeRequired, this, [&]()
+    {
+        QString path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/graph_code.jpg";
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly))
+        {
+            QMessageBox::critical(this, "错误", "无法打开验证码图片文件：" + path);
+            zjuConnectController->stop();
+            return;
+        }
+        QByteArray imgBuf = f.readAll();
+        f.close();
+
+        captchadialog dlg(imgBuf, 800, this);
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            zjuConnectController->input(dlg.getJson() + "\n");
+        }
     });
 
     connect(zjuConnectController, &ZjuConnectController::finished, this, [&]()
@@ -121,8 +164,20 @@ void MainWindow::setModeToZjuConnect()
                         return;
                     }
 
+                    QString authName = settings->value("ZJUConnect/AuthName", "上网账号").toString();
+                    QString loginDomain = "Radius";
+                    if (authName == "IDC 运维账号")
+                    {
+                        loginDomain = "local";
+                    }
+                    else if (authName == "INTL ID")
+                    {
+                        loginDomain = "radius93482";
+                    }
+
                     zjuConnectController->start(
                         "zju-connect.exe",
+                        settings->value("ZJUConnect/Protocol", "aTrust").toString().toLower(),
                         settings->value("Common/Username").toString(),
                         QByteArray::fromBase64(settings->value("Common/Password").toString().toUtf8()),
                         settings->value("ZJUConnect/ServerAddress").toString(),
@@ -132,10 +187,14 @@ void MainWindow::setModeToZjuConnect()
                         "127.0.0.1:" + QString::number(settings->value("ZJUConnect/Socks5Port", 11080).toInt()),
                         "127.0.0.1:" + QString::number(settings->value("ZJUConnect/HttpPort", 11081).toInt()),
                         ui->tunCheckBox->isChecked(),
-                        settings->value("ZJUConnect/Route", false).toBool(),
+                        settings->value("ZJUConnect/Route", true).toBool(),
+                        settings->value("ZJUConnect/HijackDns", true).toBool(),
                         settings->value("ZJUConnect/Debug", false).toBool(),
                         settings->value("ZJUConnect/TcpPortForwarding", "").toString(),
-                        settings->value("ZJUConnect/UdpPortForwarding", "").toString()
+                        settings->value("ZJUConnect/UdpPortForwarding", "").toString(),
+                        QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/client_data.json",
+                        QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/graph_code.jpg",
+                        loginDomain
                     );
 
                     isZjuConnectLinked = true;

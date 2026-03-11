@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
 project(ZJUConnectForWindows)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -28,6 +28,7 @@ add_executable(ZJUConnectForWindows WIN32
         portforwardingwindow/portforwardingwindow.cpp
         settingwindow/settingwindow.cpp
         networkdetector/networkdetector.cpp
+        captchadialog/captchadialog.cpp
         utils/utils.cpp
         resource.qrc
         ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc

@@ -46,19 +46,22 @@ SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
         ui->connectAfterStartComboBox->setCurrentText("否");
     }
 
+    ui->rvpnModeComboBox->setCurrentText(settings->value("ZJUConnect/Protocol", "aTrust").toString());
+    ui->authNameComboBox->setCurrentText(settings->value("ZJUConnect/AuthName", "上网账号").toString());
     ui->serverAddressLineEdit->setText(settings->value("ZJUConnect/ServerAddress", "rvpn.zju.edu.cn").toString());
     ui->serverPortSpinBox->setValue(settings->value("ZJUConnect/ServerPort", 443).toInt());
     ui->socks5PortSpinBox->setValue(settings->value("ZJUConnect/Socks5Port", 11080).toInt());
     ui->httpPortSpinBox->setValue(settings->value("ZJUConnect/HttpPort", 11081).toInt());
     ui->multiLineCheckBox->setChecked(settings->value("ZJUConnect/MultiLine", true).toBool());
     ui->proxyAllCheckBox->setChecked(settings->value("ZJUConnect/ProxyAll", false).toBool());
+    ui->hijackDnsCheckBox->setChecked(settings->value("ZJUConnect/HijackDns", true).toBool());
     ui->debugCheckBox->setChecked(settings->value("ZJUConnect/Debug", false).toBool());
     tcpPortForwarding = settings->value("ZJUConnect/TcpPortForwarding", "").toString();
     udpPortForwarding = settings->value("ZJUConnect/UdpPortForwarding", "").toString();
     ui->autoReconnectCheckBox->setChecked(settings->value("ZJUConnect/AutoReconnect", false).toBool());
     ui->reconnectTimeSpinBox->setValue(settings->value("ZJUConnect/ReconnectTime", 1).toInt());
     ui->autoSetProxyCheckBox->setChecked(settings->value("ZJUConnect/AutoSetProxy", false).toBool());
-    ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", false).toBool());
+    ui->routeCheckBox->setChecked(settings->value("ZJUConnect/Route", true).toBool());
 
     ui->l2tpNameLineEdit->setText(settings->value("L2TP/Name", "ZJUVPN").toString());
 
@@ -146,12 +149,15 @@ SettingWindow::SettingWindow(QWidget* parent, QSettings* inputSettings) :
                 settings->setValue("Common/AutoStart", ui->autoStartComboBox->currentText() == "是");
                 settings->setValue("Common/ConnectAfterStart", ui->connectAfterStartComboBox->currentText() == "是");
 
+                settings->setValue("ZJUConnect/Protocol", ui->rvpnModeComboBox->currentText());
+                settings->setValue("ZJUConnect/AuthName", ui->authNameComboBox->currentText());
                 settings->setValue("ZJUConnect/ServerAddress", ui->serverAddressLineEdit->text());
                 settings->setValue("ZJUConnect/ServerPort", ui->serverPortSpinBox->value());
                 settings->setValue("ZJUConnect/Socks5Port", ui->socks5PortSpinBox->value());
                 settings->setValue("ZJUConnect/HttpPort", ui->httpPortSpinBox->value());
                 settings->setValue("ZJUConnect/MultiLine", ui->multiLineCheckBox->isChecked());
                 settings->setValue("ZJUConnect/ProxyAll", ui->proxyAllCheckBox->isChecked());
+                settings->setValue("ZJUConnect/HijackDns", ui->hijackDnsCheckBox->isChecked());
                 settings->setValue("ZJUConnect/Debug", ui->debugCheckBox->isChecked());
                 settings->setValue("ZJUConnect/TcpPortForwarding", tcpPortForwarding);
                 settings->setValue("ZJUConnect/UdpPortForwarding", udpPortForwarding);

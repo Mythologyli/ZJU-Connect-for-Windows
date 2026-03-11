@@ -10,6 +10,8 @@
 
 #include "utils.h"
 
+QString consoleCodeName = "GBK";
+
 QString Utils::ConsoleOutputToQString(const QByteArray& byteArray)
 {
     QTextCodec* gbkCodec = QTextCodec::codecForName("GBK");
@@ -18,6 +20,7 @@ QString Utils::ConsoleOutputToQString(const QByteArray& byteArray)
 
     if (gbkByteArrayBack == byteArray)
     {
+        consoleCodeName = "GBK";
         return gbkStr;
     }
 
@@ -27,10 +30,17 @@ QString Utils::ConsoleOutputToQString(const QByteArray& byteArray)
 
     if (utf8ByteArrayBack == byteArray)
     {
+        consoleCodeName = "UTF-8";
         return utf8Str;
     }
 
     return QString::fromLocal8Bit(byteArray);
+}
+
+QByteArray Utils::QStringToConsoleOutput(const QString& str)
+{
+    QTextCodec* codec = QTextCodec::codecForName(consoleCodeName.toUtf8());
+    return codec->fromUnicode(str);
 }
 
 void Utils::setWidgetFixedWhenHidden(QWidget* widget)

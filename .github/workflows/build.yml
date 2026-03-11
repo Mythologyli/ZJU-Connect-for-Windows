@@ -1,8 +1,6 @@
 name: Build
 
 on:
-    release:
-      types: [ published ]
     push:
       branches: [ master ]
     pull_request:
@@ -33,7 +31,7 @@ jobs:
         run: |
           mkdir build
           cmake -S . -B build
-          cmake --build build --target ZJUConnectForWindows --config Release
+          cmake --build build --target ZJUConnectForWindows --config Release --parallel $(nproc)
 
       - name: Download and copy files
         env:
@@ -45,7 +43,7 @@ jobs:
           windeployqt.exe ZJUConnectForWindows.exe
           rm vc_redist.x64.exe
           curl -LO https://github.com/Mythologyli/zju-web-login/releases/latest/download/weblogin.exe          
-          curl -LO https://github.com/Mythologyli/zju-connect/releases/latest/download/zju-connect-windows-amd64.zip
+          https://github.com/Mythologyli/zju-connect/releases/download/latest/zju-connect-windows-amd64.zip
           tar -xf zju-connect-windows-amd64.zip
           rm zju-connect-windows-amd64.zip
           cp ../libs/wintun/bin/amd64/wintun.dll .
@@ -81,10 +79,24 @@ jobs:
           path: Output/ZJUConnectForWindowsInstaller.exe
 
       - name: Upload to release
-        if: github.event_name == 'release'
+        if: github.event_name == 'release' || (github.event_name == 'push' && contains(vars.NIGHTLY_RELEASE_ENABLED_BRANCHES, github.ref_name))
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} Output/ZJUConnectForWindowsInstaller.exe
-          gh release upload ${{ github.event.release.tag_name }} ZJU-Connect-for-Windows.zip
-          gh release upload ${{ github.event.release.tag_name }} SHA256.txt
+          gh release upload --clobber ${{ github.event_name == 'release' && github.event.release.tag_name || 'nightly' }} Output/ZJUConnectForWindowsInstaller.exe
+          gh release upload --clobber ${{ github.event_name == 'release' && github.event.release.tag_name || 'nightly' }} ZJU-Connect-for-Windows.zip
+          gh release upload --clobber ${{ github.event_name == 'release' && github.event.release.tag_name || 'nightly' }} SHA256.txt
+          
+  nightly:
+    if: github.event_name != 'release' && github.event_name == 'push' && contains(vars.NIGHTLY_RELEASE_ENABLED_BRANCHES, github.ref_name)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+
+      - name: Move nightly tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f nightly
+          git push origin nightly --force
