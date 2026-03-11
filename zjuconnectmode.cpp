@@ -43,7 +43,7 @@ void MainWindow::setModeToZjuConnect()
     // 连接服务器
     connect(zjuConnectController, &ZjuConnectController::outputRead, this, [&](const QString& output)
     {
-        ui->logPlainTextEdit->appendPlainText(output);
+        addLog(output, false);
     });
 
     connect(zjuConnectController, &ZjuConnectController::loginFailed, this, [&]()

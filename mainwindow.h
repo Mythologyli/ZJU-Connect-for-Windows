@@ -6,6 +6,8 @@
 #include <QCloseEvent>
 #include <QNetworkReply>
 
+class QFile;
+
 #include "zjuconnectcontroller/zjuconnectcontroller.h"
 #include "networkdetector/networkdetector.h"
 #include "settingwindow/settingwindow.h"
@@ -39,7 +41,7 @@ private:
 
     void clearLog();
 
-    void addLog(const QString& log);
+    void addLog(const QString& log, bool showTime = true);
 
     void showNotification(
         const QString& title,
@@ -68,6 +70,8 @@ private:
     QProcess* processForWebLogin;
     QTimer* l2tpCheckTimer;
     QrCodeGenerator qrGenerator;
+
+    QFile* logFile;
 
     QObject* diagnosisContext;
 

@@ -157,7 +157,7 @@ Windows Version: Windows 11
      </widget>
     </item>
     <item row="8" column="0">
-     <widget class="QPushButton" name="copyLogPushButton">
+     <widget class="QPushButton" name="exportLogPushButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -165,10 +165,10 @@ Windows Version: Windows 11
        </sizepolicy>
       </property>
       <property name="toolTip">
-       <string>复制日志到剪贴板</string>
+       <string>导出日志到文件</string>
       </property>
       <property name="text">
-       <string>复制日志</string>
+       <string>导出日志</string>
       </property>
      </widget>
     </item>
