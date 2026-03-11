@@ -66,7 +66,6 @@ private:
     QSettings* settings;
     QProcess* process;
     QProcess* processForL2tp;
-    QProcess* processForL2tpCheck;
     QProcess* processForWebLogin;
     QTimer* l2tpCheckTimer;
     QrCodeGenerator qrGenerator;

@@ -152,21 +152,8 @@ void NetworkDetector::checkZjuLan()
 
 void NetworkDetector::checkInternet()
 {
-    disconnect(process, &QProcess::finished, this, nullptr);
-    connect(process, &QProcess::finished, this, [&]()
-    {
-        QString output = Utils::ConsoleOutputToQString(process->readAllStandardOutput());
-        if (output.contains("(0%") && !output.contains("unreachable") && !output.contains("无法"))
-        {
-            result.isInternetAvailable = true;
-            checkProxy();
-            return;
-        }
-
-        checkProxy();
-    });
-
-    process->start("ping", QStringList() << "223.5.5.5" << "-n" << "1");
+    result.isInternetAvailable = Utils::sendIcmpEcho("223.5.5.5", 1000);
+    checkProxy();
 }
 
 void NetworkDetector::checkProxy()

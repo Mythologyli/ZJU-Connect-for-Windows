@@ -1,10 +1,14 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QNetworkInterface>
+#include <QHostAddress>
 #include <QTextCodec>
 
+#include "winsock2.h"
 #include "windows.h"
 #include "wininet.h"
+#include "iphlpapi.h"
+#include "icmpapi.h"
 #include "ras.h"
 #include "raserror.h"
 
@@ -184,4 +188,55 @@ QString Utils::getIpv4Address(const QString& interfaceName)
     }
 
     return "";
+}
+
+bool Utils::sendIcmpEcho(const QString& targetIp, int timeoutMs)
+{
+    QHostAddress hostAddress;
+    if (!hostAddress.setAddress(targetIp) || hostAddress.protocol() != QAbstractSocket::IPv4Protocol)
+    {
+        return false;
+    }
+
+    HANDLE icmpHandle = IcmpCreateFile();
+    if (icmpHandle == INVALID_HANDLE_VALUE)
+    {
+        return false;
+    }
+
+    char sendData[] = "abcdefghijklmnopqrstuvwabcdefghi";
+    WORD requestSize = 32;
+
+    IP_OPTION_INFORMATION ipOptions;
+    ZeroMemory(&ipOptions, sizeof(IP_OPTION_INFORMATION));
+    ipOptions.Ttl = 128;
+    ipOptions.Tos = 0;
+    ipOptions.Flags = 0;
+    ipOptions.OptionsSize = 0;
+    ipOptions.OptionsData = nullptr;
+
+    DWORD replySize = sizeof(ICMP_ECHO_REPLY) + requestSize + 8;
+    QByteArray replyBuffer(static_cast<int>(replySize), 0);
+    IPAddr destinationIp = htonl(hostAddress.toIPv4Address());
+
+    DWORD result = IcmpSendEcho(
+        icmpHandle,
+        destinationIp,
+        sendData,
+        requestSize,
+        &ipOptions,
+        replyBuffer.data(),
+        replySize,
+        static_cast<DWORD>(timeoutMs)
+    );
+
+    IcmpCloseHandle(icmpHandle);
+
+    if (result == 0)
+    {
+        return false;
+    }
+
+    auto* reply = reinterpret_cast<PICMP_ECHO_REPLY>(replyBuffer.data());
+    return reply->Status == IP_SUCCESS;
 }

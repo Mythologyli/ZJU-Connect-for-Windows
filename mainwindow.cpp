@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget* parent) :
 
     process = new QProcess(this);
     processForL2tp = new QProcess(this);
-    processForL2tpCheck = new QProcess(this);
     processForWebLogin = new QProcess(this);
     settings = new QSettings(
         QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/config.ini",

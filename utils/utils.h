@@ -18,6 +18,8 @@ namespace Utils
     void clearSystemProxy();
 
     QString getIpv4Address(const QString& interfaceName);
+
+    bool sendIcmpEcho(const QString& targetIp, int timeoutMs = 1000);
 }
 
 #endif //UTILS_H

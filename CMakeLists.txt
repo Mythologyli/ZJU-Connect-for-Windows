@@ -51,4 +51,5 @@ target_link_libraries(ZJUConnectForWindows
         QrCodeGenerator
         wininet
         rasapi32
+        iphlpapi
 )
