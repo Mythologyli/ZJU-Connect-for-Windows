@@ -29,6 +29,7 @@ add_executable(ZJUConnectForWindows WIN32
         settingwindow/settingwindow.cpp
         networkdetector/networkdetector.cpp
         captchadialog/captchadialog.cpp
+        randcodedialog/randcodedialog.cpp
         utils/utils.cpp
         resource.qrc
         ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc

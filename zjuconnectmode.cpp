@@ -7,6 +7,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "captchadialog/captchadialog.h"
+#include "randcodedialog/randcodedialog.h"
 #include "utils/utils.h"
 
 void MainWindow::setModeToZjuConnect()
@@ -92,6 +93,26 @@ void MainWindow::setModeToZjuConnect()
         if (dlg.exec() == QDialog::Accepted)
         {
             zjuConnectController->input(dlg.getJson() + "\n");
+        }
+    });
+
+    connect(zjuConnectController, &ZjuConnectController::randCodeRequired, this, [&]()
+    {
+        QString path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/graph_code.jpg";
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly))
+        {
+            QMessageBox::critical(this, "错误", "无法打开验证码图片文件：" + path);
+            zjuConnectController->stop();
+            return;
+        }
+        QByteArray imgBuf = f.readAll();
+        f.close();
+
+        randcodedialog dlg(imgBuf, 400, this);
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            zjuConnectController->input(dlg.getCode() + "\n");
         }
     });
 

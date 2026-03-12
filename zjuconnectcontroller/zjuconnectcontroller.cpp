@@ -27,6 +27,10 @@ ZjuConnectController::ZjuConnectController()
         {
             emit graphCheckCodeRequired();
         }
+        else if (output.contains("Please enter rand code: "))
+        {
+            emit randCodeRequired();
+        }
     });
 
     connect(zjuConnectProcess, &QProcess::readyReadStandardError, this, [&]()

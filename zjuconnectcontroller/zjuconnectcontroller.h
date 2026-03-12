@@ -48,6 +48,8 @@ signals:
 
     void graphCheckCodeRequired();
 
+    void randCodeRequired();
+
     void outputRead(const QString& output);
 
     void finished();
